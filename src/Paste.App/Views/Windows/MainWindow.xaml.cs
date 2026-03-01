@@ -1,0 +1,200 @@
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
+using Paste.App.Services;
+using Paste.Core.Interfaces;
+using Paste.UI.ViewModels;
+using Paste.UI.Views.Pages;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
+using Application = System.Windows.Application;
+
+namespace Paste.App.Views.Windows;
+
+public partial class MainWindow : FluentWindow
+{
+    private readonly IClipboardMonitor _clipboardMonitor;
+    private readonly IGlobalHotkeyService _hotkeyService;
+    private readonly ClipboardHistoryViewModel _historyViewModel;
+    private readonly IPasteService _pasteService;
+    private readonly IServiceProvider _serviceProvider;
+    private IntPtr _lastForegroundWindow;
+    private bool _isHidingProgrammatically;
+
+    public MainWindow(
+        MainWindowViewModel mainViewModel,
+        ClipboardHistoryViewModel historyViewModel,
+        IClipboardMonitor clipboardMonitor,
+        IGlobalHotkeyService hotkeyService,
+        IPasteService pasteService,
+        IServiceProvider serviceProvider)
+    {
+        DataContext = mainViewModel;
+        _historyViewModel = historyViewModel;
+        _clipboardMonitor = clipboardMonitor;
+        _hotkeyService = hotkeyService;
+        _pasteService = pasteService;
+        _serviceProvider = serviceProvider;
+
+        InitializeComponent();
+
+        Loaded += MainWindow_Loaded;
+        Closing += MainWindow_Closing;
+        StateChanged += MainWindow_StateChanged;
+        Deactivated += MainWindow_Deactivated;
+        PreviewKeyDown += MainWindow_PreviewKeyDown;
+    }
+
+    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        var hwnd = new WindowInteropHelper(this).Handle;
+
+        // Register global hotkey (Shift+Alt+V)
+        _hotkeyService.Register(hwnd);
+        _hotkeyService.HotkeyPressed += OnHotkeyPressed;
+
+        // Start clipboard monitoring
+        _clipboardMonitor.ClipboardChanged += OnClipboardChanged;
+        _clipboardMonitor.Start();
+
+        // Setup ViewModel
+        _historyViewModel.PasteService = _pasteService;
+        _historyViewModel.HideWindowAction = () =>
+        {
+            _isHidingProgrammatically = true;
+            Hide();
+            _isHidingProgrammatically = false;
+        };
+
+        // Watch for system theme changes
+        SystemThemeWatcher.Watch(this);
+
+        // Host the history page directly
+        var historyPage = _serviceProvider.GetService(typeof(HistoryPage)) as HistoryPage;
+        if (historyPage != null)
+        {
+            ContentHost.Content = historyPage;
+        }
+
+        // Position window at bottom of screen, full width
+        PositionAtBottom();
+
+        // Load initial data
+        await _historyViewModel.LoadEntriesAsync();
+    }
+
+    private void PositionAtBottom()
+    {
+        // Get the working area of the screen where the mouse cursor is
+        var mousePos = System.Windows.Forms.Cursor.Position;
+        var screen = System.Windows.Forms.Screen.FromPoint(mousePos);
+        var workArea = screen.WorkingArea;
+
+        // Account for DPI scaling
+        var source = PresentationSource.FromVisual(this);
+        var dpiX = source?.CompositionTarget?.TransformFromDevice.M11 ?? 1.0;
+        var dpiY = source?.CompositionTarget?.TransformFromDevice.M22 ?? 1.0;
+
+        var screenLeft = workArea.Left * dpiX;
+        var screenWidth = workArea.Width * dpiX;
+        var screenBottom = (workArea.Top + workArea.Height) * dpiY;
+
+        Width = screenWidth;
+        Left = screenLeft;
+        Top = screenBottom - Height;
+    }
+
+    private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            Hide();
+        }
+    }
+
+    private void MainWindow_Deactivated(object? sender, EventArgs e)
+    {
+        // Hide when window loses focus, unless we're already hiding programmatically (e.g. paste action)
+        if (!_isHidingProgrammatically && IsVisible)
+        {
+            Hide();
+        }
+    }
+
+    private void OnHotkeyPressed(object? sender, EventArgs e)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            if (IsVisible && WindowState != WindowState.Minimized)
+            {
+                Hide();
+            }
+            else
+            {
+                // Capture foreground window before showing
+                _lastForegroundWindow = NativeMethods.GetForegroundWindow();
+                _historyViewModel.LastForegroundWindow = _lastForegroundWindow;
+
+                // Re-position before showing (mouse may have moved to different monitor)
+                PositionAtBottom();
+
+                Show();
+                WindowState = WindowState.Normal;
+                Activate();
+            }
+        });
+    }
+
+    private async void OnClipboardChanged(object? sender, Core.Models.ClipboardEntry entry)
+    {
+        await Dispatcher.InvokeAsync(async () =>
+        {
+            await _historyViewModel.HandleClipboardChangedAsync(entry);
+        });
+    }
+
+    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        // Minimize to tray instead of closing
+        e.Cancel = true;
+        Hide();
+    }
+
+    private void MainWindow_StateChanged(object? sender, EventArgs e)
+    {
+        if (WindowState == WindowState.Minimized)
+        {
+            Hide();
+        }
+    }
+
+    private void TrayIcon_OnLeftDoubleClick(object sender, RoutedEventArgs e)
+    {
+        ShowAndActivate();
+    }
+
+    private void TrayMenu_Show_Click(object sender, RoutedEventArgs e)
+    {
+        ShowAndActivate();
+    }
+
+    private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
+    {
+        _clipboardMonitor.Stop();
+        _hotkeyService.Unregister();
+        Closing -= MainWindow_Closing;
+        Application.Current.Shutdown();
+    }
+
+    private void ShowAndActivate()
+    {
+        _lastForegroundWindow = NativeMethods.GetForegroundWindow();
+        _historyViewModel.LastForegroundWindow = _lastForegroundWindow;
+
+        PositionAtBottom();
+        Show();
+        WindowState = WindowState.Normal;
+        Activate();
+    }
+}

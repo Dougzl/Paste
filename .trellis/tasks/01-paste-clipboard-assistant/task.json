@@ -1,0 +1,43 @@
+{
+  "id": "01-paste-clipboard-assistant",
+  "name": "Paste - Windows Clipboard Assistant PRD",
+  "description": "Create comprehensive PRD for Paste, a Windows clipboard assistant application built with C# + WPF (.NET 8)",
+  "status": "completed",
+  "dev_type": "docs",
+  "priority": "P0",
+  "creator": "dougz",
+  "assignee": "dougz",
+  "createdAt": "2026-03-01",
+  "completedAt": "2026-03-01",
+  "commit": null,
+  "subtasks": [
+    {
+      "name": "Define project overview and tech stack",
+      "status": "completed"
+    },
+    {
+      "name": "Document core features (clipboard monitoring, favorites, hotkeys)",
+      "status": "completed"
+    },
+    {
+      "name": "Document advanced features (text transforms, persistence)",
+      "status": "completed"
+    },
+    {
+      "name": "Define UI/UX requirements (Fluent Design)",
+      "status": "completed"
+    },
+    {
+      "name": "Define non-functional requirements and architecture",
+      "status": "completed"
+    },
+    {
+      "name": "Define development phases and acceptance criteria",
+      "status": "completed"
+    }
+  ],
+  "relatedFiles": [
+    ".trellis/tasks/01-paste-clipboard-assistant/prd.md"
+  ],
+  "notes": "Complete PRD for the Paste clipboard assistant project, covering MVP through v2 planning"
+}

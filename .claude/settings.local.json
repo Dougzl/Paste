@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(\"C:/Program Files/dotnet/dotnet\":*)",
+      "WebFetch(domain:wpfui.lepo.co)",
+      "WebFetch(domain:www.meziantou.net)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:www.nuget.org)",
+      "Bash(python3:*)",
+      "Bash(export:*)",
+      "Bash(taskkill:*)",
+      "Bash(dotnet build:*)"
+    ]
+  }
+}
