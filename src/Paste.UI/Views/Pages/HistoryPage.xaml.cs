@@ -226,6 +226,18 @@ public partial class HistoryPage : UserControl
 
     private void CardList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
+        var scrollViewer = GetScrollViewer(CardList);
+        if (scrollViewer != null)
+        {
+            if (!_hasSmoothTarget)
+                _smoothTarget = scrollViewer.HorizontalOffset;
+
+            _smoothTarget -= e.Delta * 0.8;
+            _smoothTarget = Clamp(_smoothTarget, 0, scrollViewer.ScrollableWidth);
+            _velocity = 0;
+            _hasSmoothTarget = true;
+            StartAnimation();
+        }
         e.Handled = true;
     }
 
@@ -263,6 +275,15 @@ public partial class HistoryPage : UserControl
         if (sender is FrameworkElement fe && fe.Tag is SourceAppFilter filter)
         {
             _viewModel.ToggleAppFilterCommand.Execute(filter);
+        }
+    }
+
+    private void AppFilterScroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (sender is ScrollViewer sv)
+        {
+            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta * 0.5);
+            e.Handled = true;
         }
     }
 
@@ -425,6 +446,64 @@ public partial class HistoryPage : UserControl
 
         if (entry != null)
             _viewModel.RemoveEntryFromFolderCommand.Execute(entry);
+    }
+
+    // --- Alias editing handlers ---
+
+    private void CardHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount >= 2 && sender is FrameworkElement fe && fe.Tag is ClipboardEntry entry)
+        {
+            // Double-click: enter inline alias edit mode
+            var textBox = FindVisualChild<TextBox>(fe);
+            if (textBox != null)
+            {
+                textBox.Text = entry.Alias ?? string.Empty;
+                textBox.Visibility = Visibility.Visible;
+                textBox.Tag = entry;
+
+                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+                {
+                    textBox.Focus();
+                    textBox.SelectAll();
+                });
+            }
+            e.Handled = true;
+        }
+    }
+
+    private void AliasEditBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter && sender is TextBox tb && tb.Tag is ClipboardEntry entry)
+        {
+            CommitAliasEdit(tb, entry);
+            e.Handled = true;
+            CardList.Focus();
+        }
+        else if (e.Key == Key.Escape && sender is TextBox tb2)
+        {
+            tb2.Visibility = Visibility.Collapsed;
+            e.Handled = true;
+            CardList.Focus();
+        }
+    }
+
+    private void AliasEditBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.Tag is ClipboardEntry entry)
+        {
+            CommitAliasEdit(tb, entry);
+        }
+    }
+
+    private void CommitAliasEdit(TextBox textBox, ClipboardEntry entry)
+    {
+        textBox.Visibility = Visibility.Collapsed;
+        var newAlias = textBox.Text.Trim();
+        if (newAlias != entry.Alias)
+        {
+            _viewModel.UpdateAliasCommand.Execute((entry.Id, string.IsNullOrWhiteSpace(newAlias) ? null : newAlias));
+        }
     }
 
     // --- Helpers ---

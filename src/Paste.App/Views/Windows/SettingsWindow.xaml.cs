@@ -1,5 +1,4 @@
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Paste.Core.Interfaces;
@@ -11,8 +10,16 @@ namespace Paste.App.Views.Windows;
 public partial class SettingsWindow : FluentWindow
 {
     private readonly ISettingsService _settingsService;
+    private readonly IClipboardHistoryService _historyService;
     private int _capturedModifiers;
     private int _capturedKey;
+    private bool _isLoading;
+
+    // Callback to refresh main window after clearing history
+    public Action? OnHistoryClearedCallback { get; set; }
+
+    // Slider index → days mapping: 天(1) 周(7) 月(30) 季度(90) 半年(180) 年(365) 无限制(0)
+    private static readonly int[] SliderToDays = { 1, 7, 30, 90, 180, 365, 0 };
 
     private static readonly Dictionary<Key, string> KeyDisplayNames = new()
     {
@@ -22,29 +29,99 @@ public partial class SettingsWindow : FluentWindow
         { Key.OemComma, "," }, { Key.OemPeriod, "." }, { Key.OemQuestion, "/" },
     };
 
-    public SettingsWindow(ISettingsService settingsService)
+    public SettingsWindow(ISettingsService settingsService, IClipboardHistoryService historyService)
     {
         _settingsService = settingsService;
+        _historyService = historyService;
         InitializeComponent();
         LoadSettings();
     }
 
     private void LoadSettings()
     {
+        _isLoading = true;
         var s = _settingsService.Load();
+
         _capturedModifiers = s.HotkeyModifiers;
         _capturedKey = s.HotkeyKey;
         HotkeyBox.Text = FormatHotkey(_capturedModifiers, _capturedKey);
 
-        // Select the matching cleanup item
-        foreach (ComboBoxItem item in CleanupCombo.Items)
+        // Map days to slider index
+        var sliderIndex = Array.IndexOf(SliderToDays, s.AutoCleanupDays);
+        CleanupSlider.Value = sliderIndex >= 0 ? sliderIndex : 6; // default to "无限制"
+
+        AutoRunToggle.IsChecked = s.AutoRunOnStartup;
+        MinimizeToTrayToggle.IsChecked = s.MinimizeToTrayOnStartup;
+        ShowTrayIconToggle.IsChecked = s.ShowTrayIcon;
+
+        // Wire up toggle events after loading to avoid premature saves
+        AutoRunToggle.Checked += ToggleChanged;
+        AutoRunToggle.Unchecked += ToggleChanged;
+        MinimizeToTrayToggle.Checked += ToggleChanged;
+        MinimizeToTrayToggle.Unchecked += ToggleChanged;
+        ShowTrayIconToggle.Checked += ToggleChanged;
+        ShowTrayIconToggle.Unchecked += ToggleChanged;
+
+        _isLoading = false;
+    }
+
+    private void SaveSettings()
+    {
+        if (_isLoading) return;
+
+        var sliderIndex = (int)CleanupSlider.Value;
+        var cleanupDays = sliderIndex >= 0 && sliderIndex < SliderToDays.Length ? SliderToDays[sliderIndex] : 0;
+
+        var settings = new AppSettings
         {
-            if (item.Tag is string tag && int.TryParse(tag, out var days) && days == s.AutoCleanupDays)
+            HotkeyModifiers = _capturedModifiers,
+            HotkeyKey = _capturedKey,
+            AutoCleanupDays = cleanupDays,
+            AutoRunOnStartup = AutoRunToggle.IsChecked == true,
+            MinimizeToTrayOnStartup = MinimizeToTrayToggle.IsChecked == true,
+            ShowTrayIcon = ShowTrayIconToggle.IsChecked == true
+        };
+
+        _settingsService.Save(settings);
+        UpdateAutoRun(settings.AutoRunOnStartup);
+    }
+
+    private static void UpdateAutoRun(bool enable)
+    {
+        const string appName = "Paste";
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            if (key == null) return;
+
+            if (enable)
             {
-                CleanupCombo.SelectedItem = item;
-                break;
+                var exePath = Environment.ProcessPath;
+                if (!string.IsNullOrEmpty(exePath))
+                    key.SetValue(appName, $"\"{exePath}\"");
+            }
+            else
+            {
+                key.DeleteValue(appName, false);
             }
         }
+        catch
+        {
+            // Silently ignore registry errors
+        }
+    }
+
+    private void ToggleChanged(object sender, RoutedEventArgs e) => SaveSettings();
+
+    private void CleanupSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => SaveSettings();
+
+    private void ResetHotkey_Click(object sender, MouseButtonEventArgs e)
+    {
+        _capturedModifiers = 0x0001 | 0x0004; // ALT + SHIFT
+        _capturedKey = 0x56; // VK_V
+        HotkeyBox.Text = FormatHotkey(_capturedModifiers, _capturedKey);
+        SaveSettings();
     }
 
     private void HotkeyBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -53,11 +130,9 @@ public partial class SettingsWindow : FluentWindow
 
         var key = e.Key == Key.System ? e.SystemKey : e.Key;
 
-        // Ignore standalone modifier presses
         if (key is Key.LeftShift or Key.RightShift or Key.LeftCtrl or Key.RightCtrl
             or Key.LeftAlt or Key.RightAlt or Key.LWin or Key.RWin)
         {
-            // Show partial capture feedback
             var partialMods = BuildModifiers();
             if (partialMods != 0)
                 HotkeyBox.Text = FormatModifiers(partialMods) + " ...";
@@ -65,29 +140,49 @@ public partial class SettingsWindow : FluentWindow
         }
 
         var modifiers = BuildModifiers();
-        if (modifiers == 0) return; // Require at least one modifier
+        if (modifiers == 0) return;
 
         _capturedModifiers = modifiers;
         _capturedKey = KeyInterop.VirtualKeyFromKey(key);
         HotkeyBox.Text = FormatHotkey(_capturedModifiers, _capturedKey);
+        SaveSettings();
     }
 
-    private void HotkeyBox_GotFocus(object sender, RoutedEventArgs e)
-    {
-    }
+    private void HotkeyBox_GotFocus(object sender, RoutedEventArgs e) { }
 
     private void HotkeyBox_LostFocus(object sender, RoutedEventArgs e)
     {
         HotkeyBox.Text = FormatHotkey(_capturedModifiers, _capturedKey);
     }
 
+    private async void ClearHistory_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new ContentDialog
+        {
+            Title = "清空历史记录",
+            Content = "确定要清空所有历史记录吗？收藏夹中的内容将被保留。\n\n此操作不可撤销。",
+            PrimaryButtonText = "确定",
+            CloseButtonText = "取消",
+            DefaultButton = ContentDialogButton.Close
+        };
+
+        var result = await dialog.ShowAsync();
+
+        if (result == ContentDialogResult.Primary)
+        {
+            await _historyService.ClearAllAsync();
+            // Refresh the main window
+            OnHistoryClearedCallback?.Invoke();
+        }
+    }
+
     private static int BuildModifiers()
     {
         int mods = 0;
-        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) mods |= 0x0002; // MOD_CONTROL
-        if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)) mods |= 0x0001;   // MOD_ALT
-        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) mods |= 0x0004; // MOD_SHIFT
-        if (Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin)) mods |= 0x0008;           // MOD_WIN
+        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) mods |= 0x0002;
+        if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)) mods |= 0x0001;
+        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) mods |= 0x0004;
+        if (Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin)) mods |= 0x0008;
         return mods;
     }
 
@@ -114,29 +209,5 @@ public partial class SettingsWindow : FluentWindow
         if ((modifiers & 0x0004) != 0) parts.Add("Shift");
         if ((modifiers & 0x0008) != 0) parts.Add("Win");
         return string.Join(" + ", parts);
-    }
-
-    private void Save_Click(object sender, RoutedEventArgs e)
-    {
-        var cleanupDays = 0;
-        if (CleanupCombo.SelectedItem is ComboBoxItem item && item.Tag is string tag)
-            int.TryParse(tag, out cleanupDays);
-
-        var settings = new AppSettings
-        {
-            HotkeyModifiers = _capturedModifiers,
-            HotkeyKey = _capturedKey,
-            AutoCleanupDays = cleanupDays
-        };
-
-        _settingsService.Save(settings);
-        DialogResult = true;
-        Close();
-    }
-
-    private void Cancel_Click(object sender, RoutedEventArgs e)
-    {
-        DialogResult = false;
-        Close();
     }
 }

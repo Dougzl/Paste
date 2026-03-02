@@ -10,4 +10,13 @@ public class AppSettings
 
     /// <summary>Auto-cleanup interval in days. 0 = never.</summary>
     public int AutoCleanupDays { get; set; }
+
+    /// <summary>Start app on Windows startup.</summary>
+    public bool AutoRunOnStartup { get; set; }
+
+    /// <summary>Minimize to tray on startup instead of showing window.</summary>
+    public bool MinimizeToTrayOnStartup { get; set; } = true;
+
+    /// <summary>Show tray icon in system tray.</summary>
+    public bool ShowTrayIcon { get; set; } = true;
 }

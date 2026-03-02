@@ -65,6 +65,32 @@ public static class DatabaseMigrator
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
+
+            // Add Alias column to ClipboardEntries if missing
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "PRAGMA table_info(ClipboardEntries)";
+                var hasAliasCol = false;
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        if (reader.GetString(1) == "Alias")
+                        {
+                            hasAliasCol = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasAliasCol)
+                {
+                    cmd.CommandText = @"
+                        ALTER TABLE ClipboardEntries
+                        ADD COLUMN Alias TEXT NULL";
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
         }
         finally
         {

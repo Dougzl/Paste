@@ -350,6 +350,16 @@ public partial class ClipboardHistoryViewModel : ObservableObject
         ApplyFilters();
     }
 
+    [RelayCommand]
+    private async Task UpdateAlias((long entryId, string? alias) args)
+    {
+        await _historyService.UpdateAliasAsync(args.entryId, args.alias);
+        var entry = _allEntries.FirstOrDefault(e => e.Id == args.entryId);
+        if (entry != null)
+            entry.Alias = string.IsNullOrWhiteSpace(args.alias) ? null : args.alias.Trim();
+        ApplyFilters();
+    }
+
     private void ApplyFilters()
     {
         var filtered = _allEntries.AsEnumerable();

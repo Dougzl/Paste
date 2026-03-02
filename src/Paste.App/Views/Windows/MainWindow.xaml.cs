@@ -17,6 +17,7 @@ public partial class MainWindow : FluentWindow
     private readonly IClipboardMonitor _clipboardMonitor;
     private readonly IGlobalHotkeyService _hotkeyService;
     private readonly ISettingsService _settingsService;
+    private readonly IClipboardHistoryService _clipboardHistoryService;
     private readonly ClipboardHistoryViewModel _historyViewModel;
     private readonly IPasteService _pasteService;
     private readonly IServiceProvider _serviceProvider;
@@ -29,6 +30,7 @@ public partial class MainWindow : FluentWindow
         IClipboardMonitor clipboardMonitor,
         IGlobalHotkeyService hotkeyService,
         ISettingsService settingsService,
+        IClipboardHistoryService clipboardHistoryService,
         IPasteService pasteService,
         IServiceProvider serviceProvider)
     {
@@ -37,6 +39,7 @@ public partial class MainWindow : FluentWindow
         _clipboardMonitor = clipboardMonitor;
         _hotkeyService = hotkeyService;
         _settingsService = settingsService;
+        _clipboardHistoryService = clipboardHistoryService;
         _pasteService = pasteService;
         _serviceProvider = serviceProvider;
 
@@ -72,9 +75,13 @@ public partial class MainWindow : FluentWindow
             Hide();
             _isHidingProgrammatically = false;
         };
-        _historyViewModel.ShowSettingsAction = () =>
+        _historyViewModel.ShowSettingsAction = async () =>
         {
-            var settingsWindow = new SettingsWindow(_settingsService) { Owner = this };
+            var settingsWindow = new SettingsWindow(_settingsService, _clipboardHistoryService)
+            {
+                Owner = this,
+                OnHistoryClearedCallback = async () => await _historyViewModel.LoadEntriesAsync()
+            };
             settingsWindow.ShowDialog();
         };
 

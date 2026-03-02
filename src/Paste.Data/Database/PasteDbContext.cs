@@ -23,6 +23,7 @@ public class PasteDbContext : DbContext
             entity.Property(e => e.ContentHash).HasMaxLength(64);
             entity.Property(e => e.SourceAppName).HasMaxLength(256);
             entity.Property(e => e.SourceAppPath).HasMaxLength(1024);
+            entity.Property(e => e.Alias).HasMaxLength(256);
 
             // Ignore computed/UI properties
             entity.Ignore(e => e.ImageFullPath);

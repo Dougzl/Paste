@@ -80,4 +80,32 @@ public class ClipboardHistoryService : IClipboardHistoryService
             await db.SaveChangesAsync();
         }
     }
+
+    public async Task UpdateAliasAsync(long id, string? alias)
+    {
+        await using var db = await _contextFactory.CreateDbContextAsync();
+        var entry = await db.ClipboardEntries.FindAsync(id);
+        if (entry != null)
+        {
+            entry.Alias = string.IsNullOrWhiteSpace(alias) ? null : alias.Trim();
+            await db.SaveChangesAsync();
+        }
+    }
+
+    public async Task ClearAllAsync()
+    {
+        await using var db = await _contextFactory.CreateDbContextAsync();
+
+        // Only remove entries that are NOT in any favorite folder
+        // This preserves all favorited items
+        var entriesToRemove = await db.ClipboardEntries
+            .Where(e => e.FavoriteFolderId == null || e.FavoriteFolderId == 0)
+            .ToListAsync();
+
+        if (entriesToRemove.Any())
+        {
+            db.ClipboardEntries.RemoveRange(entriesToRemove);
+            await db.SaveChangesAsync();
+        }
+    }
 }

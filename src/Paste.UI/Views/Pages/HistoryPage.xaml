@@ -40,8 +40,8 @@
             <!-- Settings gear (far right) -->
             <Border
                 DockPanel.Dock="Right"
-                Padding="8,4"
-                CornerRadius="14"
+                Padding="6,3"
+                CornerRadius="12"
                 Cursor="Hand"
                 Background="Transparent"
                 MouseLeftButtonUp="SettingsButton_Click"
@@ -55,8 +55,8 @@
                     VerticalAlignment="Center" />
             </Border>
 
-            <!-- Folder chips + add button (fill center) -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <!-- Folder chips + add button (centered) -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ItemsControl ItemsSource="{Binding FavoriteFolders}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -66,9 +66,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:FavoriteFolderViewModel}">
                             <Border
-                                Margin="0,0,6,0"
-                                Padding="8,4"
-                                CornerRadius="14"
+                                Margin="0,0,4,0"
+                                Padding="6,3"
+                                CornerRadius="12"
                                 Cursor="Hand"
                                 MouseLeftButtonUp="FolderChip_Click"
                                 PreviewMouseLeftButtonDown="FolderChip_PreviewMouseDown"
@@ -87,9 +87,9 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="18">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="16">
                                     <!-- Colored circle -->
-                                    <Ellipse Width="10" Height="10" Margin="0,0,5,0">
+                                    <Ellipse Width="8" Height="8" Margin="0,0,4,0">
                                         <Ellipse.Style>
                                             <Style TargetType="Ellipse">
                                                 <Setter Property="Fill" Value="{Binding ColorHex, Converter={StaticResource StringToColorConverter}}" />
@@ -103,7 +103,7 @@
                                     </Ellipse>
                                     <!-- Display name (visible when NOT editing) -->
                                     <TextBlock
-                                        FontSize="12"
+                                        FontSize="11"
                                         VerticalAlignment="Center"
                                         Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
                                         <TextBlock.Style>
@@ -124,9 +124,9 @@
                                     <!-- Inline edit TextBox (visible when editing) -->
                                     <TextBox
                                         Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        FontSize="12"
-                                        MinWidth="40"
-                                        Height="18"
+                                        FontSize="11"
+                                        MinWidth="36"
+                                        Height="16"
                                         Padding="0"
                                         Margin="0,-1,0,0"
                                         BorderThickness="0"
@@ -146,15 +146,15 @@
 
                 <!-- Add folder button -->
                 <Border
-                    Padding="6,4"
-                    CornerRadius="14"
+                    Padding="5,3"
+                    CornerRadius="12"
                     Cursor="Hand"
                     Background="Transparent"
                     BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
                     MouseLeftButtonUp="AddFolder_Click"
                     VerticalAlignment="Center">
-                    <TextBlock Text="+" FontSize="13" FontWeight="Bold"
+                    <TextBlock Text="+" FontSize="11" FontWeight="Bold"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </Border>
@@ -180,9 +180,14 @@
                     VerticalAlignment="Center"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
-                <!-- App filter chips -->
-                <ItemsControl
+                <!-- App filter chips (max visible with scroll) -->
+                <ScrollViewer
                     DockPanel.Dock="Left"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled"
+                    MaxWidth="520"
+                    PreviewMouseWheel="AppFilterScroll_PreviewMouseWheel">
+                <ItemsControl
                     ItemsSource="{Binding SourceAppFilters}"
                     VerticalAlignment="Center">
                     <ItemsControl.ItemsPanel>
@@ -229,6 +234,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                </ScrollViewer>
 
                 <!-- Search text box (borderless) -->
                 <TextBox
@@ -289,9 +295,21 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <ContentPresenter
-                                    VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Stretch" />
+                                <Border
+                                    x:Name="SelectionBorder"
+                                    BorderThickness="2"
+                                    BorderBrush="Transparent"
+                                    CornerRadius="10"
+                                    Padding="0">
+                                    <ContentPresenter
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Stretch" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="#A78BFA" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -329,7 +347,9 @@
                             </Grid.RowDefinitions>
 
                             <!-- Header Strip (colored, top rounded corners) -->
-                            <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0">
+                            <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0"
+                                    MouseLeftButtonDown="CardHeader_MouseLeftButtonDown"
+                                    Tag="{Binding}">
                                 <Border.Background>
                                     <MultiBinding Converter="{StaticResource ContentTypeToColorConverter}">
                                         <Binding Path="ContentType" />
@@ -344,6 +364,26 @@
                                         Source="{Binding SourceAppPath, Converter={StaticResource AppIconConverter}}"
                                         VerticalAlignment="Center" />
                                     <StackPanel VerticalAlignment="Center">
+                                        <!-- Alias TextBlock (shown when Alias has value) -->
+                                        <TextBlock
+                                            Text="{Binding Alias}"
+                                            FontSize="15"
+                                            FontWeight="Bold"
+                                            Foreground="White">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Alias}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <!-- Default label (shown when Alias is null/empty) -->
                                         <TextBlock
                                             FontSize="15"
                                             FontWeight="Bold"
@@ -354,7 +394,38 @@
                                                     <Binding Path="Content" />
                                                 </MultiBinding>
                                             </TextBlock.Text>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Alias}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
                                         </TextBlock>
+                                        <!-- Inline alias edit TextBox (hidden by default, shown on double-click) -->
+                                        <TextBox
+                                            x:Name="AliasEditBox"
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            MinWidth="80"
+                                            Height="22"
+                                            Padding="2,0"
+                                            BorderThickness="0,0,0,1"
+                                            BorderBrush="#80FFFFFF"
+                                            Background="Transparent"
+                                            Foreground="White"
+                                            CaretBrush="White"
+                                            VerticalAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Visibility="Collapsed"
+                                            KeyDown="AliasEditBox_KeyDown"
+                                            LostFocus="AliasEditBox_LostFocus" />
                                         <TextBlock
                                             Text="{Binding CopiedAt, Converter={StaticResource RelativeTimeConverter}}"
                                             FontSize="10"
@@ -375,25 +446,15 @@
                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Text}" />
 
-                                <StackPanel
-                                    VerticalAlignment="Center"
+                                <Image
+                                    Width="240"
+                                    Height="200"
+                                    Source="{Binding Content, Converter={StaticResource ImagePreviewConverter}}"
+                                    Stretch="Uniform"
                                     HorizontalAlignment="Center"
-                                    Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Image}">
-                                    <Image
-                                        Width="240"
-                                        Height="200"
-                                        Source="{Binding Content, Converter={StaticResource ImagePreviewConverter}}"
-                                        Stretch="Uniform"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        RenderOptions.BitmapScalingMode="HighQuality" />
-                                    <TextBlock
-                                        Text="{Binding Preview}"
-                                        FontSize="10"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        HorizontalAlignment="Center"
-                                        Margin="0,4,0,0" />
-                                </StackPanel>
+                                    VerticalAlignment="Center"
+                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                    Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Image}" />
 
                                 <StackPanel
                                     Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=FilePaths}">

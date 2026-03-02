@@ -10,4 +10,6 @@ public interface IClipboardHistoryService
     Task DeleteAsync(long id);
     Task<bool> ExistsByHashAsync(string contentHash);
     Task UpdatePinnedAsync(long id, bool isPinned);
+    Task UpdateAliasAsync(long id, string? alias);
+    Task ClearAllAsync();
 }
