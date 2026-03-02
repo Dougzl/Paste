@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 1
-- **Last Active**: 2026-03-01
+- **Total Sessions**: 3
+- **Last Active**: 2026-03-02
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~39 | Active |
+| `journal-1.md` | ~103 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,8 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits |
 |---|------|-------|---------|
+| 3 | 2026-03-02 | Fix Alpha Transparency - Snipaste and Chat Image Preview | no-git |
+| 2 | 2026-03-02 | Image Preview Bug - Binding Fix and Alpha Root Cause | no-git |
 | 1 | 2026-03-01 | UI Overhaul: Horizontal Card Layout | none |
 <!-- @@@/auto:session-history -->
 

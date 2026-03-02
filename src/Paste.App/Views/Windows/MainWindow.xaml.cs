@@ -3,6 +3,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using Paste.App.Services;
 using Paste.Core.Interfaces;
+using Paste.Core.Models;
 using Paste.UI.ViewModels;
 using Paste.UI.Views.Pages;
 using Wpf.Ui.Appearance;
@@ -15,6 +16,7 @@ public partial class MainWindow : FluentWindow
 {
     private readonly IClipboardMonitor _clipboardMonitor;
     private readonly IGlobalHotkeyService _hotkeyService;
+    private readonly ISettingsService _settingsService;
     private readonly ClipboardHistoryViewModel _historyViewModel;
     private readonly IPasteService _pasteService;
     private readonly IServiceProvider _serviceProvider;
@@ -26,6 +28,7 @@ public partial class MainWindow : FluentWindow
         ClipboardHistoryViewModel historyViewModel,
         IClipboardMonitor clipboardMonitor,
         IGlobalHotkeyService hotkeyService,
+        ISettingsService settingsService,
         IPasteService pasteService,
         IServiceProvider serviceProvider)
     {
@@ -33,6 +36,7 @@ public partial class MainWindow : FluentWindow
         _historyViewModel = historyViewModel;
         _clipboardMonitor = clipboardMonitor;
         _hotkeyService = hotkeyService;
+        _settingsService = settingsService;
         _pasteService = pasteService;
         _serviceProvider = serviceProvider;
 
@@ -43,14 +47,17 @@ public partial class MainWindow : FluentWindow
         StateChanged += MainWindow_StateChanged;
         Deactivated += MainWindow_Deactivated;
         PreviewKeyDown += MainWindow_PreviewKeyDown;
+
+        _settingsService.SettingsChanged += OnSettingsChanged;
     }
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         var hwnd = new WindowInteropHelper(this).Handle;
 
-        // Register global hotkey (Shift+Alt+V)
-        _hotkeyService.Register(hwnd);
+        // Register global hotkey from settings
+        var settings = _settingsService.Load();
+        _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
         _hotkeyService.HotkeyPressed += OnHotkeyPressed;
 
         // Start clipboard monitoring
@@ -64,6 +71,11 @@ public partial class MainWindow : FluentWindow
             _isHidingProgrammatically = true;
             Hide();
             _isHidingProgrammatically = false;
+        };
+        _historyViewModel.ShowSettingsAction = () =>
+        {
+            var settingsWindow = new SettingsWindow(_settingsService) { Owner = this };
+            settingsWindow.ShowDialog();
         };
 
         // Watch for system theme changes
@@ -81,6 +93,15 @@ public partial class MainWindow : FluentWindow
 
         // Load initial data
         await _historyViewModel.LoadEntriesAsync();
+    }
+
+    private void OnSettingsChanged(object? sender, AppSettings settings)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
+        });
     }
 
     private void PositionAtBottom()

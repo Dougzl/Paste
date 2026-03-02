@@ -15,6 +15,7 @@ public class ClipboardEntry
     public string? ContentHash { get; set; }
     public DateTime CopiedAt { get; set; } = DateTime.UtcNow;
     public bool IsPinned { get; set; }
+    public long? FavoriteFolderId { get; set; }
 
     /// <summary>
     /// Full filesystem path to the image file, for Image entries only.

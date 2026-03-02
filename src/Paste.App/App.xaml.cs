@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Paste.App.Services;
 using Paste.App.Views.Windows;
 using Paste.Core.Interfaces;
+using Paste.Core.Models;
 using Paste.Data.Database;
 using Paste.Data.Services;
 using Paste.Data.Storage;
@@ -39,6 +40,8 @@ public partial class App : Application
                 services.AddSingleton<IGlobalHotkeyService, GlobalHotkeyService>();
                 services.AddSingleton<IPasteService, PasteService>();
                 services.AddSingleton<IClipboardHistoryService, ClipboardHistoryService>();
+                services.AddSingleton<ISettingsService, SettingsService>();
+                services.AddSingleton<IFavoriteFolderService, FavoriteFolderService>();
 
                 // ViewModels
                 services.AddSingleton<MainWindowViewModel>();
@@ -61,12 +64,41 @@ public partial class App : Application
         // Apply system theme and watch for changes
         ApplicationThemeManager.ApplySystemTheme();
 
-        // Ensure database is created
+        // Run database migration (creates tables if missing, alters schema as needed)
         var contextFactory = _host.Services.GetRequiredService<IDbContextFactory<PasteDbContext>>();
-        await using var db = await contextFactory.CreateDbContextAsync();
-        await db.Database.EnsureCreatedAsync();
+        await DatabaseMigrator.MigrateAsync(contextFactory);
+
+        // Auto-cleanup based on settings
+        await RunAutoCleanupAsync(contextFactory);
 
         await _host.StartAsync();
+    }
+
+    private async Task RunAutoCleanupAsync(IDbContextFactory<PasteDbContext> contextFactory)
+    {
+        var settingsService = _host.Services.GetRequiredService<ISettingsService>();
+        var settings = settingsService.Load();
+        if (settings.AutoCleanupDays <= 0) return;
+
+        var threshold = DateTime.UtcNow.AddDays(-settings.AutoCleanupDays);
+        var imageStorage = _host.Services.GetRequiredService<IImageStorageService>();
+
+        await using var db = await contextFactory.CreateDbContextAsync();
+        var oldEntries = await db.ClipboardEntries
+            .Where(e => !e.IsPinned && e.FavoriteFolderId == null && e.CopiedAt < threshold)
+            .ToListAsync();
+
+        foreach (var entry in oldEntries)
+        {
+            if (entry.ContentType == ClipboardContentType.Image && !string.IsNullOrEmpty(entry.Content))
+            {
+                imageStorage.DeleteImage(entry.Content);
+            }
+            db.ClipboardEntries.Remove(entry);
+        }
+
+        if (oldEntries.Count > 0)
+            await db.SaveChangesAsync();
     }
 
     protected override async void OnExit(ExitEventArgs e)

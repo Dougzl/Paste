@@ -12,15 +12,15 @@ public class RelativeTimeConverter : IValueConverter
             var diff = DateTime.UtcNow - dateTime;
 
             if (diff.TotalSeconds < 60)
-                return "just now";
+                return "刚刚";
             if (diff.TotalMinutes < 60)
-                return $"{(int)diff.TotalMinutes}m ago";
+                return $"{(int)diff.TotalMinutes}分钟前";
             if (diff.TotalHours < 24)
-                return $"{(int)diff.TotalHours}h ago";
+                return $"{(int)diff.TotalHours}小时前";
             if (diff.TotalDays < 7)
-                return $"{(int)diff.TotalDays}d ago";
+                return $"{(int)diff.TotalDays}天前";
 
-            return dateTime.ToLocalTime().ToString("MMM dd", culture);
+            return dateTime.ToLocalTime().ToString("MM月dd日", culture);
         }
         return string.Empty;
     }

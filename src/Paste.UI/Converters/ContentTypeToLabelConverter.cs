@@ -23,11 +23,11 @@ public partial class ContentTypeToLabelConverter : IMultiValueConverter
 
         return contentType switch
         {
-            ClipboardContentType.Image => "Image",
-            ClipboardContentType.FilePaths => "Files",
-            ClipboardContentType.Text when IsUrl(content) => "Link",
-            ClipboardContentType.Text => "Text",
-            _ => "Unknown"
+            ClipboardContentType.Image => "图片",
+            ClipboardContentType.FilePaths => "文件",
+            ClipboardContentType.Text when IsUrl(content) => "链接",
+            ClipboardContentType.Text => "文本",
+            _ => "未知"
         };
     }
 

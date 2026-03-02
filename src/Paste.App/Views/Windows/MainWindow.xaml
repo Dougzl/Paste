@@ -23,7 +23,11 @@
             Grid.Row="0"
             Title=""
             ShowMaximize="False"
-            ShowMinimize="False" />
+            ShowMinimize="False"
+            ShowClose="False"
+            Height="8"
+            Padding="0"
+            Margin="0" />
 
         <!-- Content Host -->
         <ContentControl
@@ -39,9 +43,9 @@
             LeftDoubleClick="TrayIcon_OnLeftDoubleClick">
             <tray:NotifyIcon.Menu>
                 <ContextMenu>
-                    <MenuItem Header="Show" Click="TrayMenu_Show_Click" />
+                    <MenuItem Header="显示" Click="TrayMenu_Show_Click" />
                     <Separator />
-                    <MenuItem Header="Exit" Click="TrayMenu_Exit_Click" />
+                    <MenuItem Header="退出" Click="TrayMenu_Exit_Click" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>

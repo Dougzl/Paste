@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Paste.UI.Converters;
@@ -18,33 +19,20 @@ public class ImagePreviewConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not string relativePath || string.IsNullOrEmpty(relativePath))
-        {
-            Console.WriteLine($"[ImagePreview] SKIP: value is null/empty (type={value?.GetType().Name ?? "null"})");
             return DependencyProperty.UnsetValue;
-        }
 
         if (!relativePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-        {
-            Console.WriteLine($"[ImagePreview] SKIP: not .png → {relativePath[..Math.Min(40, relativePath.Length)]}...");
             return DependencyProperty.UnsetValue;
-        }
 
         if (Cache.TryGetValue(relativePath, out var cached))
-        {
-            Console.WriteLine($"[ImagePreview] CACHE HIT: {relativePath} → {cached.PixelWidth}x{cached.PixelHeight}");
             return cached;
-        }
 
         try
         {
             var fullPath = Path.Combine(ImageDir, relativePath);
             if (!File.Exists(fullPath))
-            {
-                Console.WriteLine($"[ImagePreview] FILE NOT FOUND: {fullPath}");
                 return DependencyProperty.UnsetValue;
-            }
 
-            // Use MemoryStream for guaranteed synchronous loading
             var data = File.ReadAllBytes(fullPath);
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -54,16 +42,40 @@ public class ImagePreviewConverter : IValueConverter
             bitmap.EndInit();
             bitmap.Freeze();
 
-            Console.WriteLine($"[ImagePreview] LOADED: {relativePath} → {bitmap.PixelWidth}x{bitmap.PixelHeight}");
+            // Some clipboard sources (Snipaste, chat apps) save images with alpha=0,
+            // producing fully transparent PNGs. Force all pixels opaque for preview.
+            BitmapSource result = EnsureOpaque(bitmap);
 
-            Cache.TryAdd(relativePath, bitmap);
-            return bitmap;
+            Cache.TryAdd(relativePath, result);
+            return result;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"[ImagePreview] ERROR: {relativePath} → {ex.Message}");
             return DependencyProperty.UnsetValue;
         }
+    }
+
+    /// <summary>
+    /// If the bitmap has an alpha channel, set all alpha values to 255 (fully opaque).
+    /// </summary>
+    private static BitmapSource EnsureOpaque(BitmapSource source)
+    {
+        if (source.Format != PixelFormats.Bgra32 && source.Format != PixelFormats.Pbgra32)
+            return source;
+
+        var width = source.PixelWidth;
+        var height = source.PixelHeight;
+        var stride = width * 4;
+        var pixels = new byte[stride * height];
+        source.CopyPixels(pixels, stride, 0);
+
+        for (var i = 3; i < pixels.Length; i += 4)
+            pixels[i] = 255;
+
+        var opaque = BitmapSource.Create(width, height, source.DpiX, source.DpiY,
+            PixelFormats.Bgra32, null, pixels, stride);
+        opaque.Freeze();
+        return opaque;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

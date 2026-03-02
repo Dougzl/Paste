@@ -113,7 +113,7 @@ public class ClipboardMonitor : IClipboardMonitor
                     {
                         Content = relativePath,
                         ContentType = ClipboardContentType.Image,
-                        Preview = $"Image {(int)image.Width}x{(int)image.Height}",
+                        Preview = $"图片 {(int)image.Width}x{(int)image.Height}",
                         ContentHash = hash,
                         SourceAppName = appName,
                         SourceAppPath = appPath,
@@ -164,6 +164,24 @@ public class ClipboardMonitor : IClipboardMonitor
 
     private static byte[] BitmapSourceToBytes(BitmapSource source)
     {
+        // Some clipboard sources (Snipaste, chat apps) provide Bgra32 images with alpha=0.
+        // Force all pixels opaque before saving as PNG to avoid transparent images.
+        if (source.Format == System.Windows.Media.PixelFormats.Bgra32 ||
+            source.Format == System.Windows.Media.PixelFormats.Pbgra32)
+        {
+            var width = source.PixelWidth;
+            var height = source.PixelHeight;
+            var stride = width * 4;
+            var pixels = new byte[stride * height];
+            source.CopyPixels(pixels, stride, 0);
+
+            for (var i = 3; i < pixels.Length; i += 4)
+                pixels[i] = 255;
+
+            source = BitmapSource.Create(width, height, source.DpiX, source.DpiY,
+                System.Windows.Media.PixelFormats.Bgra32, null, pixels, stride);
+        }
+
         using var stream = new MemoryStream();
         var encoder = new PngBitmapEncoder();
         encoder.Frames.Add(BitmapFrame.Create(source));

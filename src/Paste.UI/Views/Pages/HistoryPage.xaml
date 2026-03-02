@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:Paste.UI.Converters"
+    xmlns:helpers="clr-namespace:Paste.UI.Helpers"
     xmlns:models="clr-namespace:Paste.Core.Models;assembly=Paste.Core"
     xmlns:vm="clr-namespace:Paste.UI.ViewModels"
     d:DesignHeight="480"
@@ -23,18 +24,147 @@
         <converters:ContentTypeToVisibilityConverter x:Key="ContentTypeToVisibilityConverter" />
         <converters:ContentTypeToColorConverter x:Key="ContentTypeToColorConverter" />
         <converters:ContentTypeToLabelConverter x:Key="ContentTypeToLabelConverter" />
+        <converters:StringToColorConverter x:Key="StringToColorConverter" />
+        <helpers:BindingProxy x:Key="ViewModelProxy" Data="{Binding}" />
     </UserControl.Resources>
 
-    <Grid Margin="12,4,12,12">
+    <Grid Margin="12,0,12,12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Search Bar (pill-shaped) -->
+        <!-- Top Bar: folder chips + add + settings gear -->
+        <DockPanel Grid.Row="0" Margin="0,2,0,6" LastChildFill="True">
+            <!-- Settings gear (far right) -->
+            <Border
+                DockPanel.Dock="Right"
+                Padding="8,4"
+                CornerRadius="14"
+                Cursor="Hand"
+                Background="Transparent"
+                MouseLeftButtonUp="SettingsButton_Click"
+                VerticalAlignment="Center"
+                Margin="6,0,0,0">
+                <TextBlock
+                    Text="&#xE713;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="14"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    VerticalAlignment="Center" />
+            </Border>
+
+            <!-- Folder chips + add button (fill center) -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <ItemsControl ItemsSource="{Binding FavoriteFolders}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:FavoriteFolderViewModel}">
+                            <Border
+                                Margin="0,0,6,0"
+                                Padding="8,4"
+                                CornerRadius="14"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="FolderChip_Click"
+                                PreviewMouseLeftButtonDown="FolderChip_PreviewMouseDown"
+                                MouseRightButtonUp="FolderChip_RightClick"
+                                Tag="{Binding}">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="{Binding ColorHex, Converter={StaticResource StringToColorConverter}}" />
+                                                <Setter Property="BorderBrush" Value="{Binding ColorHex, Converter={StaticResource StringToColorConverter}}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="18">
+                                    <!-- Colored circle -->
+                                    <Ellipse Width="10" Height="10" Margin="0,0,5,0">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="{Binding ColorHex, Converter={StaticResource StringToColorConverter}}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                        <Setter Property="Fill" Value="White" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+                                    <!-- Display name (visible when NOT editing) -->
+                                    <TextBlock
+                                        FontSize="12"
+                                        VerticalAlignment="Center"
+                                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="{Binding Name}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCompact}" Value="True">
+                                                        <Setter Property="Text" Value="{Binding Initial}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <!-- Inline edit TextBox (visible when editing) -->
+                                    <TextBox
+                                        Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        FontSize="12"
+                                        MinWidth="40"
+                                        Height="18"
+                                        Padding="0"
+                                        Margin="0,-1,0,0"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        CaretBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                                        VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                        KeyDown="FolderEditBox_KeyDown"
+                                        LostFocus="FolderEditBox_LostFocus" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Add folder button -->
+                <Border
+                    Padding="6,4"
+                    CornerRadius="14"
+                    Cursor="Hand"
+                    Background="Transparent"
+                    BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    MouseLeftButtonUp="AddFolder_Click"
+                    VerticalAlignment="Center">
+                    <TextBlock Text="+" FontSize="13" FontWeight="Bold"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Search + App filter bar (row 1, always visible) -->
         <Border
-            Grid.Row="0"
-            Margin="0,0,0,10"
+            Grid.Row="1"
+            Margin="0,0,0,8"
             Padding="6,4"
             CornerRadius="20"
             Background="{DynamicResource ControlFillColorDefaultBrush}"
@@ -102,6 +232,7 @@
 
                 <!-- Search text box (borderless) -->
                 <TextBox
+                    x:Name="SearchBox"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                     VerticalAlignment="Center"
                     Margin="6,0"
@@ -119,20 +250,24 @@
             </DockPanel>
         </Border>
 
-        <!-- Horizontal Card Grid -->
+        <!-- Horizontal Card Grid (row 2) -->
         <ListBox
             x:Name="CardList"
-            Grid.Row="1"
+            Grid.Row="2"
             ItemsSource="{Binding Entries}"
             SelectedItem="{Binding SelectedEntry}"
             MouseDoubleClick="CardList_MouseDoubleClick"
             KeyDown="CardList_KeyDown"
             PreviewMouseWheel="CardList_PreviewMouseWheel"
+            PreviewMouseLeftButtonDown="CardList_PreviewMouseLeftButtonDown"
+            PreviewMouseMove="CardList_PreviewMouseMove"
+            PreviewMouseLeftButtonUp="CardList_PreviewMouseLeftButtonUp"
             Background="Transparent"
             BorderThickness="0"
-            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-            ScrollViewer.CanContentScroll="True">
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.ScrollUnit="Pixel">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -154,25 +289,9 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border
-                                    x:Name="OuterBorder"
-                                    Background="Transparent"
-                                    BorderThickness="2"
-                                    BorderBrush="Transparent"
-                                    CornerRadius="10"
-                                    Margin="0">
-                                    <ContentPresenter
-                                        VerticalAlignment="Stretch"
-                                        HorizontalAlignment="Stretch" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="OuterBorder" Property="BorderBrush" Value="{DynamicResource SystemAccentColorPrimaryBrush}" />
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="OuterBorder" Property="BorderBrush" Value="{DynamicResource SystemAccentColorSecondaryBrush}" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
+                                <ContentPresenter
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -185,6 +304,23 @@
                         CornerRadius="8"
                         ClipToBounds="True"
                         Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                        <Border.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="添加到收藏夹">
+                                    <MenuItem.ItemsSource>
+                                        <Binding Path="Data.FavoriteFolders" Source="{StaticResource ViewModelProxy}" />
+                                    </MenuItem.ItemsSource>
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding Name}" />
+                                            <Setter Property="Tag" Value="{Binding Id}" />
+                                            <EventSetter Event="Click" Handler="AddToFolder_Click" />
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                                <MenuItem Header="从收藏夹移除" Click="RemoveFromFolder_Click" />
+                            </ContextMenu>
+                        </Border.ContextMenu>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -192,8 +328,8 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <!-- Header Strip (colored) -->
-                            <Border Grid.Row="0" Padding="10,7">
+                            <!-- Header Strip (colored, top rounded corners) -->
+                            <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0">
                                 <Border.Background>
                                     <MultiBinding Converter="{StaticResource ContentTypeToColorConverter}">
                                         <Binding Path="ContentType" />
@@ -201,18 +337,15 @@
                                     </MultiBinding>
                                 </Border.Background>
                                 <DockPanel>
-                                    <!-- Source app icon (right) -->
                                     <Image
                                         DockPanel.Dock="Right"
-                                        Width="22"
-                                        Height="22"
+                                        Width="32"
+                                        Height="32"
                                         Source="{Binding SourceAppPath, Converter={StaticResource AppIconConverter}}"
                                         VerticalAlignment="Center" />
-
-                                    <!-- Type label + time (left) -->
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock
-                                            FontSize="12"
+                                            FontSize="15"
                                             FontWeight="Bold"
                                             Foreground="White">
                                             <TextBlock.Text>
@@ -232,7 +365,6 @@
 
                             <!-- Body: Content Preview -->
                             <Grid Grid.Row="1" Margin="10,8" MinHeight="100">
-                                <!-- Text content -->
                                 <TextBlock
                                     Text="{Binding Content}"
                                     TextWrapping="Wrap"
@@ -243,9 +375,9 @@
                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Text}" />
 
-                                <!-- Image content -->
                                 <StackPanel
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
                                     Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Image}">
                                     <Image
                                         Width="240"
@@ -253,9 +385,8 @@
                                         Source="{Binding Content, Converter={StaticResource ImagePreviewConverter}}"
                                         Stretch="Uniform"
                                         HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                        Loaded="CardImage_Loaded" />
+                                        VerticalAlignment="Center"
+                                        RenderOptions.BitmapScalingMode="HighQuality" />
                                     <TextBlock
                                         Text="{Binding Preview}"
                                         FontSize="10"
@@ -264,7 +395,6 @@
                                         Margin="0,4,0,0" />
                                 </StackPanel>
 
-                                <!-- FilePaths content -->
                                 <StackPanel
                                     Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=FilePaths}">
                                     <DockPanel Margin="0,4,0,0">
@@ -287,40 +417,24 @@
                             </Grid>
 
                             <!-- Footer -->
-                            <DockPanel Grid.Row="2" Margin="10,0,6,6">
-                                <!-- Delete button (right) -->
-                                <Button
-                                    DockPanel.Dock="Right"
-                                    Content="&#xE74D;"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="12"
-                                    Padding="4,2"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                    Command="{Binding DataContext.DeleteEntryCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                    CommandParameter="{Binding}"
-                                    ToolTip="Delete"
-                                    VerticalAlignment="Center"
-                                    Cursor="Hand" />
-
-                                <!-- Character/info count (left) -->
-                                <TextBlock
-                                    FontSize="10"
-                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    VerticalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="{Binding Content.Length, StringFormat='{}{0} chars'}" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ClipboardContentType.Image}">
-                                                    <Setter Property="Text" Value="{Binding Preview}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </DockPanel>
+                            <TextBlock
+                                Grid.Row="2"
+                                Margin="10,0,10,6"
+                                FontSize="10"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="{Binding Content.Length, StringFormat='{}{0} 个字符'}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ClipboardContentType.Image}">
+                                                <Setter Property="Text" Value="{Binding Preview}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </Border>
                 </DataTemplate>

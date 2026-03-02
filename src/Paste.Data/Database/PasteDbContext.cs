@@ -6,6 +6,7 @@ namespace Paste.Data.Database;
 public class PasteDbContext : DbContext
 {
     public DbSet<ClipboardEntry> ClipboardEntries => Set<ClipboardEntry>();
+    public DbSet<FavoriteFolder> FavoriteFolders => Set<FavoriteFolder>();
 
     public PasteDbContext(DbContextOptions<PasteDbContext> options) : base(options)
     {
@@ -29,6 +30,15 @@ public class PasteDbContext : DbContext
             entity.HasIndex(e => e.CopiedAt).IsDescending();
             entity.HasIndex(e => e.ContentHash);
             entity.HasIndex(e => e.ContentType);
+            entity.HasIndex(e => e.FavoriteFolderId);
+        });
+
+        modelBuilder.Entity<FavoriteFolder>(entity =>
+        {
+            entity.HasKey(f => f.Id);
+            entity.Property(f => f.Id).ValueGeneratedOnAdd();
+            entity.Property(f => f.Name).HasMaxLength(100);
+            entity.Property(f => f.ColorHex).HasMaxLength(20);
         });
     }
 }

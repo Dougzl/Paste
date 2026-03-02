@@ -12,6 +12,19 @@ public class GlobalHotkeyService : IGlobalHotkeyService
 
     public void Register(IntPtr hwnd)
     {
+        // Default: Shift+Alt+V
+        Register(hwnd, NativeMethods.MOD_ALT | NativeMethods.MOD_SHIFT, NativeMethods.VK_V);
+    }
+
+    public void Register(IntPtr hwnd, int modifiers, int key)
+    {
+        // Unregister previous if re-registering
+        if (_hwnd != IntPtr.Zero)
+        {
+            NativeMethods.UnregisterHotKey(_hwnd, NativeMethods.HOTKEY_ID);
+            _hwndSource?.RemoveHook(WndProc);
+        }
+
         _hwnd = hwnd;
         _hwndSource = HwndSource.FromHwnd(hwnd);
         _hwndSource?.AddHook(WndProc);
@@ -19,8 +32,8 @@ public class GlobalHotkeyService : IGlobalHotkeyService
         NativeMethods.RegisterHotKey(
             _hwnd,
             NativeMethods.HOTKEY_ID,
-            NativeMethods.MOD_ALT | NativeMethods.MOD_SHIFT | NativeMethods.MOD_NOREPEAT,
-            NativeMethods.VK_V);
+            modifiers | NativeMethods.MOD_NOREPEAT,
+            key);
     }
 
     public void Unregister()
