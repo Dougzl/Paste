@@ -299,6 +299,7 @@
                                     x:Name="SelectionBorder"
                                     BorderThickness="2"
                                     BorderBrush="Transparent"
+                                    Background="Transparent"
                                     CornerRadius="10"
                                     Padding="0">
                                     <ContentPresenter
@@ -321,7 +322,7 @@
                     <Border
                         CornerRadius="8"
                         ClipToBounds="True"
-                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                        Background="#2A2A2E">
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加到收藏夹">

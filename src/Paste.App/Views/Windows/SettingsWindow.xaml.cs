@@ -157,18 +157,18 @@ public partial class SettingsWindow : FluentWindow
 
     private async void ClearHistory_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new ContentDialog
+        var uiMessageBox = new Wpf.Ui.Controls.MessageBox
         {
             Title = "清空历史记录",
             Content = "确定要清空所有历史记录吗？收藏夹中的内容将被保留。\n\n此操作不可撤销。",
             PrimaryButtonText = "确定",
             CloseButtonText = "取消",
-            DefaultButton = ContentDialogButton.Close
+            Owner = this
         };
 
-        var result = await dialog.ShowAsync();
+        var result = await uiMessageBox.ShowDialogAsync();
 
-        if (result == ContentDialogResult.Primary)
+        if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
         {
             await _historyService.ClearAllAsync();
             // Refresh the main window
