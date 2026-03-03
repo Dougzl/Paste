@@ -478,6 +478,7 @@ public partial class HistoryPage : UserControl
     {
         if (sender is FrameworkElement fe && fe.DataContext is ClipboardEntry entry)
         {
+            CommitActiveAliasEdits();
             EnterContentEditMode(fe, entry);
             e.Handled = true;
         }
@@ -538,6 +539,20 @@ public partial class HistoryPage : UserControl
         if (newAlias != entry.Alias)
         {
             _viewModel.UpdateAliasCommand.Execute((entry.Id, string.IsNullOrWhiteSpace(newAlias) ? null : newAlias));
+        }
+    }
+
+    private void CommitActiveAliasEdits()
+    {
+        var editBoxes = new List<TextBox>();
+        CollectVisualChildrenByName(CardList, "AliasEditBox", editBoxes);
+
+        foreach (var box in editBoxes)
+        {
+            if (box.Visibility == Visibility.Visible && box.Tag is ClipboardEntry entry)
+            {
+                CommitAliasEdit(box, entry);
+            }
         }
     }
 
@@ -618,6 +633,21 @@ public partial class HistoryPage : UserControl
             if (found != null) return found;
         }
         return null;
+    }
+
+    private static void CollectVisualChildrenByName<T>(DependencyObject parent, string name, IList<T> result)
+        where T : FrameworkElement
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T t && t.Name == name)
+            {
+                result.Add(t);
+            }
+
+            CollectVisualChildrenByName(child, name, result);
+        }
     }
 
     private void EnterContentEditMode(DependencyObject container, ClipboardEntry entry)
