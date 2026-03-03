@@ -245,6 +245,9 @@ public partial class HistoryPage : UserControl
 
     private void CardList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        if (Keyboard.FocusedElement is TextBox)
+            return;
+
         _viewModel.PasteSelectedCommand.Execute(null);
     }
 
@@ -268,6 +271,11 @@ public partial class HistoryPage : UserControl
     private void SettingsButton_Click(object sender, MouseButtonEventArgs e)
     {
         _viewModel.OpenSettingsCommand.Execute(null);
+    }
+
+    private void ExitButton_Click(object sender, MouseButtonEventArgs e)
+    {
+        _viewModel.ExitAppCommand.Execute(null);
     }
 
     private void AppFilterChip_Click(object sender, MouseButtonEventArgs e)
@@ -450,26 +458,30 @@ public partial class HistoryPage : UserControl
 
     // --- Alias editing handlers ---
 
-    private void CardHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void CardHeader_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        if (e.ClickCount >= 2 && sender is FrameworkElement fe && fe.Tag is ClipboardEntry entry)
-        {
-            // Double-click: enter inline alias edit mode
-            var textBox = FindVisualChild<TextBox>(fe);
-            if (textBox != null)
-            {
-                textBox.Text = entry.Alias ?? string.Empty;
-                textBox.Visibility = Visibility.Visible;
-                textBox.Tag = entry;
+        if (sender is not FrameworkElement fe || fe.Tag is not ClipboardEntry entry)
+            return;
 
-                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
-                {
-                    textBox.Focus();
-                    textBox.SelectAll();
-                });
-            }
-            e.Handled = true;
+        // Single click selects; double-click enters alias edit mode.
+        _viewModel.SelectedEntry = entry;
+        if (e.ClickCount < 2)
+            return;
+
+        var textBox = FindVisualChild<TextBox>(fe);
+        if (textBox != null)
+        {
+            textBox.Text = entry.Alias ?? string.Empty;
+            textBox.Visibility = Visibility.Visible;
+            textBox.Tag = entry;
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            });
         }
+        e.Handled = true;
     }
 
     private void AliasEditBox_KeyDown(object sender, KeyEventArgs e)

@@ -37,6 +37,24 @@
 
         <!-- Top Bar: folder chips + add + settings gear -->
         <DockPanel Grid.Row="0" Margin="0,2,0,6" LastChildFill="True">
+            <!-- Exit button (far right) -->
+            <Border
+                DockPanel.Dock="Right"
+                Padding="6,3"
+                CornerRadius="12"
+                Cursor="Hand"
+                Background="Transparent"
+                MouseLeftButtonUp="ExitButton_Click"
+                VerticalAlignment="Center"
+                Margin="6,0,0,0">
+                <TextBlock
+                    Text="&#xE711;"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="14"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    VerticalAlignment="Center" />
+            </Border>
+
             <!-- Settings gear (far right) -->
             <Border
                 DockPanel.Dock="Right"
@@ -349,7 +367,7 @@
 
                             <!-- Header Strip (colored, top rounded corners) -->
                             <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0"
-                                    MouseLeftButtonDown="CardHeader_MouseLeftButtonDown"
+                                    MouseLeftButtonUp="CardHeader_MouseLeftButtonUp"
                                     Tag="{Binding}">
                                 <Border.Background>
                                     <MultiBinding Converter="{StaticResource ContentTypeToColorConverter}">
@@ -409,7 +427,7 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <!-- Inline alias edit TextBox (hidden by default, shown on double-click) -->
+                                        <!-- Inline alias edit TextBox (hidden by default, shown on header double-click) -->
                                         <TextBox
                                             x:Name="AliasEditBox"
                                             FontSize="14"
@@ -490,8 +508,11 @@
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="{Binding Content.Length, StringFormat='{}{0} 个字符'}" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ClipboardContentType.Image}">
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ClipboardContentType.FilePaths}">
                                                 <Setter Property="Text" Value="{Binding Preview}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ClipboardContentType.Image}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
