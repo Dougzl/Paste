@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Paste.App.Services;
 using Paste.Core.Interfaces;
 using Paste.Core.Models;
 using Wpf.Ui.Controls;
@@ -34,6 +35,11 @@ public partial class SettingsWindow : FluentWindow
         _settingsService = settingsService;
         _historyService = historyService;
         InitializeComponent();
+        Loaded += (_, _) =>
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            NativeMethods.DisableWindowResize(hwnd);
+        };
         LoadSettings();
     }
 

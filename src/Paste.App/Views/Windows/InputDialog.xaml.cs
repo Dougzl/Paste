@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Interop;
+using Paste.App.Services;
 using Wpf.Ui.Controls;
 
 namespace Paste.App.Views.Windows;
@@ -14,6 +16,8 @@ public partial class InputDialog : FluentWindow
         InputBox.Text = defaultValue;
         Loaded += (_, _) =>
         {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            NativeMethods.DisableWindowResize(hwnd);
             InputBox.Focus();
             InputBox.SelectAll();
         };

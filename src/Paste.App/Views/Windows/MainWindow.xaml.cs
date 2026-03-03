@@ -57,6 +57,7 @@ public partial class MainWindow : FluentWindow
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         var hwnd = new WindowInteropHelper(this).Handle;
+        NativeMethods.DisableWindowResize(hwnd);
 
         // Register global hotkey from settings
         var settings = _settingsService.Load();
@@ -133,6 +134,10 @@ public partial class MainWindow : FluentWindow
         }
 
         Width = screenWidth;
+        MinWidth = screenWidth;
+        MaxWidth = screenWidth;
+        MinHeight = Height;
+        MaxHeight = Height;
         Left = screenLeft;
         Top = screenBottom - Height;
     }
