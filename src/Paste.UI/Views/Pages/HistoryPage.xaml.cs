@@ -269,7 +269,7 @@ public partial class HistoryPage : UserControl
         _viewModel.PasteSelectedCommand.Execute(null);
     }
 
-    private void CardList_KeyDown(object sender, KeyEventArgs e)
+    private async void CardList_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
@@ -279,7 +279,29 @@ public partial class HistoryPage : UserControl
         {
             if (_viewModel.SelectedEntry != null)
             {
-                _viewModel.DeleteEntryCommand.ExecuteAsync(_viewModel.SelectedEntry);
+                var entry = _viewModel.SelectedEntry;
+
+                if (entry.FavoriteFolderId is > 0)
+                {
+                    var confirmBox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        Title = "删除确认",
+                        Content = "该记录在收藏夹中，确认删除吗？",
+                        PrimaryButtonText = "删除",
+                        CloseButtonText = "取消",
+                        Owner = Window.GetWindow(this)
+                    };
+
+                    var result = await confirmBox.ShowDialogAsync();
+                    if (result != Wpf.Ui.Controls.MessageBoxResult.Primary)
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
+                await _viewModel.DeleteEntryCommand.ExecuteAsync(entry);
+                e.Handled = true;
             }
         }
     }

@@ -218,11 +218,30 @@ public partial class MainWindow : FluentWindow
 
     private void MainWindow_Deactivated(object? sender, EventArgs e)
     {
+        // Keep main window visible while owned dialogs (settings/confirm) are open.
+        if (HasVisibleOwnedWindow())
+        {
+            return;
+        }
+
         // Hide when window loses focus, unless we're already hiding programmatically (e.g. paste action)
         if (!_isHidingProgrammatically && IsVisible)
         {
             Hide();
         }
+    }
+
+    private bool HasVisibleOwnedWindow()
+    {
+        foreach (Window window in Application.Current.Windows)
+        {
+            if (window.Owner == this && window.IsVisible)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void OnHotkeyPressed(object? sender, EventArgs e)
