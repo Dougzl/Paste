@@ -17,6 +17,7 @@ public class ApplicationHostService : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        mainWindow.Opacity = 0;
         _ = new WindowInteropHelper(mainWindow).EnsureHandle();
         return Task.CompletedTask;
     }

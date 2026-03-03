@@ -95,7 +95,7 @@ public partial class MainWindow : FluentWindow
             Hide();
             _isHidingProgrammatically = false;
         };
-        _historyViewModel.ShowSettingsAction = async () =>
+        _historyViewModel.ShowSettingsAction = () =>
         {
             var settingsWindow = new SettingsWindow(_settingsService, _clipboardHistoryService)
             {
@@ -217,6 +217,11 @@ public partial class MainWindow : FluentWindow
                 // Re-position before showing (mouse may have moved to different monitor)
                 PositionAtBottom();
 
+                if (Opacity < 1)
+                {
+                    Opacity = 1;
+                }
+
                 Show();
                 WindowState = WindowState.Normal;
                 Activate();
@@ -271,6 +276,10 @@ public partial class MainWindow : FluentWindow
         _historyViewModel.LastForegroundWindow = _lastForegroundWindow;
 
         PositionAtBottom();
+        if (Opacity < 1)
+        {
+            Opacity = 1;
+        }
         Show();
         WindowState = WindowState.Normal;
         Activate();
