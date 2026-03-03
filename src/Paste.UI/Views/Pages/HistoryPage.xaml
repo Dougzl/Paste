@@ -21,6 +21,7 @@
         <converters:ImagePreviewConverter x:Key="ImagePreviewConverter" />
         <converters:UrlDetectorConverter x:Key="UrlDetectorConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:FavoriteFolderIdToVisibilityConverter x:Key="FavoriteFolderIdToVisibilityConverter" />
         <converters:ContentTypeToVisibilityConverter x:Key="ContentTypeToVisibilityConverter" />
         <converters:ContentTypeToColorConverter x:Key="ContentTypeToColorConverter" />
         <converters:ContentTypeToLabelConverter x:Key="ContentTypeToLabelConverter" />
@@ -334,7 +335,9 @@
                         Background="#2A2A2E">
                         <Border.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="添加到收藏夹">
+                                <MenuItem
+                                    Header="添加到收藏夹"
+                                    Visibility="{Binding FavoriteFolderId, Converter={StaticResource FavoriteFolderIdToVisibilityConverter}, ConverterParameter=Invert}">
                                     <MenuItem.ItemsSource>
                                         <Binding Path="Data.FavoriteFolders" Source="{StaticResource ViewModelProxy}" />
                                     </MenuItem.ItemsSource>
@@ -346,7 +349,10 @@
                                         </Style>
                                     </MenuItem.ItemContainerStyle>
                                 </MenuItem>
-                                <MenuItem Header="从收藏夹移除" Click="RemoveFromFolder_Click" />
+                                <MenuItem
+                                    Header="从收藏夹移除"
+                                    Click="RemoveFromFolder_Click"
+                                    Visibility="{Binding FavoriteFolderId, Converter={StaticResource FavoriteFolderIdToVisibilityConverter}}" />
                             </ContextMenu>
                         </Border.ContextMenu>
                         <Grid>
