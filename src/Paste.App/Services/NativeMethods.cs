@@ -48,5 +48,50 @@ internal static partial class NativeMethods
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool IsIconic(IntPtr hWnd);
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        public int X;
+        public int Y;
+
+        public POINT(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+    }
+
+    public const uint MONITOR_DEFAULTTONEAREST = 2;
+    private const uint MDT_EFFECTIVE_DPI = 0;
+
+    [LibraryImport("user32.dll")]
+    public static partial IntPtr MonitorFromPoint(POINT pt, uint dwFlags);
+
+    [LibraryImport("shcore.dll", SetLastError = true)]
+    private static partial int GetDpiForMonitor(
+        IntPtr hmonitor,
+        uint dpiType,
+        out uint dpiX,
+        out uint dpiY);
+
+    public static bool TryGetMonitorDpi(IntPtr monitor, out uint dpiX, out uint dpiY)
+    {
+        dpiX = 96;
+        dpiY = 96;
+
+        try
+        {
+            return GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, out dpiX, out dpiY) == 0;
+        }
+        catch (DllNotFoundException)
+        {
+            return false;
+        }
+        catch (EntryPointNotFoundException)
+        {
+            return false;
+        }
+    }
+
     public const int SW_RESTORE = 9;
 }
