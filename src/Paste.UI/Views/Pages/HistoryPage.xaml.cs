@@ -567,6 +567,7 @@ public partial class HistoryPage : UserControl
     {
         if (sender is FrameworkElement fe && fe.Tag is ClipboardEntry entry)
         {
+            _viewModel.SelectedEntry = entry;
             EnterAliasEditMode(fe, entry);
             e.Handled = true;
         }
@@ -576,6 +577,7 @@ public partial class HistoryPage : UserControl
     {
         if (sender is FrameworkElement fe && fe.DataContext is ClipboardEntry entry)
         {
+            _viewModel.SelectedEntry = entry;
             CommitActiveAliasEdits();
             EnterContentEditMode(fe, entry);
             e.Handled = true;

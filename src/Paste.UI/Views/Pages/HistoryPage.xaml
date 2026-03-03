@@ -279,7 +279,9 @@
             PreviewMouseMove="CardList_PreviewMouseMove"
             PreviewMouseLeftButtonUp="CardList_PreviewMouseLeftButtonUp"
             Background="Transparent"
+            BorderBrush="Transparent"
             BorderThickness="0"
+            FocusVisualStyle="{x:Null}"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ScrollViewer.CanContentScroll="True"
@@ -307,7 +309,7 @@
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Border
                                     x:Name="SelectionBorder"
-                                    BorderThickness="0"
+                                    BorderThickness="2"
                                     BorderBrush="Transparent"
                                     Background="Transparent"
                                     CornerRadius="10"
@@ -318,7 +320,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="Transparent" />
+                                        <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="#A78BFA" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
