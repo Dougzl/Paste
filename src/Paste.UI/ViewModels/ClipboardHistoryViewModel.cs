@@ -83,9 +83,6 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     // Callback to open settings window. Set by the host window.
     public Action? ShowSettingsAction { get; set; }
 
-    // Callback to exit app. Set by the host window.
-    public Action? ExitAppAction { get; set; }
-
     public ClipboardHistoryViewModel(IClipboardHistoryService historyService)
     {
         _historyService = historyService;
@@ -184,12 +181,6 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     private void OpenSettings()
     {
         ShowSettingsAction?.Invoke();
-    }
-
-    [RelayCommand]
-    private void ExitApp()
-    {
-        ExitAppAction?.Invoke();
     }
 
     [RelayCommand]

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Paste.Core.Interfaces;
 using Paste.App.Views.Windows;
 
 namespace Paste.App.Services;
@@ -8,34 +7,16 @@ namespace Paste.App.Services;
 public class ApplicationHostService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ISettingsService _settingsService;
 
-    public ApplicationHostService(IServiceProvider serviceProvider, ISettingsService settingsService)
+    public ApplicationHostService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _settingsService = settingsService;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-        var settings = _settingsService.Load();
-
-        if (settings.MinimizeToTrayOnStartup)
-        {
-            // Silent startup: initialize the window without visible flash.
-            mainWindow.Opacity = 0;
-            mainWindow.ShowActivated = false;
-            mainWindow.Show();
-            mainWindow.Hide();
-            mainWindow.Opacity = 1;
-            mainWindow.ShowActivated = true;
-        }
-        else
-        {
-            mainWindow.Show();
-        }
-
+        mainWindow.Show();
         return Task.CompletedTask;
     }
 

@@ -23,7 +23,6 @@ public partial class MainWindow : FluentWindow
     private readonly IServiceProvider _serviceProvider;
     private IntPtr _lastForegroundWindow;
     private bool _isHidingProgrammatically;
-    private bool _isEnforcingWindowSize;
 
     public MainWindow(
         MainWindowViewModel mainViewModel,
@@ -51,7 +50,6 @@ public partial class MainWindow : FluentWindow
         StateChanged += MainWindow_StateChanged;
         Deactivated += MainWindow_Deactivated;
         PreviewKeyDown += MainWindow_PreviewKeyDown;
-        SizeChanged += MainWindow_SizeChanged;
 
         _settingsService.SettingsChanged += OnSettingsChanged;
     }
@@ -86,7 +84,6 @@ public partial class MainWindow : FluentWindow
             };
             settingsWindow.ShowDialog();
         };
-        _historyViewModel.ExitAppAction = ExitApplication;
 
         // Watch for system theme changes
         SystemThemeWatcher.Watch(this);
@@ -100,7 +97,6 @@ public partial class MainWindow : FluentWindow
 
         // Position window at bottom of screen, full width
         PositionAtBottom();
-        ApplyTrayIconVisibility(settings);
 
         // Load initial data
         await _historyViewModel.LoadEntriesAsync();
@@ -112,7 +108,6 @@ public partial class MainWindow : FluentWindow
         {
             var hwnd = new WindowInteropHelper(this).Handle;
             _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
-            ApplyTrayIconVisibility(settings);
         });
     }
 
@@ -133,8 +128,6 @@ public partial class MainWindow : FluentWindow
         var screenBottom = (workArea.Top + workArea.Height) * dpiY;
 
         Width = screenWidth;
-        MinWidth = screenWidth;
-        MaxWidth = screenWidth;
         Left = screenLeft;
         Top = screenBottom - Height;
     }
@@ -174,7 +167,9 @@ public partial class MainWindow : FluentWindow
                 // Re-position before showing (mouse may have moved to different monitor)
                 PositionAtBottom();
 
-                BringToFront();
+                Show();
+                WindowState = WindowState.Normal;
+                Activate();
             }
         });
     }
@@ -202,33 +197,6 @@ public partial class MainWindow : FluentWindow
         }
     }
 
-    private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        if (_isEnforcingWindowSize || !IsLoaded)
-            return;
-
-        // Keep this window fixed-size: full screen width + fixed height.
-        const double fixedHeight = 420;
-        var shouldResetSize = Math.Abs(Height - fixedHeight) > 0.5 ||
-                              Math.Abs(Width - MinWidth) > 0.5 ||
-                              Math.Abs(Width - MaxWidth) > 0.5;
-        if (!shouldResetSize)
-            return;
-
-        _isEnforcingWindowSize = true;
-        try
-        {
-            Height = fixedHeight;
-            MinHeight = fixedHeight;
-            MaxHeight = fixedHeight;
-            PositionAtBottom();
-        }
-        finally
-        {
-            _isEnforcingWindowSize = false;
-        }
-    }
-
     private void TrayIcon_OnLeftDoubleClick(object sender, RoutedEventArgs e)
     {
         ShowAndActivate();
@@ -241,7 +209,10 @@ public partial class MainWindow : FluentWindow
 
     private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
     {
-        ExitApplication();
+        _clipboardMonitor.Stop();
+        _hotkeyService.Unregister();
+        Closing -= MainWindow_Closing;
+        Application.Current.Shutdown();
     }
 
     private void ShowAndActivate()
@@ -250,32 +221,8 @@ public partial class MainWindow : FluentWindow
         _historyViewModel.LastForegroundWindow = _lastForegroundWindow;
 
         PositionAtBottom();
-        BringToFront();
-    }
-
-    private void ApplyTrayIconVisibility(AppSettings settings)
-    {
-        TrayIcon.Visibility = settings.ShowTrayIcon ? Visibility.Visible : Visibility.Collapsed;
-    }
-
-    private void ExitApplication()
-    {
-        _clipboardMonitor.Stop();
-        _hotkeyService.Unregister();
-        Closing -= MainWindow_Closing;
-        Application.Current.Shutdown();
-    }
-
-    private void BringToFront()
-    {
         Show();
         WindowState = WindowState.Normal;
-
-        // Refresh z-order to ensure this overlay window stays above other apps.
-        Topmost = false;
-        Topmost = true;
-
         Activate();
-        Focus();
     }
 }

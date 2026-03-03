@@ -6,8 +6,6 @@
     xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
     Title="Paste"
     Height="420"
-    MinHeight="420"
-    MaxHeight="420"
     WindowStartupLocation="Manual"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Mica"
