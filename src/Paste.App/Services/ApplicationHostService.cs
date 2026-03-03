@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Paste.Core.Interfaces;
 using Paste.App.Views.Windows;
+using System.Windows;
 
 namespace Paste.App.Services;
 
@@ -23,11 +24,15 @@ public class ApplicationHostService : IHostedService
 
         if (settings.MinimizeToTrayOnStartup)
         {
-            // Silent startup: initialize the window without visible flash.
+            // Silent startup: initialize the window while kept invisible and minimized.
             mainWindow.Opacity = 0;
             mainWindow.ShowActivated = false;
+            mainWindow.WindowState = WindowState.Minimized;
+            mainWindow.Left = -32000;
+            mainWindow.Top = -32000;
             mainWindow.Show();
             mainWindow.Hide();
+            mainWindow.WindowState = WindowState.Normal;
             mainWindow.Opacity = 1;
             mainWindow.ShowActivated = true;
         }

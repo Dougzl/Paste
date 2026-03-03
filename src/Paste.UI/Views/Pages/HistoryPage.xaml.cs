@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -245,6 +246,9 @@ public partial class HistoryPage : UserControl
 
     private void CardList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        if (e.OriginalSource is DependencyObject source && IsInCardHeader(source))
+            return;
+
         if (Keyboard.FocusedElement is TextBox)
             return;
 
@@ -267,16 +271,6 @@ public partial class HistoryPage : UserControl
     }
 
     // --- Top bar handlers ---
-
-    private void SettingsButton_Click(object sender, MouseButtonEventArgs e)
-    {
-        _viewModel.OpenSettingsCommand.Execute(null);
-    }
-
-    private void ExitButton_Click(object sender, MouseButtonEventArgs e)
-    {
-        _viewModel.ExitAppCommand.Execute(null);
-    }
 
     private void AppFilterChip_Click(object sender, MouseButtonEventArgs e)
     {
@@ -463,11 +457,9 @@ public partial class HistoryPage : UserControl
         if (sender is not FrameworkElement fe || fe.Tag is not ClipboardEntry entry)
             return;
 
-        // Single click selects; double-click enters alias edit mode.
         _viewModel.SelectedEntry = entry;
-        if (e.ClickCount < 2)
-            return;
 
+        // Single click enters alias edit mode.
         var textBox = FindVisualChild<TextBox>(fe);
         if (textBox != null)
         {
@@ -481,6 +473,30 @@ public partial class HistoryPage : UserControl
                 textBox.SelectAll();
             });
         }
+        e.Handled = true;
+    }
+
+    private void TopMenuButton_Click(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not FrameworkElement anchor)
+            return;
+
+        var menu = new ContextMenu
+        {
+            PlacementTarget = anchor,
+            Placement = PlacementMode.Bottom,
+            StaysOpen = false
+        };
+
+        var settingsItem = new MenuItem { Header = "偏好设置" };
+        settingsItem.Click += (_, _) => _viewModel.OpenSettingsCommand.Execute(null);
+
+        var exitItem = new MenuItem { Header = "关闭" };
+        exitItem.Click += (_, _) => _viewModel.ExitAppCommand.Execute(null);
+
+        menu.Items.Add(settingsItem);
+        menu.Items.Add(exitItem);
+        menu.IsOpen = true;
         e.Handled = true;
     }
 
@@ -547,4 +563,18 @@ public partial class HistoryPage : UserControl
 
     private static double Clamp(double value, double min, double max)
         => Math.Max(min, Math.Min(value, max));
+
+    private static bool IsInCardHeader(DependencyObject source)
+    {
+        var current = source;
+        while (current != null)
+        {
+            if (current is Border border && border.Tag is ClipboardEntry)
+                return true;
+
+            current = VisualTreeHelper.GetParent(current);
+        }
+
+        return false;
+    }
 }

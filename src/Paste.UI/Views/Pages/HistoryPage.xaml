@@ -35,38 +35,20 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Top Bar: folder chips + add + settings gear -->
+        <!-- Top Bar: folder chips + add + dropdown menu -->
         <DockPanel Grid.Row="0" Margin="0,2,0,6" LastChildFill="True">
-            <!-- Exit button (far right) -->
+            <!-- Top-right dropdown menu -->
             <Border
                 DockPanel.Dock="Right"
                 Padding="6,3"
                 CornerRadius="12"
                 Cursor="Hand"
                 Background="Transparent"
-                MouseLeftButtonUp="ExitButton_Click"
+                MouseLeftButtonUp="TopMenuButton_Click"
                 VerticalAlignment="Center"
                 Margin="6,0,0,0">
                 <TextBlock
-                    Text="&#xE711;"
-                    FontFamily="Segoe MDL2 Assets"
-                    FontSize="14"
-                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    VerticalAlignment="Center" />
-            </Border>
-
-            <!-- Settings gear (far right) -->
-            <Border
-                DockPanel.Dock="Right"
-                Padding="6,3"
-                CornerRadius="12"
-                Cursor="Hand"
-                Background="Transparent"
-                MouseLeftButtonUp="SettingsButton_Click"
-                VerticalAlignment="Center"
-                Margin="6,0,0,0">
-                <TextBlock
-                    Text="&#xE713;"
+                    Text="&#xE70D;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="14"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"

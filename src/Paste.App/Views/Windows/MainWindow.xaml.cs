@@ -123,20 +123,49 @@ public partial class MainWindow : FluentWindow
         var screen = System.Windows.Forms.Screen.FromPoint(mousePos);
         var workArea = screen.WorkingArea;
 
-        // Account for DPI scaling
-        var source = PresentationSource.FromVisual(this);
-        var dpiX = source?.CompositionTarget?.TransformFromDevice.M11 ?? 1.0;
-        var dpiY = source?.CompositionTarget?.TransformFromDevice.M22 ?? 1.0;
+        var (scaleX, scaleY) = GetDpiScaleAtPoint(mousePos);
 
-        var screenLeft = workArea.Left * dpiX;
-        var screenWidth = workArea.Width * dpiX;
-        var screenBottom = (workArea.Top + workArea.Height) * dpiY;
+        var screenLeft = workArea.Left / scaleX;
+        var screenWidth = workArea.Width / scaleX;
+        var screenBottom = (workArea.Top + workArea.Height) / scaleY;
+
+        // Fallback guard for any unexpected DPI API result.
+        if (screenWidth < 300)
+        {
+            screenLeft = SystemParameters.WorkArea.Left;
+            screenWidth = SystemParameters.WorkArea.Width;
+            screenBottom = SystemParameters.WorkArea.Bottom;
+        }
 
         Width = screenWidth;
         MinWidth = screenWidth;
         MaxWidth = screenWidth;
         Left = screenLeft;
         Top = screenBottom - Height;
+    }
+
+    private (double ScaleX, double ScaleY) GetDpiScaleAtPoint(System.Drawing.Point point)
+    {
+        var monitor = NativeMethods.MonitorFromPoint(
+            new NativeMethods.POINT(point.X, point.Y),
+            NativeMethods.MONITOR_DEFAULTTONEAREST);
+
+        if (monitor != IntPtr.Zero &&
+            NativeMethods.TryGetMonitorDpi(monitor, out var dpiX, out var dpiY) &&
+            dpiX > 0 && dpiY > 0)
+        {
+            return (dpiX / 96.0, dpiY / 96.0);
+        }
+
+        // Fallback to WPF transform if monitor DPI is unavailable.
+        var source = PresentationSource.FromVisual(this);
+        var scaleX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+        var scaleY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+
+        if (scaleX <= 0) scaleX = 1.0;
+        if (scaleY <= 0) scaleY = 1.0;
+
+        return (scaleX, scaleY);
     }
 
     private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
