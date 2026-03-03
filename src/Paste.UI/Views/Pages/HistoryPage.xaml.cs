@@ -29,6 +29,7 @@ public partial class HistoryPage : UserControl
     private double _smoothTarget;
     private bool _hasSmoothTarget;
     private DispatcherTimer? _animationTimer;
+    private CancellationTokenSource? _folderClickDelayCts;
     private const double InertiaFriction = 0.95;
     private const double MinVelocity = 0.5;
     private const double SmoothLerpFactor = 0.15;
@@ -353,34 +354,49 @@ public partial class HistoryPage : UserControl
 
     // --- Favorites handlers ---
 
-    private void FolderChip_Click(object sender, MouseButtonEventArgs e)
+    private async void FolderChip_Click(object sender, MouseButtonEventArgs e)
     {
         if (sender is FrameworkElement fe && fe.Tag is FavoriteFolderViewModel folder)
         {
-            // Only handle single clicks (double-click is handled in PreviewMouseDown)
-            if (!folder.IsEditing)
+            if (e.ClickCount >= 2)
+            {
+                _folderClickDelayCts?.Cancel();
+                BeginFolderRename(fe, folder);
+                e.Handled = true;
+                return;
+            }
+
+            if (e.ClickCount != 1 || folder.IsEditing)
+            {
+                return;
+            }
+
+            _folderClickDelayCts?.Cancel();
+            _folderClickDelayCts = new CancellationTokenSource();
+            var token = _folderClickDelayCts.Token;
+
+            try
+            {
+                const int DoubleClickDelayMs = 300;
+                await Task.Delay(DoubleClickDelayMs, token);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+
+            if (!token.IsCancellationRequested && !folder.IsEditing)
+            {
                 _viewModel.SelectFolderCommand.Execute(folder);
+            }
         }
     }
 
     private void FolderChip_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ClickCount >= 2 && sender is FrameworkElement fe && fe.Tag is FavoriteFolderViewModel folder)
+        if (e.ClickCount >= 2)
         {
-            // Double-click: enter inline edit mode
-            folder.IsEditing = true;
-            e.Handled = true;
-
-            // Focus the TextBox after it becomes visible
-            Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
-            {
-                var textBox = FindVisualChild<TextBox>(fe);
-                if (textBox != null)
-                {
-                    textBox.Focus();
-                    textBox.SelectAll();
-                }
-            });
+            _folderClickDelayCts?.Cancel();
         }
     }
 
@@ -390,14 +406,11 @@ public partial class HistoryPage : UserControl
         {
             CommitFolderRename(folder);
             e.Handled = true;
-            // Return focus to card list
-            CardList.Focus();
         }
         else if (e.Key == Key.Escape && sender is TextBox && ((TextBox)sender).DataContext is FavoriteFolderViewModel f)
         {
             f.IsEditing = false;
             e.Handled = true;
-            CardList.Focus();
         }
     }
 
@@ -418,6 +431,29 @@ public partial class HistoryPage : UserControl
         }
     }
 
+    private void BeginFolderRename(FrameworkElement folderElement, FavoriteFolderViewModel targetFolder)
+    {
+        foreach (var folder in _viewModel.FavoriteFolders)
+        {
+            if (!ReferenceEquals(folder, targetFolder) && folder.IsEditing)
+            {
+                CommitFolderRename(folder);
+            }
+        }
+
+        targetFolder.IsEditing = true;
+
+        Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+        {
+            var textBox = FindVisualChild<TextBox>(folderElement);
+            if (textBox != null)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+        });
+    }
+
     private void FolderChip_RightClick(object sender, MouseButtonEventArgs e)
     {
         if (sender is FrameworkElement fe && fe.Tag is FavoriteFolderViewModel folder)
@@ -427,16 +463,7 @@ public partial class HistoryPage : UserControl
             var renameItem = new MenuItem { Header = "重命名" };
             renameItem.Click += (_, _) =>
             {
-                folder.IsEditing = true;
-                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
-                {
-                    var textBox = FindVisualChild<TextBox>(fe);
-                    if (textBox != null)
-                    {
-                        textBox.Focus();
-                        textBox.SelectAll();
-                    }
-                });
+                BeginFolderRename(fe, folder);
             };
 
             var deleteItem = new MenuItem { Header = "删除" };

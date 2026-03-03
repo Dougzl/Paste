@@ -307,7 +307,7 @@
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Border
                                     x:Name="SelectionBorder"
-                                    BorderThickness="2"
+                                    BorderThickness="0"
                                     BorderBrush="Transparent"
                                     Background="Transparent"
                                     CornerRadius="10"
@@ -318,7 +318,7 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="#A78BFA" />
+                                        <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="Transparent" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
