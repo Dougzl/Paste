@@ -176,7 +176,8 @@
             CornerRadius="20"
             Background="{DynamicResource ControlFillColorDefaultBrush}"
             BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1">
+            BorderThickness="1"
+            PreviewMouseWheel="TopFilterBar_PreviewMouseWheel">
             <DockPanel>
                 <!-- Search icon on the right -->
                 <ui:SymbolIcon

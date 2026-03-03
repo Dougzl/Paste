@@ -64,18 +64,26 @@ public partial class HistoryPage : UserControl
         if (msg == WM_MOUSEHWHEEL)
         {
             var delta = (short)((wParam.ToInt64() >> 16) & 0xFFFF);
-            var scrollViewer = GetScrollViewer(CardList);
-            if (scrollViewer != null)
+            if (AppFilterScrollViewer.IsMouseOver)
             {
-                if (!_hasSmoothTarget)
-                    _smoothTarget = scrollViewer.HorizontalOffset;
-
-                _smoothTarget += delta * 0.8;
-                _smoothTarget = Clamp(_smoothTarget, 0, scrollViewer.ScrollableWidth);
-                _velocity = 0;
-                _hasSmoothTarget = true;
-                StartAnimation();
+                ScrollAppFilters(delta);
                 handled = true;
+            }
+            else if (CardList.IsMouseOver)
+            {
+                var scrollViewer = GetScrollViewer(CardList);
+                if (scrollViewer != null)
+                {
+                    if (!_hasSmoothTarget)
+                        _smoothTarget = scrollViewer.HorizontalOffset;
+
+                    _smoothTarget += delta * 0.8;
+                    _smoothTarget = Clamp(_smoothTarget, 0, scrollViewer.ScrollableWidth);
+                    _velocity = 0;
+                    _hasSmoothTarget = true;
+                    StartAnimation();
+                    handled = true;
+                }
             }
         }
         return IntPtr.Zero;
@@ -295,11 +303,23 @@ public partial class HistoryPage : UserControl
 
     private void AppFilterScroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-        if (sender is ScrollViewer sv)
-        {
-            sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta * 0.5);
-            e.Handled = true;
-        }
+        ScrollAppFilters(e.Delta);
+        e.Handled = true;
+    }
+
+    private void TopFilterBar_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        ScrollAppFilters(e.Delta);
+        e.Handled = true;
+    }
+
+    private void ScrollAppFilters(int delta)
+    {
+        AppFilterScrollViewer.ScrollToHorizontalOffset(
+            Clamp(
+                AppFilterScrollViewer.HorizontalOffset + delta * 0.5,
+                0,
+                AppFilterScrollViewer.ScrollableWidth));
     }
 
     // --- Favorites handlers ---
