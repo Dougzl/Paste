@@ -15,6 +15,7 @@ public class ImagePreviewConverter : IValueConverter
         "Paste", "images");
 
     private static readonly ConcurrentDictionary<string, BitmapSource> Cache = new();
+    private static readonly Color CardBodyColor = Color.FromRgb(0x2A, 0x2A, 0x2E);
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -23,9 +24,6 @@ public class ImagePreviewConverter : IValueConverter
 
         if (!relativePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
             return DependencyProperty.UnsetValue;
-
-        if (Cache.TryGetValue(relativePath, out var cached))
-            return cached;
 
         try
         {
@@ -42,12 +40,10 @@ public class ImagePreviewConverter : IValueConverter
             bitmap.EndInit();
             bitmap.Freeze();
 
-            // Some clipboard sources (Snipaste, chat apps) save images with alpha=0,
-            // producing fully transparent PNGs. Force all pixels opaque for preview.
-            BitmapSource result = EnsureOpaque(bitmap);
-
-            Cache.TryAdd(relativePath, result);
-            return result;
+            // Composite PNG over card body color so transparent areas always match content background.
+            var composited = CompositeOnBackground(bitmap, CardBodyColor);
+            Cache[relativePath] = composited;
+            return composited;
         }
         catch
         {
@@ -55,29 +51,42 @@ public class ImagePreviewConverter : IValueConverter
         }
     }
 
-    /// <summary>
-    /// If the bitmap has an alpha channel, set all alpha values to 255 (fully opaque).
-    /// </summary>
-    private static BitmapSource EnsureOpaque(BitmapSource source)
-    {
-        if (source.Format != PixelFormats.Bgra32 && source.Format != PixelFormats.Pbgra32)
-            return source;
-
-        var width = source.PixelWidth;
-        var height = source.PixelHeight;
-        var stride = width * 4;
-        var pixels = new byte[stride * height];
-        source.CopyPixels(pixels, stride, 0);
-
-        for (var i = 3; i < pixels.Length; i += 4)
-            pixels[i] = 255;
-
-        var opaque = BitmapSource.Create(width, height, source.DpiX, source.DpiY,
-            PixelFormats.Bgra32, null, pixels, stride);
-        opaque.Freeze();
-        return opaque;
-    }
-
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
+
+    private static BitmapSource CompositeOnBackground(BitmapSource source, Color background)
+    {
+        var formatted = source.Format == PixelFormats.Bgra32
+            ? source
+            : new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
+
+        var width = formatted.PixelWidth;
+        var height = formatted.PixelHeight;
+        var stride = width * 4;
+        var pixels = new byte[stride * height];
+        formatted.CopyPixels(pixels, stride, 0);
+
+        for (var i = 0; i < pixels.Length; i += 4)
+        {
+            var b = pixels[i];
+            var g = pixels[i + 1];
+            var r = pixels[i + 2];
+            var a = pixels[i + 3];
+
+            if (a == 255)
+                continue;
+
+            // Alpha blend source pixel over background color.
+            var invA = 255 - a;
+            pixels[i] = (byte)((b * a + background.B * invA) / 255);
+            pixels[i + 1] = (byte)((g * a + background.G * invA) / 255);
+            pixels[i + 2] = (byte)((r * a + background.R * invA) / 255);
+            pixels[i + 3] = 255;
+        }
+
+        var result = BitmapSource.Create(width, height, formatted.DpiX, formatted.DpiY,
+            PixelFormats.Bgra32, null, pixels, stride);
+        result.Freeze();
+        return result;
+    }
 }
