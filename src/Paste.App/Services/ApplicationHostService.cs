@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Paste.App.Views.Windows;
+using System.Windows.Interop;
 
 namespace Paste.App.Services;
 
@@ -16,7 +17,7 @@ public class ApplicationHostService : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Show();
+        _ = new WindowInteropHelper(mainWindow).EnsureHandle();
         return Task.CompletedTask;
     }
 

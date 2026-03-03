@@ -39,6 +39,7 @@
         <tray:NotifyIcon
             x:Name="TrayIcon"
             Grid.Row="0"
+            Visibility="Collapsed"
             MenuOnRightClick="True"
             TooltipText="Paste - Clipboard Manager"
             LeftDoubleClick="TrayIcon_OnLeftDoubleClick">

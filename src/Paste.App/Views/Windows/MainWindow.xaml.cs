@@ -23,6 +23,7 @@ public partial class MainWindow : FluentWindow
     private readonly IServiceProvider _serviceProvider;
     private IntPtr _lastForegroundWindow;
     private bool _isHidingProgrammatically;
+    private bool _initialized;
 
     public MainWindow(
         MainWindowViewModel mainViewModel,
@@ -45,6 +46,7 @@ public partial class MainWindow : FluentWindow
 
         InitializeComponent();
 
+        SourceInitialized += MainWindow_SourceInitialized;
         Loaded += MainWindow_Loaded;
         Closing += MainWindow_Closing;
         StateChanged += MainWindow_StateChanged;
@@ -54,8 +56,25 @@ public partial class MainWindow : FluentWindow
         _settingsService.SettingsChanged += OnSettingsChanged;
     }
 
+    private async void MainWindow_SourceInitialized(object? sender, EventArgs e)
+    {
+        await InitializeAsync();
+    }
+
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        await InitializeAsync();
+    }
+
+    private async Task InitializeAsync()
+    {
+        if (_initialized)
+        {
+            return;
+        }
+
+        _initialized = true;
+
         var hwnd = new WindowInteropHelper(this).Handle;
         NativeMethods.DisableWindowResize(hwnd);
 
@@ -95,9 +114,6 @@ public partial class MainWindow : FluentWindow
         {
             ContentHost.Content = historyPage;
         }
-
-        // Position window at bottom of screen, full width
-        PositionAtBottom();
 
         // Load initial data
         await _historyViewModel.LoadEntriesAsync();
