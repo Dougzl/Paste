@@ -38,6 +38,7 @@ public partial class HistoryPage : UserControl
         _viewModel = viewModel;
         DataContext = _viewModel;
         InitializeComponent();
+        CardList.LostMouseCapture += CardList_LostMouseCapture;
         Loaded += HistoryPage_Loaded;
         Unloaded += HistoryPage_Unloaded;
     }
@@ -164,6 +165,7 @@ public partial class HistoryPage : UserControl
         StopAnimation();
         _isMouseDown = true;
         _isDragging = false;
+        Mouse.OverrideCursor = null;
         _dragStartPoint = e.GetPosition(CardList);
         var sv = GetScrollViewer(CardList);
         _dragStartOffset = sv?.HorizontalOffset ?? 0;
@@ -174,6 +176,11 @@ public partial class HistoryPage : UserControl
     private void CardList_PreviewMouseMove(object sender, MouseEventArgs e)
     {
         if (!_isMouseDown) return;
+        if (_isDragging && e.LeftButton != MouseButtonState.Pressed)
+        {
+            ResetDragState();
+            return;
+        }
 
         var currentPos = e.GetPosition(CardList);
         var deltaX = currentPos.X - _dragStartPoint.X;
@@ -184,7 +191,7 @@ public partial class HistoryPage : UserControl
             {
                 _isDragging = true;
                 CardList.CaptureMouse();
-                Cursor = Cursors.Hand;
+                Mouse.OverrideCursor = Cursors.Hand;
             }
             else return;
         }
@@ -207,7 +214,7 @@ public partial class HistoryPage : UserControl
     {
         if (!_isMouseDown) return;
         _isMouseDown = false;
-        Cursor = Cursors.Arrow;
+        Mouse.OverrideCursor = null;
 
         if (_isDragging)
         {
@@ -234,6 +241,11 @@ public partial class HistoryPage : UserControl
 
     private void CardList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
+        if (_isDragging || (_isMouseDown && Mouse.LeftButton != MouseButtonState.Pressed))
+        {
+            ResetDragState();
+        }
+
         var scrollViewer = GetScrollViewer(CardList);
         if (scrollViewer != null)
         {
@@ -305,6 +317,23 @@ public partial class HistoryPage : UserControl
     {
         ScrollAppFilters(e.Delta);
         e.Handled = true;
+    }
+
+    private void CardList_LostMouseCapture(object sender, MouseEventArgs e)
+    {
+        ResetDragState();
+    }
+
+    private void ResetDragState()
+    {
+        _isMouseDown = false;
+        _isDragging = false;
+        _dragSamples.Clear();
+        Mouse.OverrideCursor = null;
+        if (CardList.IsMouseCaptured)
+        {
+            CardList.ReleaseMouseCapture();
+        }
     }
 
     private void TopFilterBar_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
