@@ -82,6 +82,7 @@ public partial class MainWindow : FluentWindow
         var settings = _settingsService.Load();
         _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
         _hotkeyService.HotkeyPressed += OnHotkeyPressed;
+        ApplyTrayIconVisibility(settings.ShowTrayIcon);
 
         // Start clipboard monitoring
         _clipboardMonitor.ClipboardChanged += OnClipboardChanged;
@@ -125,7 +126,31 @@ public partial class MainWindow : FluentWindow
         {
             var hwnd = new WindowInteropHelper(this).Handle;
             _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
+            ApplyTrayIconVisibility(settings.ShowTrayIcon);
         });
+    }
+
+    private void ApplyTrayIconVisibility(bool showTrayIcon)
+    {
+        TrayIcon.IsEnabled = showTrayIcon;
+        TrayIcon.Visibility = showTrayIcon ? Visibility.Visible : Visibility.Collapsed;
+
+        // Some tray hosts keep the icon alive even when WPF visibility changes.
+        // Try invoking common show/hide API names if present.
+        var iconType = TrayIcon.GetType();
+        var flags = System.Reflection.BindingFlags.Instance
+                    | System.Reflection.BindingFlags.Public
+                    | System.Reflection.BindingFlags.NonPublic;
+        if (showTrayIcon)
+        {
+            iconType.GetMethod("Register", flags)?.Invoke(TrayIcon, null);
+            iconType.GetMethod("Show", flags)?.Invoke(TrayIcon, null);
+        }
+        else
+        {
+            iconType.GetMethod("Unregister", flags)?.Invoke(TrayIcon, null);
+            iconType.GetMethod("Hide", flags)?.Invoke(TrayIcon, null);
+        }
     }
 
     private void PositionAtBottom()

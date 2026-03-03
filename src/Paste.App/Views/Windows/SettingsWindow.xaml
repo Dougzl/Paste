@@ -20,6 +20,9 @@
         <SolidColorBrush x:Key="DividerBrush" Color="#3A3A3E" />
         <SolidColorBrush x:Key="OrangeDot" Color="#FF9F43" />
         <SolidColorBrush x:Key="PurpleDot" Color="#A78BFA" />
+        <Style TargetType="{x:Type Control}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        </Style>
 
         <!-- Toggle switch style -->
         <Style x:Key="ToggleSwitchStyle" TargetType="ToggleButton">
@@ -66,7 +69,7 @@
             <StackPanel>
 
                 <!-- Section 1: Hotkey -->
-                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16" Margin="0,0,0,12">
+                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16" Margin="0,0,0,12" BorderBrush="Transparent" BorderThickness="0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                             <Ellipse Width="10" Height="10" Fill="{StaticResource OrangeDot}" VerticalAlignment="Center" Margin="0,0,8,0" />
@@ -105,7 +108,7 @@
                 </Border>
 
                 <!-- Section 2: Startup Settings -->
-                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16" Margin="0,0,0,12">
+                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16" Margin="0,0,0,12" BorderBrush="Transparent" BorderThickness="0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <Ellipse Width="10" Height="10" Fill="{StaticResource OrangeDot}" VerticalAlignment="Center" Margin="0,0,8,0" />
@@ -139,7 +142,7 @@
                 </Border>
 
                 <!-- Section 3: History Capacity -->
-                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16,20,12">
+                <Border Background="{StaticResource CardBg}" CornerRadius="12" Padding="20,16,20,12" BorderBrush="Transparent" BorderThickness="0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                             <Ellipse Width="10" Height="10" Fill="{StaticResource PurpleDot}" VerticalAlignment="Center" Margin="0,0,8,0" />

@@ -189,8 +189,9 @@
 
                 <!-- App filter chips (max visible with scroll) -->
                 <ScrollViewer
+                    x:Name="AppFilterScrollViewer"
                     DockPanel.Dock="Left"
-                    HorizontalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Hidden"
                     VerticalScrollBarVisibility="Disabled"
                     MaxWidth="520"
                     PreviewMouseWheel="AppFilterScroll_PreviewMouseWheel">

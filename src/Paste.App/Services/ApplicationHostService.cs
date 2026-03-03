@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Paste.Core.Interfaces;
 using Paste.App.Views.Windows;
 using System.Windows.Interop;
 
@@ -17,8 +18,22 @@ public class ApplicationHostService : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Opacity = 0;
-        _ = new WindowInteropHelper(mainWindow).EnsureHandle();
+        var settingsService = _serviceProvider.GetRequiredService<ISettingsService>();
+        var settings = settingsService.Load();
+
+        if (settings.MinimizeToTrayOnStartup)
+        {
+            // Silent startup: initialize handle/background services without showing window.
+            mainWindow.Opacity = 0;
+            _ = new WindowInteropHelper(mainWindow).EnsureHandle();
+        }
+        else
+        {
+            mainWindow.Opacity = 1;
+            mainWindow.Show();
+            mainWindow.Activate();
+        }
+
         return Task.CompletedTask;
     }
 
