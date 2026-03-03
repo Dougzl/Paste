@@ -92,6 +92,17 @@ public class ClipboardHistoryService : IClipboardHistoryService
         }
     }
 
+    public async Task UpdateContentAsync(long id, string content)
+    {
+        await using var db = await _contextFactory.CreateDbContextAsync();
+        var entry = await db.ClipboardEntries.FindAsync(id);
+        if (entry != null)
+        {
+            entry.Content = content ?? string.Empty;
+            await db.SaveChangesAsync();
+        }
+    }
+
     public async Task ClearAllAsync()
     {
         await using var db = await _contextFactory.CreateDbContextAsync();

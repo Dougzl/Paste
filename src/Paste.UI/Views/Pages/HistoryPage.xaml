@@ -35,25 +35,32 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Top Bar: folder chips + add + settings gear -->
+        <!-- Top Bar: folder chips + add + settings menu -->
         <DockPanel Grid.Row="0" Margin="0,2,0,6" LastChildFill="True">
-            <!-- Settings gear (far right) -->
-            <Border
+            <!-- Settings menu (far right) -->
+            <Button
+                x:Name="TopMenuButton"
                 DockPanel.Dock="Right"
                 Padding="6,3"
-                CornerRadius="12"
                 Cursor="Hand"
                 Background="Transparent"
-                MouseLeftButtonUp="SettingsButton_Click"
+                BorderThickness="0"
                 VerticalAlignment="Center"
-                Margin="6,0,0,0">
+                Margin="6,0,0,0"
+                Click="TopMenuButton_Click">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="偏好设置" Click="TopMenu_Settings_Click" />
+                        <MenuItem Header="退出" Click="TopMenu_Exit_Click" />
+                    </ContextMenu>
+                </Button.ContextMenu>
                 <TextBlock
                     Text="&#xE713;"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="14"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center" />
-            </Border>
+            </Button>
 
             <!-- Folder chips + add button (centered) -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -348,9 +355,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Header Strip (colored, top rounded corners) -->
-                            <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0"
-                                    MouseLeftButtonDown="CardHeader_MouseLeftButtonDown"
-                                    Tag="{Binding}">
+                            <Border Grid.Row="0" Padding="12,10" CornerRadius="8,8,0,0" Tag="{Binding}">
                                 <Border.Background>
                                     <MultiBinding Converter="{StaticResource ContentTypeToColorConverter}">
                                         <Binding Path="ContentType" />
@@ -364,9 +369,13 @@
                                         Height="32"
                                         Source="{Binding SourceAppPath, Converter={StaticResource AppIconConverter}}"
                                         VerticalAlignment="Center" />
-                                    <StackPanel VerticalAlignment="Center">
+                                    <StackPanel
+                                        VerticalAlignment="Center"
+                                        MouseLeftButtonDown="CardHeader_MouseLeftButtonDown"
+                                        Tag="{Binding}">
                                         <!-- Alias TextBlock (shown when Alias has value) -->
                                         <TextBlock
+                                            x:Name="AliasTitleTextBlock"
                                             Text="{Binding Alias}"
                                             FontSize="15"
                                             FontWeight="Bold"
@@ -386,6 +395,7 @@
                                         </TextBlock>
                                         <!-- Default label (shown when Alias is null/empty) -->
                                         <TextBlock
+                                            x:Name="DefaultTitleTextBlock"
                                             FontSize="15"
                                             FontWeight="Bold"
                                             Foreground="White">
@@ -409,16 +419,16 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <!-- Inline alias edit TextBox (hidden by default, shown on double-click) -->
+                                        <!-- Inline alias edit TextBox -->
                                         <TextBox
                                             x:Name="AliasEditBox"
-                                            FontSize="14"
+                                            FontSize="15"
                                             FontWeight="Bold"
                                             MinWidth="80"
-                                            Height="22"
-                                            Padding="2,0"
-                                            BorderThickness="0,0,0,1"
-                                            BorderBrush="#80FFFFFF"
+                                            Height="20"
+                                            Padding="0"
+                                            Margin="0,-1,0,0"
+                                            BorderThickness="0"
                                             Background="Transparent"
                                             Foreground="White"
                                             CaretBrush="White"
@@ -437,15 +447,35 @@
 
                             <!-- Body: Content Preview -->
                             <Grid Grid.Row="1" Margin="10,8" MinHeight="100">
-                                <TextBlock
-                                    Text="{Binding Content}"
-                                    TextWrapping="Wrap"
-                                    TextTrimming="CharacterEllipsis"
-                                    MaxHeight="260"
-                                    FontSize="12"
-                                    LineHeight="18"
-                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                    Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Text}" />
+                                <Grid
+                                    Visibility="{Binding ContentType, Converter={StaticResource ContentTypeToVisibilityConverter}, ConverterParameter=Text}">
+                                    <TextBlock
+                                        x:Name="ContentTextBlock"
+                                        Text="{Binding Content}"
+                                        TextWrapping="Wrap"
+                                        TextTrimming="CharacterEllipsis"
+                                        MaxHeight="260"
+                                        FontSize="12"
+                                        LineHeight="18"
+                                        Cursor="IBeam"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        MouseLeftButtonDown="ContentText_MouseLeftButtonDown" />
+                                    <TextBox
+                                        x:Name="ContentEditBox"
+                                        TextWrapping="Wrap"
+                                        AcceptsReturn="True"
+                                        VerticalScrollBarVisibility="Auto"
+                                        MaxHeight="260"
+                                        FontSize="12"
+                                        Padding="0"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        CaretBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Visibility="Collapsed"
+                                        KeyDown="ContentEditBox_KeyDown"
+                                        LostFocus="ContentEditBox_LostFocus" />
+                                </Grid>
 
                                 <Image
                                     Width="240"

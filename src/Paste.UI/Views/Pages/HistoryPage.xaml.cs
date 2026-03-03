@@ -265,9 +265,24 @@ public partial class HistoryPage : UserControl
 
     // --- Top bar handlers ---
 
-    private void SettingsButton_Click(object sender, MouseButtonEventArgs e)
+    private void TopMenuButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.ContextMenu != null)
+        {
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.IsOpen = true;
+            e.Handled = true;
+        }
+    }
+
+    private void TopMenu_Settings_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.OpenSettingsCommand.Execute(null);
+    }
+
+    private void TopMenu_Exit_Click(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
     }
 
     private void AppFilterChip_Click(object sender, MouseButtonEventArgs e)
@@ -452,22 +467,18 @@ public partial class HistoryPage : UserControl
 
     private void CardHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ClickCount >= 2 && sender is FrameworkElement fe && fe.Tag is ClipboardEntry entry)
+        if (sender is FrameworkElement fe && fe.Tag is ClipboardEntry entry)
         {
-            // Double-click: enter inline alias edit mode
-            var textBox = FindVisualChild<TextBox>(fe);
-            if (textBox != null)
-            {
-                textBox.Text = entry.Alias ?? string.Empty;
-                textBox.Visibility = Visibility.Visible;
-                textBox.Tag = entry;
+            EnterAliasEditMode(fe, entry);
+            e.Handled = true;
+        }
+    }
 
-                Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
-                {
-                    textBox.Focus();
-                    textBox.SelectAll();
-                });
-            }
+    private void ContentText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.DataContext is ClipboardEntry entry)
+        {
+            EnterContentEditMode(fe, entry);
             e.Handled = true;
         }
     }
@@ -482,7 +493,7 @@ public partial class HistoryPage : UserControl
         }
         else if (e.Key == Key.Escape && sender is TextBox tb2)
         {
-            tb2.Visibility = Visibility.Collapsed;
+            ExitAliasEditMode(tb2, tb2.Tag as ClipboardEntry);
             e.Handled = true;
             CardList.Focus();
         }
@@ -496,9 +507,33 @@ public partial class HistoryPage : UserControl
         }
     }
 
+    private void ContentEditBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None && sender is TextBox tb && tb.Tag is ClipboardEntry entry)
+        {
+            CommitContentEdit(tb, entry);
+            e.Handled = true;
+            CardList.Focus();
+        }
+        else if (e.Key == Key.Escape && sender is TextBox tb2)
+        {
+            ExitContentEditMode(tb2);
+            e.Handled = true;
+            CardList.Focus();
+        }
+    }
+
+    private void ContentEditBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb.Tag is ClipboardEntry entry)
+        {
+            CommitContentEdit(tb, entry);
+        }
+    }
+
     private void CommitAliasEdit(TextBox textBox, ClipboardEntry entry)
     {
-        textBox.Visibility = Visibility.Collapsed;
+        ExitAliasEditMode(textBox, entry);
         var newAlias = textBox.Text.Trim();
         if (newAlias != entry.Alias)
         {
@@ -535,4 +570,89 @@ public partial class HistoryPage : UserControl
 
     private static double Clamp(double value, double min, double max)
         => Math.Max(min, Math.Min(value, max));
+
+    private static void EnterAliasEditMode(DependencyObject container, ClipboardEntry entry)
+    {
+        var textBox = FindVisualChildByName<TextBox>(container, "AliasEditBox");
+        var aliasTitle = FindVisualChildByName<TextBlock>(container, "AliasTitleTextBlock");
+        var defaultTitle = FindVisualChildByName<TextBlock>(container, "DefaultTitleTextBlock");
+        if (textBox == null) return;
+
+        if (aliasTitle != null) aliasTitle.Visibility = Visibility.Collapsed;
+        if (defaultTitle != null) defaultTitle.Visibility = Visibility.Collapsed;
+
+        var displayedTitle = aliasTitle?.Text;
+        if (string.IsNullOrWhiteSpace(displayedTitle))
+            displayedTitle = defaultTitle?.Text;
+        textBox.Text = displayedTitle ?? string.Empty;
+        textBox.Visibility = Visibility.Visible;
+        textBox.Tag = entry;
+
+        textBox.Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+        {
+            textBox.Focus();
+            textBox.SelectAll();
+        });
+    }
+
+    private static void ExitAliasEditMode(TextBox textBox, ClipboardEntry? entry)
+    {
+        textBox.Visibility = Visibility.Collapsed;
+        var container = VisualTreeHelper.GetParent(textBox);
+        var aliasTitle = container != null ? FindVisualChildByName<TextBlock>(container, "AliasTitleTextBlock") : null;
+        var defaultTitle = container != null ? FindVisualChildByName<TextBlock>(container, "DefaultTitleTextBlock") : null;
+
+        var hasAlias = !string.IsNullOrWhiteSpace(entry?.Alias);
+        if (aliasTitle != null) aliasTitle.Visibility = hasAlias ? Visibility.Visible : Visibility.Collapsed;
+        if (defaultTitle != null) defaultTitle.Visibility = hasAlias ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private static T? FindVisualChildByName<T>(DependencyObject parent, string name)
+        where T : FrameworkElement
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T t && t.Name == name) return t;
+            var found = FindVisualChildByName<T>(child, name);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private void EnterContentEditMode(DependencyObject container, ClipboardEntry entry)
+    {
+        var textBlock = FindVisualChildByName<TextBlock>(container, "ContentTextBlock");
+        var textBox = FindVisualChildByName<TextBox>(container, "ContentEditBox");
+        if (textBlock == null || textBox == null) return;
+
+        textBlock.Visibility = Visibility.Collapsed;
+        textBox.Text = entry.Content ?? string.Empty;
+        textBox.Visibility = Visibility.Visible;
+        textBox.Tag = entry;
+        textBox.Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+        {
+            textBox.Focus();
+            textBox.SelectAll();
+        });
+    }
+
+    private static void ExitContentEditMode(TextBox textBox)
+    {
+        textBox.Visibility = Visibility.Collapsed;
+        var container = VisualTreeHelper.GetParent(textBox);
+        var textBlock = container != null ? FindVisualChildByName<TextBlock>(container, "ContentTextBlock") : null;
+        if (textBlock != null)
+            textBlock.Visibility = Visibility.Visible;
+    }
+
+    private void CommitContentEdit(TextBox textBox, ClipboardEntry entry)
+    {
+        var newContent = (textBox.Text ?? string.Empty).Trim();
+        ExitContentEditMode(textBox);
+        if (newContent != (entry.Content ?? string.Empty))
+        {
+            _viewModel.UpdateContentCommand.Execute((entry.Id, newContent));
+        }
+    }
 }
