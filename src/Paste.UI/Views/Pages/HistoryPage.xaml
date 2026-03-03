@@ -378,75 +378,85 @@
                                         Width="32"
                                         Height="32"
                                         Source="{Binding SourceAppPath, Converter={StaticResource AppIconConverter}}"
-                                        VerticalAlignment="Center" />
+                                        VerticalAlignment="Center"
+                                        RenderTransformOrigin="0.5,0.5">
+                                        <Image.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                        </Image.RenderTransform>
+                                    </Image>
                                     <StackPanel
                                         VerticalAlignment="Center"
                                         MouseLeftButtonDown="CardHeader_MouseLeftButtonDown"
                                         Tag="{Binding}">
-                                        <!-- Alias TextBlock (shown when Alias has value) -->
-                                        <TextBlock
-                                            x:Name="AliasTitleTextBlock"
-                                            Text="{Binding Alias}"
-                                            FontSize="15"
-                                            FontWeight="Bold"
-                                            Foreground="White">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Alias}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <!-- Default label (shown when Alias is null/empty) -->
-                                        <TextBlock
-                                            x:Name="DefaultTitleTextBlock"
-                                            FontSize="15"
-                                            FontWeight="Bold"
-                                            Foreground="White">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource ContentTypeToLabelConverter}">
-                                                    <Binding Path="ContentType" />
-                                                    <Binding Path="Content" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Alias}" Value="">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <!-- Inline alias edit TextBox -->
-                                        <TextBox
-                                            x:Name="AliasEditBox"
-                                            FontSize="15"
-                                            FontWeight="Bold"
-                                            MinWidth="80"
-                                            Height="20"
-                                            Padding="0"
-                                            Margin="0,-1,0,0"
-                                            BorderThickness="0"
-                                            Background="Transparent"
-                                            Foreground="White"
-                                            CaretBrush="White"
-                                            VerticalAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            Visibility="Collapsed"
-                                            KeyDown="AliasEditBox_KeyDown"
-                                            LostFocus="AliasEditBox_LostFocus" />
+                                        <Grid Height="22">
+                                            <!-- Alias TextBlock (shown when Alias has value) -->
+                                            <TextBlock
+                                                x:Name="AliasTitleTextBlock"
+                                                Text="{Binding Alias}"
+                                                FontSize="15"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Alias}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <!-- Default label (shown when Alias is null/empty) -->
+                                            <TextBlock
+                                                x:Name="DefaultTitleTextBlock"
+                                                FontSize="15"
+                                                FontWeight="Bold"
+                                                Foreground="White"
+                                                VerticalAlignment="Center">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource ContentTypeToLabelConverter}">
+                                                        <Binding Path="ContentType" />
+                                                        <Binding Path="Content" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Alias}" Value="">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <!-- Inline alias edit TextBox -->
+                                            <TextBox
+                                                x:Name="AliasEditBox"
+                                                FontSize="15"
+                                                FontWeight="Bold"
+                                                Width="168"
+                                                Height="18"
+                                                Padding="0"
+                                                Margin="0"
+                                                BorderThickness="0"
+                                                Background="Transparent"
+                                                Foreground="White"
+                                                CaretBrush="White"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalAlignment="Left"
+                                                Visibility="Collapsed"
+                                                KeyDown="AliasEditBox_KeyDown"
+                                                LostFocus="AliasEditBox_LostFocus" />
+                                        </Grid>
                                         <TextBlock
                                             Text="{Binding CopiedAt, Converter={StaticResource RelativeTimeConverter}}"
                                             FontSize="10"
