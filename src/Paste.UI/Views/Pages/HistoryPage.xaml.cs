@@ -23,6 +23,7 @@ public partial class HistoryPage : UserControl
     private readonly List<(DateTime Time, double Offset)> _dragSamples = new();
     private const double DragThreshold = 5.0;
     private const double MaxVelocity = 60.0;
+    private int _currentSelectionIndex = -1;
 
     // Inertia / smooth scroll animation
     private double _velocity;
@@ -40,6 +41,7 @@ public partial class HistoryPage : UserControl
         DataContext = _viewModel;
         InitializeComponent();
         CardList.LostMouseCapture += CardList_LostMouseCapture;
+        CardList.SelectionChanged += CardList_SelectionChanged;
         Loaded += HistoryPage_Loaded;
         Unloaded += HistoryPage_Unloaded;
     }
@@ -58,6 +60,7 @@ public partial class HistoryPage : UserControl
     private void HistoryPage_Unloaded(object sender, RoutedEventArgs e)
     {
         _hwndSource?.RemoveHook(WndProc);
+        CardList.SelectionChanged -= CardList_SelectionChanged;
         StopAnimation();
     }
 
@@ -269,17 +272,29 @@ public partial class HistoryPage : UserControl
         _viewModel.PasteSelectedCommand.Execute(null);
     }
 
-    private async void CardList_KeyDown(object sender, KeyEventArgs e)
+    private async void CardList_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
             _viewModel.PasteSelectedCommand.Execute(null);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Right)
+        {
+            MoveSelectionBy(1);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Left)
+        {
+            MoveSelectionBy(-1);
+            e.Handled = true;
         }
         else if (e.Key == Key.Delete)
         {
-            if (_viewModel.SelectedEntry != null)
+            var entry = ResolveCurrentEntryForKeyboardDelete();
+            if (entry != null)
             {
-                var entry = _viewModel.SelectedEntry;
+                var indexBeforeDelete = _currentSelectionIndex >= 0 ? _currentSelectionIndex : CardList.SelectedIndex;
 
                 if (entry.FavoriteFolderId is > 0)
                 {
@@ -301,9 +316,75 @@ public partial class HistoryPage : UserControl
                 }
 
                 await _viewModel.DeleteEntryCommand.ExecuteAsync(entry);
+                SelectByIndex(indexBeforeDelete);
                 e.Handled = true;
             }
         }
+    }
+
+    private void CardList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        _currentSelectionIndex = CardList.SelectedIndex;
+    }
+
+    private void MoveSelectionBy(int delta)
+    {
+        if (_viewModel.Entries.Count == 0)
+        {
+            return;
+        }
+
+        var baseIndex = _currentSelectionIndex;
+        if (baseIndex < 0)
+        {
+            baseIndex = CardList.SelectedIndex;
+        }
+        if (baseIndex < 0)
+        {
+            baseIndex = 0;
+        }
+
+        var targetIndex = Math.Clamp(baseIndex + delta, 0, _viewModel.Entries.Count - 1);
+        SelectByIndex(targetIndex);
+    }
+
+    private void SelectByIndex(int index)
+    {
+        if (_viewModel.Entries.Count == 0)
+        {
+            _currentSelectionIndex = -1;
+            _viewModel.SelectedEntry = null;
+            return;
+        }
+
+        var clamped = Math.Clamp(index, 0, _viewModel.Entries.Count - 1);
+        _currentSelectionIndex = clamped;
+        var entry = _viewModel.Entries[clamped];
+        _viewModel.SelectedEntry = entry;
+        CardList.SelectedIndex = clamped;
+        CardList.ScrollIntoView(entry);
+    }
+
+    private ClipboardEntry? ResolveCurrentEntryForKeyboardDelete()
+    {
+        if (_viewModel.SelectedEntry != null)
+        {
+            return _viewModel.SelectedEntry;
+        }
+
+        if (_viewModel.Entries.Count == 0)
+        {
+            return null;
+        }
+
+        var index = _currentSelectionIndex >= 0 ? _currentSelectionIndex : CardList.SelectedIndex;
+        if (index < 0)
+        {
+            index = 0;
+        }
+
+        index = Math.Clamp(index, 0, _viewModel.Entries.Count - 1);
+        return _viewModel.Entries[index];
     }
 
     // --- Top bar handlers ---

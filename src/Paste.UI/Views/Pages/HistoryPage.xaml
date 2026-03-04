@@ -273,7 +273,7 @@
             ItemsSource="{Binding Entries}"
             SelectedItem="{Binding SelectedEntry}"
             MouseDoubleClick="CardList_MouseDoubleClick"
-            KeyDown="CardList_KeyDown"
+            PreviewKeyDown="CardList_PreviewKeyDown"
             PreviewMouseWheel="CardList_PreviewMouseWheel"
             PreviewMouseLeftButtonDown="CardList_PreviewMouseLeftButtonDown"
             PreviewMouseMove="CardList_PreviewMouseMove"
