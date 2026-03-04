@@ -749,13 +749,10 @@ public partial class HistoryPage : UserControl
         var dialogWidth = dialog.ActualWidth > 0 ? dialog.ActualWidth : (double.IsNaN(dialog.Width) ? 420 : dialog.Width);
         var dialogHeight = dialog.ActualHeight > 0 ? dialog.ActualHeight : (double.IsNaN(dialog.Height) ? 220 : dialog.Height);
 
-        var ownerWidth = owner.ActualWidth > 0 ? owner.ActualWidth : owner.Width;
-        var ownerHeight = owner.ActualHeight > 0 ? owner.ActualHeight : owner.Height;
-        if (double.IsNaN(ownerWidth) || ownerWidth <= 0) ownerWidth = 800;
-        if (double.IsNaN(ownerHeight) || ownerHeight <= 0) ownerHeight = 500;
-
-        var targetLeft = owner.Left + (ownerWidth - dialogWidth) / 2.0;
-        var targetTop = owner.Top + (ownerHeight - dialogHeight) / 2.0;
+        // Center on the current monitor's working area (slightly above center),
+        // instead of centering on owner window bounds.
+        var targetLeft = workLeft + (workWidth - dialogWidth) / 2.0;
+        var targetTop = workTop + (workHeight - dialogHeight) / 2.0 - 24.0;
 
         var minLeft = workLeft;
         var maxLeft = workLeft + workWidth - dialogWidth;
