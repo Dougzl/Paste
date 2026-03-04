@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
 using Paste.Core.Models;
 using Paste.UI.ViewModels;
 
@@ -12,6 +13,7 @@ namespace Paste.UI.Views.Pages;
 public partial class HistoryPage : UserControl
 {
     private const int WM_MOUSEHWHEEL = 0x020E;
+    private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
     private readonly ClipboardHistoryViewModel _viewModel;
     private HwndSource? _hwndSource;
 
@@ -298,17 +300,7 @@ public partial class HistoryPage : UserControl
 
                 if (entry.FavoriteFolderId is > 0)
                 {
-                    var confirmBox = new Wpf.Ui.Controls.MessageBox
-                    {
-                        Title = "删除确认",
-                        Content = "该记录在收藏夹中，确认删除吗？",
-                        PrimaryButtonText = "删除",
-                        CloseButtonText = "取消",
-                        Owner = Window.GetWindow(this)
-                    };
-
-                    var result = await confirmBox.ShowDialogAsync();
-                    if (result != Wpf.Ui.Controls.MessageBoxResult.Primary)
+                    if (!await ConfirmDeleteFavoriteEntryAsync())
                     {
                         e.Handled = true;
                         return;
@@ -675,17 +667,7 @@ public partial class HistoryPage : UserControl
 
         if (entry.FavoriteFolderId is > 0)
         {
-            var confirmBox = new Wpf.Ui.Controls.MessageBox
-            {
-                Title = "删除确认",
-                Content = "该记录在收藏夹中，确认删除吗？",
-                PrimaryButtonText = "删除",
-                CloseButtonText = "取消",
-                Owner = Window.GetWindow(this)
-            };
-
-            var result = await confirmBox.ShowDialogAsync();
-            if (result != Wpf.Ui.Controls.MessageBoxResult.Primary)
+            if (!await ConfirmDeleteFavoriteEntryAsync())
             {
                 return;
             }
@@ -716,6 +698,125 @@ public partial class HistoryPage : UserControl
         }
 
         return cm?.DataContext as ClipboardEntry;
+    }
+
+    private async Task<bool> ConfirmDeleteFavoriteEntryAsync()
+    {
+        var owner = Window.GetWindow(this);
+        var confirmBox = new Wpf.Ui.Controls.MessageBox
+        {
+            Title = "删除确认",
+            Content = "该记录在收藏夹中，确认删除吗？",
+            PrimaryButtonText = "删除",
+            CloseButtonText = "取消",
+            Owner = owner,
+            WindowStartupLocation = WindowStartupLocation.Manual
+        };
+
+        if (owner != null)
+        {
+            confirmBox.Loaded += (_, _) => CenterDialogOnOwnerScreen(confirmBox, owner);
+        }
+
+        var result = await confirmBox.ShowDialogAsync();
+        return result == Wpf.Ui.Controls.MessageBoxResult.Primary;
+    }
+
+    private static void CenterDialogOnOwnerScreen(Window dialog, Window owner)
+    {
+        var ownerHandle = new WindowInteropHelper(owner).Handle;
+        if (ownerHandle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        if (!TryGetOwnerMonitorWorkArea(ownerHandle, out var workLeftPx, out var workTopPx, out var workWidthPx, out var workHeightPx))
+        {
+            return;
+        }
+
+        var source = PresentationSource.FromVisual(owner);
+        var scaleX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+        var scaleY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+        if (scaleX <= 0) scaleX = 1.0;
+        if (scaleY <= 0) scaleY = 1.0;
+
+        var workLeft = workLeftPx / scaleX;
+        var workTop = workTopPx / scaleY;
+        var workWidth = workWidthPx / scaleX;
+        var workHeight = workHeightPx / scaleY;
+
+        var dialogWidth = dialog.ActualWidth > 0 ? dialog.ActualWidth : (double.IsNaN(dialog.Width) ? 420 : dialog.Width);
+        var dialogHeight = dialog.ActualHeight > 0 ? dialog.ActualHeight : (double.IsNaN(dialog.Height) ? 220 : dialog.Height);
+
+        var ownerWidth = owner.ActualWidth > 0 ? owner.ActualWidth : owner.Width;
+        var ownerHeight = owner.ActualHeight > 0 ? owner.ActualHeight : owner.Height;
+        if (double.IsNaN(ownerWidth) || ownerWidth <= 0) ownerWidth = 800;
+        if (double.IsNaN(ownerHeight) || ownerHeight <= 0) ownerHeight = 500;
+
+        var targetLeft = owner.Left + (ownerWidth - dialogWidth) / 2.0;
+        var targetTop = owner.Top + (ownerHeight - dialogHeight) / 2.0;
+
+        var minLeft = workLeft;
+        var maxLeft = workLeft + workWidth - dialogWidth;
+        var minTop = workTop;
+        var maxTop = workTop + workHeight - dialogHeight;
+
+        if (maxLeft < minLeft) maxLeft = minLeft;
+        if (maxTop < minTop) maxTop = minTop;
+
+        dialog.Left = Math.Max(minLeft, Math.Min(targetLeft, maxLeft));
+        dialog.Top = Math.Max(minTop, Math.Min(targetTop, maxTop));
+    }
+
+    private static bool TryGetOwnerMonitorWorkArea(IntPtr ownerHandle, out int left, out int top, out int width, out int height)
+    {
+        left = 0;
+        top = 0;
+        width = 0;
+        height = 0;
+
+        var monitor = MonitorFromWindow(ownerHandle, MONITOR_DEFAULTTONEAREST);
+        if (monitor == IntPtr.Zero)
+        {
+            return false;
+        }
+
+        var info = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
+        if (!GetMonitorInfo(monitor, ref info))
+        {
+            return false;
+        }
+
+        left = info.rcWork.Left;
+        top = info.rcWork.Top;
+        width = info.rcWork.Right - info.rcWork.Left;
+        height = info.rcWork.Bottom - info.rcWork.Top;
+        return width > 0 && height > 0;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct MONITORINFO
+    {
+        public int cbSize;
+        public RECT rcMonitor;
+        public RECT rcWork;
+        public uint dwFlags;
     }
 
     // --- Alias editing handlers ---
