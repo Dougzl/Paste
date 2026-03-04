@@ -46,10 +46,30 @@
                 Padding="6,3"
                 Cursor="Hand"
                 Background="Transparent"
+                BorderBrush="Transparent"
                 BorderThickness="0"
+                FocusVisualStyle="{x:Null}"
                 VerticalAlignment="Center"
                 Margin="6,0,0,0"
                 Click="TopMenuButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="偏好设置" Click="TopMenu_Settings_Click" />
