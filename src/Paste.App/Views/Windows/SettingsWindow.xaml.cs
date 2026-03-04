@@ -245,11 +245,6 @@ public partial class SettingsWindow : FluentWindow
             return;
         }
 
-        if (Owner is Window ownerWindow && ownerWindow.IsVisible)
-        {
-            ownerWindow.Hide();
-        }
-
         Close();
     }
 
