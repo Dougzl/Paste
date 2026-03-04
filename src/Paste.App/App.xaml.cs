@@ -61,8 +61,9 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        // Apply system theme and watch for changes
-        ApplicationThemeManager.ApplySystemTheme();
+        var settingsService = _host.Services.GetRequiredService<ISettingsService>();
+        var settings = settingsService.Load();
+        ApplyThemeMode(settings.ThemeMode);
 
         // Run database migration (creates tables if missing, alters schema as needed)
         var contextFactory = _host.Services.GetRequiredService<IDbContextFactory<PasteDbContext>>();
@@ -72,6 +73,23 @@ public partial class App : Application
         await RunAutoCleanupAsync(contextFactory);
 
         await _host.StartAsync();
+    }
+
+    public static void ApplyThemeMode(string? themeMode)
+    {
+        if (string.Equals(themeMode, "Light", StringComparison.OrdinalIgnoreCase))
+        {
+            ApplicationThemeManager.Apply(ApplicationTheme.Light);
+            return;
+        }
+
+        if (string.Equals(themeMode, "Dark", StringComparison.OrdinalIgnoreCase))
+        {
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+            return;
+        }
+
+        ApplicationThemeManager.ApplySystemTheme();
     }
 
     private async Task RunAutoCleanupAsync(IDbContextFactory<PasteDbContext> contextFactory)

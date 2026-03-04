@@ -355,7 +355,7 @@
                     <Border
                         CornerRadius="8"
                         ClipToBounds="True"
-                        Background="#2A2A2E"
+                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
                         MouseLeftButtonDown="EntryCard_MouseLeftButtonDown">
                         <Border.ContextMenu>
                             <ContextMenu>

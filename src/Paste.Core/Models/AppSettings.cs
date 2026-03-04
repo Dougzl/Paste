@@ -19,4 +19,7 @@ public class AppSettings
 
     /// <summary>Show tray icon in system tray.</summary>
     public bool ShowTrayIcon { get; set; } = true;
+
+    /// <summary>Theme mode: System / Light / Dark.</summary>
+    public string ThemeMode { get; set; } = "System";
 }

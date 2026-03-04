@@ -80,6 +80,7 @@ public partial class MainWindow : FluentWindow
 
         // Register global hotkey from settings
         var settings = _settingsService.Load();
+        App.ApplyThemeMode(settings.ThemeMode);
         _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
         _hotkeyService.HotkeyPressed += OnHotkeyPressed;
         ApplyTrayIconVisibility(settings.ShowTrayIcon);
@@ -125,6 +126,7 @@ public partial class MainWindow : FluentWindow
         Dispatcher.Invoke(() =>
         {
             var hwnd = new WindowInteropHelper(this).Handle;
+            App.ApplyThemeMode(settings.ThemeMode);
             _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
             ApplyTrayIconVisibility(settings.ShowTrayIcon);
         });

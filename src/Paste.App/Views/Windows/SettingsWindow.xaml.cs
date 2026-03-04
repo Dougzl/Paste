@@ -36,6 +36,7 @@ public partial class SettingsWindow : FluentWindow
         _historyService = historyService;
         InitializeComponent();
         PreviewKeyDown += SettingsWindow_PreviewKeyDown;
+        Deactivated += SettingsWindow_Deactivated;
         Loaded += (_, _) =>
         {
             var hwnd = new WindowInteropHelper(this).Handle;
@@ -60,6 +61,7 @@ public partial class SettingsWindow : FluentWindow
         AutoRunToggle.IsChecked = s.AutoRunOnStartup;
         MinimizeToTrayToggle.IsChecked = s.MinimizeToTrayOnStartup;
         ShowTrayIconToggle.IsChecked = s.ShowTrayIcon;
+        ThemeModeCombo.SelectedValue = NormalizeThemeMode(s.ThemeMode);
 
         // Wire up toggle events after loading to avoid premature saves
         AutoRunToggle.Checked += ToggleChanged;
@@ -86,10 +88,12 @@ public partial class SettingsWindow : FluentWindow
             AutoCleanupDays = cleanupDays,
             AutoRunOnStartup = AutoRunToggle.IsChecked == true,
             MinimizeToTrayOnStartup = MinimizeToTrayToggle.IsChecked == true,
-            ShowTrayIcon = ShowTrayIconToggle.IsChecked == true
+            ShowTrayIcon = ShowTrayIconToggle.IsChecked == true,
+            ThemeMode = GetSelectedThemeMode()
         };
 
         _settingsService.Save(settings);
+        App.ApplyThemeMode(settings.ThemeMode);
         UpdateAutoRun(settings.AutoRunOnStartup);
     }
 
@@ -122,6 +126,11 @@ public partial class SettingsWindow : FluentWindow
     private void ToggleChanged(object sender, RoutedEventArgs e) => SaveSettings();
 
     private void CleanupSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => SaveSettings();
+
+    private void ThemeModeCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        SaveSettings();
+    }
 
     private void ResetHotkey_Click(object sender, MouseButtonEventArgs e)
     {
@@ -227,5 +236,54 @@ public partial class SettingsWindow : FluentWindow
 
         e.Handled = true;
         Close();
+    }
+
+    private void SettingsWindow_Deactivated(object? sender, EventArgs e)
+    {
+        if (!IsVisible || HasVisibleOwnedWindow())
+        {
+            return;
+        }
+
+        if (Owner is Window ownerWindow && ownerWindow.IsVisible)
+        {
+            ownerWindow.Hide();
+        }
+
+        Close();
+    }
+
+    private bool HasVisibleOwnedWindow()
+    {
+        foreach (Window window in System.Windows.Application.Current.Windows)
+        {
+            if (window.Owner == this && window.IsVisible)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private string GetSelectedThemeMode()
+    {
+        var selectedValue = ThemeModeCombo.SelectedValue as string;
+        return NormalizeThemeMode(selectedValue);
+    }
+
+    private static string NormalizeThemeMode(string? themeMode)
+    {
+        if (string.Equals(themeMode, "Light", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Light";
+        }
+
+        if (string.Equals(themeMode, "Dark", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Dark";
+        }
+
+        return "System";
     }
 }
