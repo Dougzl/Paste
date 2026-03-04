@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Runtime.InteropServices;
 using Paste.App.Services;
 using Paste.Core.Interfaces;
 using Paste.Core.Models;
@@ -10,6 +11,7 @@ namespace Paste.App.Views.Windows;
 
 public partial class SettingsWindow : FluentWindow
 {
+    private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
     private readonly ISettingsService _settingsService;
     private readonly IClipboardHistoryService _historyService;
     private int _capturedModifiers;
@@ -179,8 +181,11 @@ public partial class SettingsWindow : FluentWindow
             Content = "确定要清空所有历史记录吗？收藏夹中的内容将被保留。\n\n此操作不可撤销。",
             PrimaryButtonText = "确定",
             CloseButtonText = "取消",
-            Owner = this
+            Owner = this,
+            WindowStartupLocation = WindowStartupLocation.Manual
         };
+
+        uiMessageBox.Loaded += (_, _) => CenterDialogOnOwnerScreen(uiMessageBox, this);
 
         var result = await uiMessageBox.ShowDialogAsync();
 
@@ -259,6 +264,98 @@ public partial class SettingsWindow : FluentWindow
         }
 
         return false;
+    }
+
+    private static void CenterDialogOnOwnerScreen(Window dialog, Window owner)
+    {
+        var ownerHandle = new WindowInteropHelper(owner).Handle;
+        if (ownerHandle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        if (!TryGetOwnerMonitorWorkArea(ownerHandle, out var workLeftPx, out var workTopPx, out var workWidthPx, out var workHeightPx))
+        {
+            return;
+        }
+
+        var source = PresentationSource.FromVisual(owner);
+        var scaleX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+        var scaleY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+        if (scaleX <= 0) scaleX = 1.0;
+        if (scaleY <= 0) scaleY = 1.0;
+
+        var workLeft = workLeftPx / scaleX;
+        var workTop = workTopPx / scaleY;
+        var workWidth = workWidthPx / scaleX;
+        var workHeight = workHeightPx / scaleY;
+
+        var dialogWidth = dialog.ActualWidth > 0 ? dialog.ActualWidth : (double.IsNaN(dialog.Width) ? 420 : dialog.Width);
+        var dialogHeight = dialog.ActualHeight > 0 ? dialog.ActualHeight : (double.IsNaN(dialog.Height) ? 220 : dialog.Height);
+
+        var targetLeft = workLeft + (workWidth - dialogWidth) / 2.0;
+        var targetTop = workTop + (workHeight - dialogHeight) / 2.0 - 24.0;
+
+        var minLeft = workLeft;
+        var maxLeft = workLeft + workWidth - dialogWidth;
+        var minTop = workTop;
+        var maxTop = workTop + workHeight - dialogHeight;
+
+        if (maxLeft < minLeft) maxLeft = minLeft;
+        if (maxTop < minTop) maxTop = minTop;
+
+        dialog.Left = Math.Max(minLeft, Math.Min(targetLeft, maxLeft));
+        dialog.Top = Math.Max(minTop, Math.Min(targetTop, maxTop));
+    }
+
+    private static bool TryGetOwnerMonitorWorkArea(IntPtr ownerHandle, out int left, out int top, out int width, out int height)
+    {
+        left = 0;
+        top = 0;
+        width = 0;
+        height = 0;
+
+        var monitor = MonitorFromWindow(ownerHandle, MONITOR_DEFAULTTONEAREST);
+        if (monitor == IntPtr.Zero)
+        {
+            return false;
+        }
+
+        var info = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
+        if (!GetMonitorInfo(monitor, ref info))
+        {
+            return false;
+        }
+
+        left = info.rcWork.Left;
+        top = info.rcWork.Top;
+        width = info.rcWork.Right - info.rcWork.Left;
+        height = info.rcWork.Bottom - info.rcWork.Top;
+        return width > 0 && height > 0;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct MONITORINFO
+    {
+        public int cbSize;
+        public RECT rcMonitor;
+        public RECT rcWork;
+        public uint dwFlags;
     }
 
     private string GetSelectedThemeMode()
