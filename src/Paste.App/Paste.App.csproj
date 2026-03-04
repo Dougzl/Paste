@@ -8,6 +8,12 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <AssemblyTitle>Paste</AssemblyTitle>
+    <Product>Paste</Product>
+    <Description>Paste - 智能剪贴板助手</Description>
+    <Copyright>Copyright © 2026</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

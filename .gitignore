@@ -37,3 +37,7 @@ Desktop.ini
 .DS_Store
 
 build.*
+
+## Installer output
+dist/
+publish/
