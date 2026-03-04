@@ -1,0 +1,40 @@
+<Wix
+  xmlns="http://wixtoolset.org/schemas/v4/wxs"
+  xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package
+    Name="Paste"
+    Manufacturer="Paste"
+    Version="1.0.0"
+    UpgradeCode="A0B4E7EC-DDBF-480A-8B64-48898CE76C83"
+    Language="1033"
+    InstallerVersion="500"
+    Scope="perMachine">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Paste" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ProgramMenuPasteFolder" Name="Paste" />
+    </StandardDirectory>
+
+    <Component Id="StartMenuShortcutComponent" Directory="ProgramMenuPasteFolder" Guid="*">
+      <Shortcut
+        Id="StartMenuShortcut"
+        Name="Paste"
+        Target="[INSTALLFOLDER]Paste.App.exe"
+        WorkingDirectory="INSTALLFOLDER" />
+      <RemoveFolder Id="RemoveStartMenuPasteFolder" Directory="ProgramMenuPasteFolder" On="uninstall" />
+      <RegistryValue Root="HKCU" Key="Software\Paste" Name="HasStartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
+    <Feature Id="MainFeature" Title="Paste" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="StartMenuShortcutComponent" />
+    </Feature>
+  </Package>
+
+</Wix>

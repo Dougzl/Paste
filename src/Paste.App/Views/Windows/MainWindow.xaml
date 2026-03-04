@@ -33,7 +33,8 @@
         <!-- Content Host -->
         <ContentControl
             x:Name="ContentHost"
-            Grid.Row="1" />
+            Grid.Row="1"
+            FocusVisualStyle="{x:Null}" />
 
         <!-- Tray Icon -->
         <tray:NotifyIcon

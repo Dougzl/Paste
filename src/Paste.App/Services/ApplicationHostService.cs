@@ -30,8 +30,7 @@ public class ApplicationHostService : IHostedService
         else
         {
             mainWindow.Opacity = 1;
-            mainWindow.Show();
-            mainWindow.Activate();
+            mainWindow.ShowAtBottomAndActivate();
         }
 
         return Task.CompletedTask;

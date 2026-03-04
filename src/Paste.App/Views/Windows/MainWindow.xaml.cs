@@ -305,7 +305,7 @@ public partial class MainWindow : FluentWindow
 
     private void TrayMenu_Show_Click(object sender, RoutedEventArgs e)
     {
-        ShowAndActivate();
+        ShowAtBottomAndActivate();
     }
 
     private void TrayMenu_Exit_Click(object sender, RoutedEventArgs e)
@@ -329,5 +329,10 @@ public partial class MainWindow : FluentWindow
         Show();
         WindowState = WindowState.Normal;
         Activate();
+    }
+
+    public void ShowAtBottomAndActivate()
+    {
+        ShowAndActivate();
     }
 }

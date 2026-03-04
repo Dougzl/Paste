@@ -13,6 +13,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Focusable="True"
+    FocusVisualStyle="{x:Null}"
     PreviewKeyDown="HistoryPage_PreviewKeyDown">
 
     <UserControl.Resources>
@@ -197,8 +198,8 @@
             Padding="6,4"
             CornerRadius="20"
             Background="{DynamicResource ControlFillColorDefaultBrush}"
-            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1"
+            BorderBrush="Transparent"
+            BorderThickness="0"
             PreviewMouseWheel="TopFilterBar_PreviewMouseWheel">
             <DockPanel>
                 <!-- Search icon on the right -->
@@ -299,7 +300,7 @@
             PreviewMouseLeftButtonDown="CardList_PreviewMouseLeftButtonDown"
             PreviewMouseMove="CardList_PreviewMouseMove"
             PreviewMouseLeftButtonUp="CardList_PreviewMouseLeftButtonUp"
-            Background="Transparent"
+            Background="{DynamicResource ControlFillColorTertiaryBrush}"
             BorderBrush="Transparent"
             BorderThickness="0"
             FocusVisualStyle="{x:Null}"
@@ -356,6 +357,8 @@
                         CornerRadius="8"
                         ClipToBounds="True"
                         Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                        BorderThickness="1"
                         MouseLeftButtonDown="EntryCard_MouseLeftButtonDown">
                         <Border.ContextMenu>
                             <ContextMenu>
