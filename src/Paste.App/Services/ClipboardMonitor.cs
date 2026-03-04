@@ -16,11 +16,6 @@ public class ClipboardMonitor : IClipboardMonitor
     private static readonly string ImageDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Paste", "images");
-    private static readonly string LogDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "Paste", "logs");
-    private static readonly string CaptureLogPath = Path.Combine(LogDir, "capture-diagnostics.log");
-    private static readonly string CaptureDebugDir = Path.Combine(LogDir, "capture-debug");
 
     private HwndSource? _hwndSource;
     private readonly ISourceAppService _sourceAppService;
@@ -113,23 +108,13 @@ public class ClipboardMonitor : IClipboardMonitor
                 var image = Clipboard.GetImage();
                 if (image != null)
                 {
-                    LogImageStats("source", image, null, null);
                     var imageForStorage = NormalizeTransparentImageIfNeeded(image);
-                    LogImageStats("normalized", imageForStorage, null, null);
 
                     var imageData = BitmapSourceToBytes(imageForStorage);
                     var hash = ComputeHash(imageData);
-                    var encoded = TryDecodeBitmap(imageData);
-                    LogImageStats("encoded", encoded, hash, null);
-                    WriteDebugImage("source", image, hash, null);
-                    WriteDebugImage("normalized", imageForStorage, hash, null);
-                    WriteDebugImage("encoded", encoded, hash, null);
                     // Use Task.Run to avoid deadlock — SaveImageAsync posts back
                     // to SynchronizationContext which is blocked by .GetResult()
                     var relativePath = Task.Run(() => _imageStorageService.SaveImageAsync(imageData, hash)).GetAwaiter().GetResult();
-                    var saved = TryLoadSavedBitmap(relativePath);
-                    LogImageStats("saved", saved, hash, relativePath);
-                    WriteDebugImage("saved", saved, hash, relativePath);
 
                     entry = new ClipboardEntry
                     {
@@ -256,156 +241,6 @@ public class ClipboardMonitor : IClipboardMonitor
             stride);
         normalized.Freeze();
         return normalized;
-    }
-
-    private static BitmapSource? TryDecodeBitmap(byte[] data)
-    {
-        try
-        {
-            using var ms = new MemoryStream(data);
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.StreamSource = ms;
-            bitmap.EndInit();
-            bitmap.Freeze();
-            return bitmap;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static BitmapSource? TryLoadSavedBitmap(string relativePath)
-    {
-        try
-        {
-            var path = Path.Combine(ImageDir, relativePath);
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-
-            var data = File.ReadAllBytes(path);
-            return TryDecodeBitmap(data);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static void LogImageStats(string stage, BitmapSource? source, string? hash, string? relativePath)
-    {
-        try
-        {
-            Directory.CreateDirectory(LogDir);
-
-            if (source == null)
-            {
-                AppendCaptureLog($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} stage={stage} hash={hash ?? "-"} file={relativePath ?? "-"} decode=null");
-                return;
-            }
-
-            var formatted = source.Format == PixelFormats.Bgra32
-                ? source
-                : new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
-            if (formatted is Freezable freezable && freezable.CanFreeze)
-            {
-                freezable.Freeze();
-            }
-
-            var width = formatted.PixelWidth;
-            var height = formatted.PixelHeight;
-            var stride = width * 4;
-            var pixels = new byte[stride * height];
-            formatted.CopyPixels(pixels, stride, 0);
-
-            var stepX = Math.Max(1, width / 200);
-            var stepY = Math.Max(1, height / 200);
-            long samples = 0;
-            long black = 0;
-            long alphaZero = 0;
-            long rTotal = 0;
-            long gTotal = 0;
-            long bTotal = 0;
-
-            for (var y = 0; y < height; y += stepY)
-            {
-                var rowBase = y * stride;
-                for (var x = 0; x < width; x += stepX)
-                {
-                    var i = rowBase + x * 4;
-                    var b = pixels[i];
-                    var g = pixels[i + 1];
-                    var r = pixels[i + 2];
-                    var a = pixels[i + 3];
-                    samples++;
-
-                    if (a == 0)
-                    {
-                        alphaZero++;
-                    }
-
-                    if (a > 8 && r < 8 && g < 8 && b < 8)
-                    {
-                        black++;
-                    }
-
-                    rTotal += r;
-                    gTotal += g;
-                    bTotal += b;
-                }
-            }
-
-            var avgR = samples > 0 ? rTotal / (double)samples : 0;
-            var avgG = samples > 0 ? gTotal / (double)samples : 0;
-            var avgB = samples > 0 ? bTotal / (double)samples : 0;
-            var blackPct = samples > 0 ? black * 100.0 / samples : 0;
-            var alphaZeroPct = samples > 0 ? alphaZero * 100.0 / samples : 0;
-
-            AppendCaptureLog(
-                $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} stage={stage} hash={hash ?? "-"} file={relativePath ?? "-"} " +
-                $"size={width}x{height} format={source.Format} samples={samples} black%={blackPct:F2} alpha0%={alphaZeroPct:F2} " +
-                $"avgRGB=({avgR:F1},{avgG:F1},{avgB:F1})");
-        }
-        catch
-        {
-            // Ignore diagnostics failure.
-        }
-    }
-
-    private static void AppendCaptureLog(string line)
-    {
-        File.AppendAllText(CaptureLogPath, line + Environment.NewLine);
-    }
-
-    private static void WriteDebugImage(string stage, BitmapSource? source, string hash, string? relativePath)
-    {
-        try
-        {
-            if (source == null)
-            {
-                return;
-            }
-
-            Directory.CreateDirectory(CaptureDebugDir);
-            var safeFile = string.IsNullOrWhiteSpace(relativePath)
-                ? "-"
-                : relativePath.Replace(Path.DirectorySeparatorChar, '_').Replace(Path.AltDirectorySeparatorChar, '_');
-            var fileName = $"{DateTime.Now:yyyyMMdd-HHmmss-fff}_{stage}_{hash}_{safeFile}.png";
-            var path = Path.Combine(CaptureDebugDir, fileName);
-
-            var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(source));
-            using var stream = File.Create(path);
-            encoder.Save(stream);
-        }
-        catch
-        {
-            // Ignore diagnostics failure.
-        }
     }
 
     public void Dispose()
