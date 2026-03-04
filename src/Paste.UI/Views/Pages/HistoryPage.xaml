@@ -12,7 +12,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Focusable="True">
+    Focusable="True"
+    PreviewKeyDown="HistoryPage_PreviewKeyDown">
 
     <UserControl.Resources>
         <converters:AppIconConverter x:Key="AppIconConverter" />
@@ -334,7 +335,8 @@
                     <Border
                         CornerRadius="8"
                         ClipToBounds="True"
-                        Background="#2A2A2E">
+                        Background="#2A2A2E"
+                        MouseLeftButtonDown="EntryCard_MouseLeftButtonDown">
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem
@@ -479,24 +481,8 @@
                                         MaxHeight="260"
                                         FontSize="12"
                                         LineHeight="18"
-                                        Cursor="IBeam"
                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        MouseLeftButtonDown="ContentText_MouseLeftButtonDown" />
-                                    <TextBox
-                                        x:Name="ContentEditBox"
-                                        TextWrapping="Wrap"
-                                        AcceptsReturn="True"
-                                        VerticalScrollBarVisibility="Auto"
-                                        MaxHeight="260"
-                                        FontSize="12"
-                                        Padding="0"
-                                        BorderThickness="0"
-                                        Background="Transparent"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        CaretBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                                        Visibility="Collapsed"
-                                        KeyDown="ContentEditBox_KeyDown"
-                                        LostFocus="ContentEditBox_LostFocus" />
+                                        Cursor="Arrow" />
                                 </Grid>
 
                                 <Image
