@@ -355,6 +355,8 @@
                                     Header="从收藏夹移除"
                                     Click="RemoveFromFolder_Click"
                                     Visibility="{Binding FavoriteFolderId, Converter={StaticResource FavoriteFolderIdToVisibilityConverter}}" />
+                                <Separator />
+                                <MenuItem Header="删除" Click="DeleteEntry_Click" />
                             </ContextMenu>
                         </Border.ContextMenu>
                         <Grid>

@@ -561,6 +561,64 @@ public partial class HistoryPage : UserControl
             _viewModel.RemoveEntryFromFolderCommand.Execute(entry);
     }
 
+    private async void DeleteEntry_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem)
+        {
+            return;
+        }
+
+        var entry = TryGetEntryFromContextMenu(menuItem);
+        if (entry == null)
+        {
+            return;
+        }
+
+        if (entry.FavoriteFolderId is > 0)
+        {
+            var confirmBox = new Wpf.Ui.Controls.MessageBox
+            {
+                Title = "删除确认",
+                Content = "该记录在收藏夹中，确认删除吗？",
+                PrimaryButtonText = "删除",
+                CloseButtonText = "取消",
+                Owner = Window.GetWindow(this)
+            };
+
+            var result = await confirmBox.ShowDialogAsync();
+            if (result != Wpf.Ui.Controls.MessageBoxResult.Primary)
+            {
+                return;
+            }
+        }
+
+        await _viewModel.DeleteEntryCommand.ExecuteAsync(entry);
+    }
+
+    private static ClipboardEntry? TryGetEntryFromContextMenu(MenuItem menuItem)
+    {
+        ContextMenu? cm = null;
+        DependencyObject? current = menuItem;
+        while (current != null)
+        {
+            if (current is ContextMenu found)
+            {
+                cm = found;
+                break;
+            }
+
+            current = LogicalTreeHelper.GetParent(current)
+                      ?? VisualTreeHelper.GetParent(current);
+        }
+
+        if (cm?.PlacementTarget is FrameworkElement fe)
+        {
+            return fe.DataContext as ClipboardEntry;
+        }
+
+        return cm?.DataContext as ClipboardEntry;
+    }
+
     // --- Alias editing handlers ---
 
     private void CardHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
