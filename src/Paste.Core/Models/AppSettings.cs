@@ -15,7 +15,7 @@ public class AppSettings
     public bool AutoRunOnStartup { get; set; }
 
     /// <summary>Minimize to tray on startup instead of showing window.</summary>
-    public bool MinimizeToTrayOnStartup { get; set; } = true;
+    public bool MinimizeToTrayOnStartup { get; set; } = false;
 
     /// <summary>Show tray icon in system tray.</summary>
     public bool ShowTrayIcon { get; set; } = true;

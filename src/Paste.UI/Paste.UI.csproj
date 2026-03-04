@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Paste.Core\Paste.Core.csproj" />
-    <ProjectReference Include="..\Paste.Data\Paste.Data.csproj" />
   </ItemGroup>
 
 </Project>

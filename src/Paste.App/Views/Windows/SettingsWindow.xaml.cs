@@ -35,6 +35,7 @@ public partial class SettingsWindow : FluentWindow
         _settingsService = settingsService;
         _historyService = historyService;
         InitializeComponent();
+        PreviewKeyDown += SettingsWindow_PreviewKeyDown;
         Loaded += (_, _) =>
         {
             var hwnd = new WindowInteropHelper(this).Handle;
@@ -215,5 +216,16 @@ public partial class SettingsWindow : FluentWindow
         if ((modifiers & 0x0004) != 0) parts.Add("Shift");
         if ((modifiers & 0x0008) != 0) parts.Add("Win");
         return string.Join(" + ", parts);
+    }
+
+    private void SettingsWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key != Key.Escape)
+        {
+            return;
+        }
+
+        e.Handled = true;
+        Close();
     }
 }
