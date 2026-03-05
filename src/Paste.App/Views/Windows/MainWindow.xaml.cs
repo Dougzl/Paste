@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Microsoft.Win32;
 using Paste.App.Services;
 using Paste.Core.Interfaces;
 using Paste.Core.Models;
@@ -25,6 +26,7 @@ public partial class MainWindow : FluentWindow
     private bool _isHidingProgrammatically;
     private bool _initialized;
     private bool _isWatchingSystemTheme;
+    private string _currentThemeMode = "System";
 
     public MainWindow(
         MainWindowViewModel mainViewModel,
@@ -53,6 +55,7 @@ public partial class MainWindow : FluentWindow
         StateChanged += MainWindow_StateChanged;
         Deactivated += MainWindow_Deactivated;
         PreviewKeyDown += MainWindow_PreviewKeyDown;
+        SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
 
         _settingsService.SettingsChanged += OnSettingsChanged;
     }
@@ -132,6 +135,8 @@ public partial class MainWindow : FluentWindow
 
     private void ApplyThemeModeFromSettings(string? themeMode)
     {
+        _currentThemeMode = NormalizeThemeMode(themeMode);
+
         if (IsSystemThemeMode(themeMode))
         {
             if (!_isWatchingSystemTheme)
@@ -156,6 +161,21 @@ public partial class MainWindow : FluentWindow
     private static bool IsSystemThemeMode(string? themeMode)
         => string.IsNullOrWhiteSpace(themeMode)
            || string.Equals(themeMode, "System", StringComparison.OrdinalIgnoreCase);
+
+    private static string NormalizeThemeMode(string? themeMode)
+    {
+        if (string.Equals(themeMode, "Light", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Light";
+        }
+
+        if (string.Equals(themeMode, "Dark", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Dark";
+        }
+
+        return "System";
+    }
 
     private void TryUnwatchSystemTheme()
     {
@@ -355,8 +375,19 @@ public partial class MainWindow : FluentWindow
     {
         _clipboardMonitor.Stop();
         _hotkeyService.Unregister();
+        SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
         Closing -= MainWindow_Closing;
         Application.Current.Shutdown();
+    }
+
+    private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+    {
+        if (!_initialized || !string.Equals(_currentThemeMode, "System", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        Dispatcher.Invoke(() => App.ApplyThemeMode("System"));
     }
 
     private void ShowAndActivate()
