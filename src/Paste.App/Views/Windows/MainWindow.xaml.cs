@@ -24,6 +24,7 @@ public partial class MainWindow : FluentWindow
     private IntPtr _lastForegroundWindow;
     private bool _isHidingProgrammatically;
     private bool _initialized;
+    private bool _isWatchingSystemTheme;
 
     public MainWindow(
         MainWindowViewModel mainViewModel,
@@ -80,7 +81,7 @@ public partial class MainWindow : FluentWindow
 
         // Register global hotkey from settings
         var settings = _settingsService.Load();
-        App.ApplyThemeMode(settings.ThemeMode);
+        ApplyThemeModeFromSettings(settings.ThemeMode);
         _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
         _hotkeyService.HotkeyPressed += OnHotkeyPressed;
         ApplyTrayIconVisibility(settings.ShowTrayIcon);
@@ -107,9 +108,6 @@ public partial class MainWindow : FluentWindow
             settingsWindow.ShowDialog();
         };
 
-        // Watch for system theme changes
-        SystemThemeWatcher.Watch(this);
-
         // Host the history page directly
         var historyPage = _serviceProvider.GetService(typeof(HistoryPage)) as HistoryPage;
         if (historyPage != null)
@@ -126,10 +124,55 @@ public partial class MainWindow : FluentWindow
         Dispatcher.Invoke(() =>
         {
             var hwnd = new WindowInteropHelper(this).Handle;
-            App.ApplyThemeMode(settings.ThemeMode);
+            ApplyThemeModeFromSettings(settings.ThemeMode);
             _hotkeyService.Register(hwnd, settings.HotkeyModifiers, settings.HotkeyKey);
             ApplyTrayIconVisibility(settings.ShowTrayIcon);
         });
+    }
+
+    private void ApplyThemeModeFromSettings(string? themeMode)
+    {
+        if (IsSystemThemeMode(themeMode))
+        {
+            if (!_isWatchingSystemTheme)
+            {
+                SystemThemeWatcher.Watch(this);
+                _isWatchingSystemTheme = true;
+            }
+
+            App.ApplyThemeMode("System");
+            return;
+        }
+
+        if (_isWatchingSystemTheme)
+        {
+            TryUnwatchSystemTheme();
+            _isWatchingSystemTheme = false;
+        }
+
+        App.ApplyThemeMode(themeMode);
+    }
+
+    private static bool IsSystemThemeMode(string? themeMode)
+        => string.IsNullOrWhiteSpace(themeMode)
+           || string.Equals(themeMode, "System", StringComparison.OrdinalIgnoreCase);
+
+    private void TryUnwatchSystemTheme()
+    {
+        try
+        {
+            var type = typeof(SystemThemeWatcher);
+            var flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static;
+            var method = type.GetMethod("UnWatch", flags, new[] { typeof(Window) })
+                         ?? type.GetMethod("Unwatch", flags, new[] { typeof(Window) })
+                         ?? type.GetMethod("StopWatching", flags, new[] { typeof(Window) });
+
+            method?.Invoke(null, new object[] { this });
+        }
+        catch
+        {
+            // Ignore: fallback behavior still applies explicit theme immediately.
+        }
     }
 
     private void ApplyTrayIconVisibility(bool showTrayIcon)

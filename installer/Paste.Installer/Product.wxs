@@ -4,7 +4,7 @@
   <Package
     Name="Paste"
     Manufacturer="Paste"
-    Version="1.0.0"
+    Version="1.0.1"
     UpgradeCode="A0B4E7EC-DDBF-480A-8B64-48898CE76C83"
     Language="1033"
     InstallerVersion="500"
@@ -22,6 +22,7 @@
     </StandardDirectory>
 
     <Component Id="StartMenuShortcutComponent" Directory="ProgramMenuPasteFolder" Guid="*">
+      <CreateFolder />
       <Shortcut
         Id="StartMenuShortcut"
         Name="Paste"
