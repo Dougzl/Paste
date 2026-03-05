@@ -15,6 +15,15 @@ public partial class SourceAppFilter : ObservableObject
     private bool _isSelected;
 }
 
+public partial class TimeFilterOption : ObservableObject
+{
+    public string Key { get; set; } = string.Empty;
+    public string Label { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    private bool _isSelected;
+}
+
 public partial class FavoriteFolderViewModel : ObservableObject
 {
     public long Id { get; set; }
@@ -41,6 +50,7 @@ public partial class ClipboardHistoryViewModel : ObservableObject
 {
     private readonly IClipboardHistoryService _historyService;
     private readonly IFavoriteFolderService? _favoriteFolderService;
+    private bool _isSyncingCustomDateFromPreset;
     private string? _lastHash;
     private List<ClipboardEntry> _allEntries = new();
 
@@ -60,7 +70,16 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     private ObservableCollection<FavoriteFolderViewModel> _favoriteFolders = new();
 
     [ObservableProperty]
+    private ObservableCollection<TimeFilterOption> _timeFilters = new();
+
+    [ObservableProperty]
     private FavoriteFolderViewModel? _selectedFolder;
+
+    [ObservableProperty]
+    private DateTime? _selectedCustomDate;
+
+    [ObservableProperty]
+    private bool _isCustomDateActive;
 
     [ObservableProperty]
     private bool _isSearchVisible;
@@ -86,16 +105,52 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     public ClipboardHistoryViewModel(IClipboardHistoryService historyService)
     {
         _historyService = historyService;
+        InitializeTimeFilters();
     }
 
     public ClipboardHistoryViewModel(IClipboardHistoryService historyService, IFavoriteFolderService favoriteFolderService)
     {
         _historyService = historyService;
         _favoriteFolderService = favoriteFolderService;
+        InitializeTimeFilters();
     }
 
     partial void OnSearchTextChanged(string value)
     {
+        ApplyFilters();
+    }
+
+    partial void OnSelectedCustomDateChanged(DateTime? value)
+    {
+        if (_isSyncingCustomDateFromPreset)
+            return;
+
+        if (!value.HasValue)
+            return;
+
+        IsCustomDateActive = true;
+        foreach (var f in TimeFilters)
+            f.IsSelected = false;
+        ApplyFilters();
+    }
+
+    [RelayCommand]
+    private void ToggleCustomDateFilter()
+    {
+        if (IsCustomDateActive)
+        {
+            IsCustomDateActive = false;
+            ApplyFilters();
+            return;
+        }
+
+        foreach (var f in TimeFilters)
+            f.IsSelected = false;
+
+        if (!SelectedCustomDate.HasValue)
+            SelectedCustomDate = DateTime.Today;
+
+        IsCustomDateActive = true;
         ApplyFilters();
     }
 
@@ -299,6 +354,43 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void SelectTimeFilter(TimeFilterOption? filter)
+    {
+        if (filter == null)
+            return;
+
+        if (filter.IsSelected)
+        {
+            filter.IsSelected = false;
+            IsCustomDateActive = false;
+            ApplyFilters();
+            return;
+        }
+
+        foreach (var f in TimeFilters)
+            f.IsSelected = false;
+
+        filter.IsSelected = true;
+        _isSyncingCustomDateFromPreset = true;
+        try
+        {
+            SelectedCustomDate = filter.Key switch
+            {
+                "today" => DateTime.Today,
+                "yesterday" => DateTime.Today.AddDays(-1),
+                "threeDaysAgo" => DateTime.Today.AddDays(-2),
+                _ => SelectedCustomDate
+            };
+        }
+        finally
+        {
+            _isSyncingCustomDateFromPreset = false;
+        }
+        IsCustomDateActive = false;
+        ApplyFilters();
+    }
+
+    [RelayCommand]
     private async Task CreateFolder()
     {
         if (_favoriteFolderService == null) return;
@@ -374,6 +466,30 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     {
         var filtered = _allEntries.AsEnumerable();
 
+        var selectedTimeFilter = GetSelectedTimeFilterKey();
+        if (!string.IsNullOrEmpty(selectedTimeFilter))
+        {
+            var today = DateTime.Today;
+            DateTime? targetDate = selectedTimeFilter switch
+            {
+                "today" => today,
+                "yesterday" => today.AddDays(-1),
+                "threeDaysAgo" => today.AddDays(-2),
+                _ => null
+            };
+
+            if (targetDate.HasValue)
+            {
+                var date = targetDate.Value;
+                filtered = filtered.Where(e => ToLocalDate(e.CopiedAt) == date);
+            }
+        }
+        else if (IsCustomDateActive && SelectedCustomDate.HasValue)
+        {
+            var date = SelectedCustomDate.Value.Date;
+            filtered = filtered.Where(e => ToLocalDate(e.CopiedAt) == date);
+        }
+
         // Filter by selected folder
         if (SelectedFolder != null)
         {
@@ -399,6 +515,31 @@ public partial class ClipboardHistoryViewModel : ObservableObject
         }
 
         Entries = new ObservableCollection<ClipboardEntry>(filtered);
+    }
+
+    private void InitializeTimeFilters()
+    {
+        TimeFilters = new ObservableCollection<TimeFilterOption>
+        {
+            new() { Key = "today", Label = "今天", IsSelected = true },
+            new() { Key = "yesterday", Label = "昨天" },
+            new() { Key = "threeDaysAgo", Label = "前天" }
+        };
+        SelectedCustomDate = DateTime.Today;
+        IsCustomDateActive = false;
+    }
+
+    private string? GetSelectedTimeFilterKey()
+    {
+        return TimeFilters.FirstOrDefault(f => f.IsSelected)?.Key;
+    }
+
+    private static DateTime ToLocalDate(DateTime dateTime)
+    {
+        if (dateTime.Kind == DateTimeKind.Unspecified)
+            dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+
+        return dateTime.ToLocalTime().Date;
     }
 
     public void RebuildAppFilters()

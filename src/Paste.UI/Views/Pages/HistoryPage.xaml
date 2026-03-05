@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <!-- Top Bar: folder chips + add + settings menu -->
-        <DockPanel Grid.Row="0" Margin="0,2,0,6" LastChildFill="True">
+        <DockPanel Grid.Row="0" Margin="0,2,0,6" Height="32" LastChildFill="True">
             <!-- Settings menu (far right) -->
             <Button
                 x:Name="TopMenuButton"
@@ -84,6 +84,112 @@
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center" />
             </Button>
+
+            <!-- Time filters (left of settings) -->
+            <StackPanel
+                DockPanel.Dock="Right"
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                Margin="0,0,8,0">
+                <ItemsControl ItemsSource="{Binding TimeFilters}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:TimeFilterOption}">
+                            <Border
+                                Margin="2,0"
+                                Padding="6,3"
+                                Height="22"
+                                VerticalAlignment="Center"
+                                CornerRadius="12"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="TimeFilterChip_Click"
+                                Tag="{Binding}">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Background" Value="#409EFF" />
+                                                <Setter Property="BorderBrush" Value="#409EFF" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock
+                                    Text="{Binding Label}"
+                                    FontSize="11"
+                                    VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border
+                    Margin="2,0"
+                    Padding="6,3"
+                    Height="22"
+                    VerticalAlignment="Center"
+                    CornerRadius="12"
+                    Cursor="Hand"
+                    MouseLeftButtonUp="CustomDateFilterChip_Click">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCustomDateActive}" Value="True">
+                                    <Setter Property="Background" Value="#409EFF" />
+                                    <Setter Property="BorderBrush" Value="#409EFF" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <TextBlock
+                        Text="&#xE787;"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="12"
+                        VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsCustomDateActive}" Value="True">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Border>
+
+                <DatePicker
+                    x:Name="CustomDatePicker"
+                    SelectedDate="{Binding SelectedCustomDate, Mode=TwoWay}"
+                    Width="1"
+                    Height="1"
+                    Opacity="0"
+                    IsHitTestVisible="False"
+                    Focusable="False" />
+
+            </StackPanel>
 
             <!-- Folder chips + add button (centered) -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">

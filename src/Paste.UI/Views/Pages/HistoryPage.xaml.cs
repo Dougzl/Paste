@@ -446,6 +446,26 @@ public partial class HistoryPage : UserControl
         }
     }
 
+    private void TimeFilterChip_Click(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.Tag is TimeFilterOption filter)
+        {
+            _viewModel.SelectTimeFilterCommand.Execute(filter);
+        }
+    }
+
+    private void CustomDateFilterChip_Click(object sender, MouseButtonEventArgs e)
+    {
+        _viewModel.ToggleCustomDateFilterCommand.Execute(null);
+        if (_viewModel.IsCustomDateActive)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
+            {
+                CustomDatePicker.IsDropDownOpen = true;
+            });
+        }
+    }
+
     private void AppFilterScroll_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         ScrollAppFilters(e.Delta);
