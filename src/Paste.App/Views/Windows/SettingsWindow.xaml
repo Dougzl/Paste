@@ -149,6 +149,25 @@
                                     <ComboBoxItem Content="深色" Tag="Dark" />
                                 </ComboBox>
                             </DockPanel>
+                            <Border Height="1" Background="{DynamicResource ControlStrokeColorDefaultBrush}" />
+
+                            <DockPanel Margin="0,12,0,4">
+                                <TextBlock Text="滚动速度" FontSize="13" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <StackPanel DockPanel.Dock="Right" Width="190" HorizontalAlignment="Right">
+                                    <Slider x:Name="ScrollSpeedSlider"
+                                            Minimum="0.5"
+                                            Maximum="10.0"
+                                            TickFrequency="0.1"
+                                            IsSnapToTickEnabled="True"
+                                            ValueChanged="ScrollSpeedSlider_ValueChanged" />
+                                    <TextBlock x:Name="ScrollSpeedValueText"
+                                               Margin="0,2,0,0"
+                                               FontSize="11"
+                                               HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                </StackPanel>
+                            </DockPanel>
                         </StackPanel>
                     </Border>
 

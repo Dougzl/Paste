@@ -12,6 +12,8 @@ namespace Paste.App.Views.Windows;
 public partial class SettingsWindow : FluentWindow
 {
     private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
+    private const double MinScrollSpeed = 0.5;
+    private const double MaxScrollSpeed = 10.0;
     private readonly ISettingsService _settingsService;
     private readonly IClipboardHistoryService _historyService;
     private int _capturedModifiers;
@@ -36,6 +38,7 @@ public partial class SettingsWindow : FluentWindow
     {
         _settingsService = settingsService;
         _historyService = historyService;
+        _isLoading = true;
         InitializeComponent();
         PreviewKeyDown += SettingsWindow_PreviewKeyDown;
         Deactivated += SettingsWindow_Deactivated;
@@ -64,6 +67,8 @@ public partial class SettingsWindow : FluentWindow
         MinimizeToTrayToggle.IsChecked = s.MinimizeToTrayOnStartup;
         ShowTrayIconToggle.IsChecked = s.ShowTrayIcon;
         ThemeModeCombo.SelectedValue = NormalizeThemeMode(s.ThemeMode);
+        ScrollSpeedSlider.Value = Clamp(s.ScrollSpeedMultiplier, MinScrollSpeed, MaxScrollSpeed);
+        UpdateScrollSpeedText();
 
         // Wire up toggle events after loading to avoid premature saves
         AutoRunToggle.Checked += ToggleChanged;
@@ -91,7 +96,8 @@ public partial class SettingsWindow : FluentWindow
             AutoRunOnStartup = AutoRunToggle.IsChecked == true,
             MinimizeToTrayOnStartup = MinimizeToTrayToggle.IsChecked == true,
             ShowTrayIcon = ShowTrayIconToggle.IsChecked == true,
-            ThemeMode = GetSelectedThemeMode()
+            ThemeMode = GetSelectedThemeMode(),
+            ScrollSpeedMultiplier = Clamp(ScrollSpeedSlider.Value, MinScrollSpeed, MaxScrollSpeed)
         };
 
         _settingsService.Save(settings);
@@ -131,6 +137,17 @@ public partial class SettingsWindow : FluentWindow
 
     private void ThemeModeCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
+        SaveSettings();
+    }
+
+    private void ScrollSpeedSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (ScrollSpeedValueText == null)
+        {
+            return;
+        }
+
+        UpdateScrollSpeedText();
         SaveSettings();
     }
 
@@ -378,4 +395,12 @@ public partial class SettingsWindow : FluentWindow
 
         return "System";
     }
+
+    private void UpdateScrollSpeedText()
+    {
+        ScrollSpeedValueText.Text = $"{ScrollSpeedSlider.Value:F1}x";
+    }
+
+    private static double Clamp(double value, double min, double max)
+        => Math.Max(min, Math.Min(value, max));
 }

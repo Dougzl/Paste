@@ -5,6 +5,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
+using Paste.Core.Interfaces;
 using Paste.Core.Models;
 using Paste.UI.ViewModels;
 
@@ -14,8 +15,13 @@ public partial class HistoryPage : UserControl
 {
     private const int WM_MOUSEHWHEEL = 0x020E;
     private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
+    private const double DefaultCardWheelStep = 0.8;
+    private const double DefaultFilterWheelStep = 0.5;
     private readonly ClipboardHistoryViewModel _viewModel;
+    private readonly ISettingsService _settingsService;
     private HwndSource? _hwndSource;
+    private double _scrollSpeedMultiplier = 1.0;
+    private bool _settingsEventsHooked;
 
     // Drag-to-scroll state
     private bool _isMouseDown;
@@ -37,11 +43,13 @@ public partial class HistoryPage : UserControl
     private const double MinVelocity = 0.5;
     private const double SmoothLerpFactor = 0.15;
 
-    public HistoryPage(ClipboardHistoryViewModel viewModel)
+    public HistoryPage(ClipboardHistoryViewModel viewModel, ISettingsService settingsService)
     {
         _viewModel = viewModel;
+        _settingsService = settingsService;
         DataContext = _viewModel;
         InitializeComponent();
+        UpdateScrollSpeedFromSettings(_settingsService.Load());
         CardList.LostMouseCapture += CardList_LostMouseCapture;
         CardList.SelectionChanged += CardList_SelectionChanged;
         Loaded += HistoryPage_Loaded;
@@ -50,6 +58,12 @@ public partial class HistoryPage : UserControl
 
     private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
     {
+        if (!_settingsEventsHooked)
+        {
+            _settingsService.SettingsChanged += OnSettingsChanged;
+            _settingsEventsHooked = true;
+        }
+
         var window = Window.GetWindow(this);
         if (window != null)
         {
@@ -62,6 +76,11 @@ public partial class HistoryPage : UserControl
     private void HistoryPage_Unloaded(object sender, RoutedEventArgs e)
     {
         _hwndSource?.RemoveHook(WndProc);
+        if (_settingsEventsHooked)
+        {
+            _settingsService.SettingsChanged -= OnSettingsChanged;
+            _settingsEventsHooked = false;
+        }
         CardList.SelectionChanged -= CardList_SelectionChanged;
         StopAnimation();
     }
@@ -84,7 +103,7 @@ public partial class HistoryPage : UserControl
                     if (!_hasSmoothTarget)
                         _smoothTarget = scrollViewer.HorizontalOffset;
 
-                    _smoothTarget += delta * 0.8;
+                    _smoothTarget += delta * GetCardWheelStep();
                     _smoothTarget = Clamp(_smoothTarget, 0, scrollViewer.ScrollableWidth);
                     _velocity = 0;
                     _hasSmoothTarget = true;
@@ -258,7 +277,7 @@ public partial class HistoryPage : UserControl
             if (!_hasSmoothTarget)
                 _smoothTarget = scrollViewer.HorizontalOffset;
 
-            _smoothTarget -= e.Delta * 0.8;
+            _smoothTarget -= e.Delta * GetCardWheelStep();
             _smoothTarget = Clamp(_smoothTarget, 0, scrollViewer.ScrollableWidth);
             _velocity = 0;
             _hasSmoothTarget = true;
@@ -460,10 +479,24 @@ public partial class HistoryPage : UserControl
     {
         AppFilterScrollViewer.ScrollToHorizontalOffset(
             Clamp(
-                AppFilterScrollViewer.HorizontalOffset + delta * 0.5,
+                AppFilterScrollViewer.HorizontalOffset + delta * GetFilterWheelStep(),
                 0,
                 AppFilterScrollViewer.ScrollableWidth));
     }
+
+    private void OnSettingsChanged(object? sender, AppSettings settings)
+    {
+        Dispatcher.Invoke(() => UpdateScrollSpeedFromSettings(settings));
+    }
+
+    private void UpdateScrollSpeedFromSettings(AppSettings settings)
+    {
+        _scrollSpeedMultiplier = Clamp(settings.ScrollSpeedMultiplier, 0.5, 10.0);
+    }
+
+    private double GetCardWheelStep() => DefaultCardWheelStep * _scrollSpeedMultiplier;
+
+    private double GetFilterWheelStep() => DefaultFilterWheelStep * _scrollSpeedMultiplier;
 
     // --- Favorites handlers ---
 

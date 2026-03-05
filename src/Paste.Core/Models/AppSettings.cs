@@ -22,4 +22,7 @@ public class AppSettings
 
     /// <summary>Theme mode: System / Light / Dark.</summary>
     public string ThemeMode { get; set; } = "System";
+
+    /// <summary>Scroll speed multiplier. 1.0 = default speed.</summary>
+    public double ScrollSpeedMultiplier { get; set; } = 1.0;
 }
