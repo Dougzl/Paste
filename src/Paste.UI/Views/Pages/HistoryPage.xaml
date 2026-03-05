@@ -251,8 +251,8 @@
                                         <Setter Property="BorderThickness" Value="1" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter Property="Background" Value="{DynamicResource SystemAccentColorPrimaryBrush}" />
-                                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorPrimaryBrush}" />
+                                                <Setter Property="Background" Value="#409EFF" />
+                                                <Setter Property="BorderBrush" Value="#409EFF" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
