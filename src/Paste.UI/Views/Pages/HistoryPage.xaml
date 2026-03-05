@@ -218,10 +218,18 @@
                     HorizontalScrollBarVisibility="Hidden"
                     VerticalScrollBarVisibility="Disabled"
                     MaxWidth="520"
+                    Focusable="False"
+                    FocusVisualStyle="{x:Null}"
                     PreviewMouseWheel="AppFilterScroll_PreviewMouseWheel">
                 <ItemsControl
                     ItemsSource="{Binding SourceAppFilters}"
                     VerticalAlignment="Center">
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Focusable" Value="False" />
+                            <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />
