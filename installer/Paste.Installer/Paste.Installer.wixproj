@@ -12,7 +12,7 @@
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.5" />
   </ItemGroup>
   <Target Name="PrepareAppFiles" BeforeTargets="BeforeBuild">
-    <Exec Command='dotnet publish &quot;$(AppProject)&quot; -c Release -r win-x64 --self-contained true -o &quot;$(AppPublishDir)&quot;' />
+    <Exec Command='dotnet publish &quot;$(AppProject)&quot; -c Release -r win-x64 --self-contained false -p:UseAppHost=true -p:DebugType=None -p:DebugSymbols=false -o &quot;$(AppPublishDir)&quot;' />
     <Exec Command='powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\Generate-AppFiles.ps1&quot; -SourceDir &quot;$(AppPublishDir)&quot;' />
   </Target>
 </Project>

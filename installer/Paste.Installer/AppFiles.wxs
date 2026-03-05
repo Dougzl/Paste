@@ -1,1591 +1,172 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Fragment>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0001" Name="cs" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0002" Name="de" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0003" Name="es" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0004" Name="fr" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0005" Name="it" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0006" Name="ja" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0007" Name="ko" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0008" Name="pl" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0009" Name="pt-BR" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0010" Name="ru" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0011" Name="tr" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0012" Name="zh-Hans" />
-    </DirectoryRef>
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Directory Id="AppDir0013" Name="zh-Hant" />
-    </DirectoryRef>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
       <Component Id="AppFile0001" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Accessibility.dll" />
-      </Component>
-      <Component Id="AppFile0002" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\clretwrc.dll" />
-      </Component>
-      <Component Id="AppFile0003" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\clrgc.dll" />
-      </Component>
-      <Component Id="AppFile0004" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\clrjit.dll" />
-      </Component>
-      <Component Id="AppFile0005" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\CommunityToolkit.Mvvm.dll" />
       </Component>
-      <Component Id="AppFile0006" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\coreclr.dll" />
-      </Component>
-      <Component Id="AppFile0007" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\createdump.exe" />
-      </Component>
-      <Component Id="AppFile0008" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0009" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0010" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0011" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0012" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0013" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0014" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0015" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0016" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0017" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0018" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0019" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0020" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0021" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0022" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0023" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0024" Guid="*" Directory="AppDir0001">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\cs\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0025" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\D3DCompiler_47_cor3.dll" />
-      </Component>
-      <Component Id="AppFile0026" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0027" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0028" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0029" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0030" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0031" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0032" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0033" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0034" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0035" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0036" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0037" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0038" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0039" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0040" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0041" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0042" Guid="*" Directory="AppDir0002">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\de\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0043" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\DirectWriteForwarder.dll" />
-      </Component>
-      <Component Id="AppFile0044" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0002" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\e_sqlite3.dll" />
       </Component>
-      <Component Id="AppFile0045" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0046" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0047" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0048" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0049" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0050" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0051" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0052" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0053" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0054" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0055" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0056" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0057" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0058" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0059" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0060" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0061" Guid="*" Directory="AppDir0003">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\es\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0062" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0063" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0064" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0065" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0066" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0067" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0068" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0069" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0070" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0071" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0072" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0073" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0074" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0075" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0076" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0077" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0078" Guid="*" Directory="AppDir0004">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\fr\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0079" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\hostfxr.dll" />
-      </Component>
-      <Component Id="AppFile0080" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\hostpolicy.dll" />
-      </Component>
-      <Component Id="AppFile0081" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0082" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0083" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0084" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0085" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0086" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0087" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0088" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0089" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0090" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0091" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0092" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0093" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0094" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0095" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0096" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0097" Guid="*" Directory="AppDir0005">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\it\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0098" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0099" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0100" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0101" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0102" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0103" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0104" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0105" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0106" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0107" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0108" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0109" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0110" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0111" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0112" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0113" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0114" Guid="*" Directory="AppDir0006">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ja\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0115" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0116" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0117" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0118" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0119" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0120" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0121" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0122" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0123" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0124" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0125" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0126" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0127" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0128" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0129" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0130" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0131" Guid="*" Directory="AppDir0007">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ko\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0132" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.CSharp.dll" />
-      </Component>
-      <Component Id="AppFile0133" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0003" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Data.Sqlite.dll" />
       </Component>
-      <Component Id="AppFile0134" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.DiaSymReader.Native.amd64.dll" />
-      </Component>
-      <Component Id="AppFile0135" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0004" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.EntityFrameworkCore.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0136" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0005" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.EntityFrameworkCore.dll" />
       </Component>
-      <Component Id="AppFile0137" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0006" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.EntityFrameworkCore.Relational.dll" />
       </Component>
-      <Component Id="AppFile0138" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0007" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.EntityFrameworkCore.Sqlite.dll" />
       </Component>
-      <Component Id="AppFile0139" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0008" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Caching.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0140" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0009" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Caching.Memory.dll" />
       </Component>
-      <Component Id="AppFile0141" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0010" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0142" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0011" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.Binder.dll" />
       </Component>
-      <Component Id="AppFile0143" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0012" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.CommandLine.dll" />
       </Component>
-      <Component Id="AppFile0144" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0013" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.dll" />
       </Component>
-      <Component Id="AppFile0145" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0014" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" />
       </Component>
-      <Component Id="AppFile0146" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0015" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.FileExtensions.dll" />
       </Component>
-      <Component Id="AppFile0147" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0016" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.Json.dll" />
       </Component>
-      <Component Id="AppFile0148" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0017" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Configuration.UserSecrets.dll" />
       </Component>
-      <Component Id="AppFile0149" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0018" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0150" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0019" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.DependencyInjection.dll" />
       </Component>
-      <Component Id="AppFile0151" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0020" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.DependencyModel.dll" />
       </Component>
-      <Component Id="AppFile0152" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0021" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Diagnostics.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0153" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0022" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Diagnostics.dll" />
       </Component>
-      <Component Id="AppFile0154" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0023" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.FileProviders.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0155" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0024" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.FileProviders.Physical.dll" />
       </Component>
-      <Component Id="AppFile0156" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0025" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.FileSystemGlobbing.dll" />
       </Component>
-      <Component Id="AppFile0157" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0026" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Hosting.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0158" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0027" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Hosting.dll" />
       </Component>
-      <Component Id="AppFile0159" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0028" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0160" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0029" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.Configuration.dll" />
       </Component>
-      <Component Id="AppFile0161" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0030" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.Console.dll" />
       </Component>
-      <Component Id="AppFile0162" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0031" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.Debug.dll" />
       </Component>
-      <Component Id="AppFile0163" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0032" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.dll" />
       </Component>
-      <Component Id="AppFile0164" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0033" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.EventLog.dll" />
       </Component>
-      <Component Id="AppFile0165" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0034" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Logging.EventSource.dll" />
       </Component>
-      <Component Id="AppFile0166" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0035" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Options.ConfigurationExtensions.dll" />
       </Component>
-      <Component Id="AppFile0167" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0036" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Options.dll" />
       </Component>
-      <Component Id="AppFile0168" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0037" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Extensions.Primitives.dll" />
       </Component>
-      <Component Id="AppFile0169" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.VisualBasic.Core.dll" />
-      </Component>
-      <Component Id="AppFile0170" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.VisualBasic.dll" />
-      </Component>
-      <Component Id="AppFile0171" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.VisualBasic.Forms.dll" />
-      </Component>
-      <Component Id="AppFile0172" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0173" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.Registry.AccessControl.dll" />
-      </Component>
-      <Component Id="AppFile0174" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.Registry.dll" />
-      </Component>
-      <Component Id="AppFile0175" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0038" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.SystemEvents.dll" />
       </Component>
-      <Component Id="AppFile0176" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\mscordaccore.dll" />
-      </Component>
-      <Component Id="AppFile0177" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\mscordaccore_amd64_amd64_8.0.2426.7010.dll" />
-      </Component>
-      <Component Id="AppFile0178" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\mscordbi.dll" />
-      </Component>
-      <Component Id="AppFile0179" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\mscorlib.dll" />
-      </Component>
-      <Component Id="AppFile0180" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\mscorrc.dll" />
-      </Component>
-      <Component Id="AppFile0181" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\msquic.dll" />
-      </Component>
-      <Component Id="AppFile0182" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\netstandard.dll" />
-      </Component>
-      <Component Id="AppFile0183" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0039" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.deps.json" />
       </Component>
-      <Component Id="AppFile0184" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0040" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.dll" />
       </Component>
-      <Component Id="AppFile0185" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0041" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.exe" />
       </Component>
-      <Component Id="AppFile0186" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.pdb" />
-      </Component>
-      <Component Id="AppFile0187" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0042" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.runtimeconfig.json" />
       </Component>
-      <Component Id="AppFile0188" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0043" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Core.dll" />
       </Component>
-      <Component Id="AppFile0189" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Core.pdb" />
-      </Component>
-      <Component Id="AppFile0190" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0044" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Data.dll" />
       </Component>
-      <Component Id="AppFile0191" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Data.pdb" />
-      </Component>
-      <Component Id="AppFile0192" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0045" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.UI.dll" />
       </Component>
-      <Component Id="AppFile0193" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.UI.pdb" />
-      </Component>
-      <Component Id="AppFile0194" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PenImc_cor3.dll" />
-      </Component>
-      <Component Id="AppFile0195" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0196" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0197" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0198" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0199" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0200" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0201" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0202" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0203" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0204" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0205" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0206" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0207" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0208" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0209" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0210" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0211" Guid="*" Directory="AppDir0008">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pl\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0212" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationCore.dll" />
-      </Component>
-      <Component Id="AppFile0213" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.Aero.dll" />
-      </Component>
-      <Component Id="AppFile0214" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.Aero2.dll" />
-      </Component>
-      <Component Id="AppFile0215" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.AeroLite.dll" />
-      </Component>
-      <Component Id="AppFile0216" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.Classic.dll" />
-      </Component>
-      <Component Id="AppFile0217" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.dll" />
-      </Component>
-      <Component Id="AppFile0218" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.Luna.dll" />
-      </Component>
-      <Component Id="AppFile0219" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework.Royale.dll" />
-      </Component>
-      <Component Id="AppFile0220" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework-SystemCore.dll" />
-      </Component>
-      <Component Id="AppFile0221" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework-SystemData.dll" />
-      </Component>
-      <Component Id="AppFile0222" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework-SystemDrawing.dll" />
-      </Component>
-      <Component Id="AppFile0223" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework-SystemXml.dll" />
-      </Component>
-      <Component Id="AppFile0224" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationFramework-SystemXmlLinq.dll" />
-      </Component>
-      <Component Id="AppFile0225" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationNative_cor3.dll" />
-      </Component>
-      <Component Id="AppFile0226" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\PresentationUI.dll" />
-      </Component>
-      <Component Id="AppFile0227" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0228" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0229" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0230" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0231" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0232" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0233" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0234" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0235" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0236" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0237" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0238" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0239" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0240" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0241" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0242" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0243" Guid="*" Directory="AppDir0009">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\pt-BR\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0244" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ReachFramework.dll" />
-      </Component>
-      <Component Id="AppFile0245" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0246" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0247" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0248" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0249" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0250" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0251" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0252" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0253" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0254" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0255" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0256" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0257" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0258" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0259" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0260" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0261" Guid="*" Directory="AppDir0010">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\ru\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0262" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0046" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.batteries_v2.dll" />
       </Component>
-      <Component Id="AppFile0263" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0047" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.core.dll" />
       </Component>
-      <Component Id="AppFile0264" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0048" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.provider.e_sqlite3.dll" />
       </Component>
-      <Component Id="AppFile0265" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.AppContext.dll" />
-      </Component>
-      <Component Id="AppFile0266" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Buffers.dll" />
-      </Component>
-      <Component Id="AppFile0267" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.CodeDom.dll" />
-      </Component>
-      <Component Id="AppFile0268" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Collections.Concurrent.dll" />
-      </Component>
-      <Component Id="AppFile0269" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Collections.dll" />
-      </Component>
-      <Component Id="AppFile0270" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Collections.Immutable.dll" />
-      </Component>
-      <Component Id="AppFile0271" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Collections.NonGeneric.dll" />
-      </Component>
-      <Component Id="AppFile0272" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Collections.Specialized.dll" />
-      </Component>
-      <Component Id="AppFile0273" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.Annotations.dll" />
-      </Component>
-      <Component Id="AppFile0274" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.DataAnnotations.dll" />
-      </Component>
-      <Component Id="AppFile0275" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.dll" />
-      </Component>
-      <Component Id="AppFile0276" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.EventBasedAsync.dll" />
-      </Component>
-      <Component Id="AppFile0277" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0278" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ComponentModel.TypeConverter.dll" />
-      </Component>
-      <Component Id="AppFile0279" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Configuration.ConfigurationManager.dll" />
-      </Component>
-      <Component Id="AppFile0280" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Configuration.dll" />
-      </Component>
-      <Component Id="AppFile0281" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Console.dll" />
-      </Component>
-      <Component Id="AppFile0282" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Core.dll" />
-      </Component>
-      <Component Id="AppFile0283" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Data.Common.dll" />
-      </Component>
-      <Component Id="AppFile0284" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Data.DataSetExtensions.dll" />
-      </Component>
-      <Component Id="AppFile0285" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Data.dll" />
-      </Component>
-      <Component Id="AppFile0286" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Design.dll" />
-      </Component>
-      <Component Id="AppFile0287" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.Contracts.dll" />
-      </Component>
-      <Component Id="AppFile0288" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.Debug.dll" />
-      </Component>
-      <Component Id="AppFile0289" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.DiagnosticSource.dll" />
-      </Component>
-      <Component Id="AppFile0290" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0049" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.EventLog.dll" />
       </Component>
-      <Component Id="AppFile0291" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.EventLog.Messages.dll" />
-      </Component>
-      <Component Id="AppFile0292" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.FileVersionInfo.dll" />
-      </Component>
-      <Component Id="AppFile0293" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.PerformanceCounter.dll" />
-      </Component>
-      <Component Id="AppFile0294" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.Process.dll" />
-      </Component>
-      <Component Id="AppFile0295" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.StackTrace.dll" />
-      </Component>
-      <Component Id="AppFile0296" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.TextWriterTraceListener.dll" />
-      </Component>
-      <Component Id="AppFile0297" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.Tools.dll" />
-      </Component>
-      <Component Id="AppFile0298" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.TraceSource.dll" />
-      </Component>
-      <Component Id="AppFile0299" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Diagnostics.Tracing.dll" />
-      </Component>
-      <Component Id="AppFile0300" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.DirectoryServices.dll" />
-      </Component>
-      <Component Id="AppFile0301" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.dll" />
-      </Component>
-      <Component Id="AppFile0302" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0050" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.Common.dll" />
       </Component>
-      <Component Id="AppFile0303" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.Design.dll" />
-      </Component>
-      <Component Id="AppFile0304" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.dll" />
-      </Component>
-      <Component Id="AppFile0305" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Drawing.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0306" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Dynamic.Runtime.dll" />
-      </Component>
-      <Component Id="AppFile0307" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Formats.Asn1.dll" />
-      </Component>
-      <Component Id="AppFile0308" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Formats.Tar.dll" />
-      </Component>
-      <Component Id="AppFile0309" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Globalization.Calendars.dll" />
-      </Component>
-      <Component Id="AppFile0310" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Globalization.dll" />
-      </Component>
-      <Component Id="AppFile0311" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Globalization.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0312" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.Brotli.dll" />
-      </Component>
-      <Component Id="AppFile0313" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.dll" />
-      </Component>
-      <Component Id="AppFile0314" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.FileSystem.dll" />
-      </Component>
-      <Component Id="AppFile0315" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.Native.dll" />
-      </Component>
-      <Component Id="AppFile0316" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Compression.ZipFile.dll" />
-      </Component>
-      <Component Id="AppFile0317" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.dll" />
-      </Component>
-      <Component Id="AppFile0318" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.FileSystem.AccessControl.dll" />
-      </Component>
-      <Component Id="AppFile0319" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.FileSystem.dll" />
-      </Component>
-      <Component Id="AppFile0320" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.FileSystem.DriveInfo.dll" />
-      </Component>
-      <Component Id="AppFile0321" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.FileSystem.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0322" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.FileSystem.Watcher.dll" />
-      </Component>
-      <Component Id="AppFile0323" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.IsolatedStorage.dll" />
-      </Component>
-      <Component Id="AppFile0324" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.MemoryMappedFiles.dll" />
-      </Component>
-      <Component Id="AppFile0325" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Packaging.dll" />
-      </Component>
-      <Component Id="AppFile0326" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Pipes.AccessControl.dll" />
-      </Component>
-      <Component Id="AppFile0327" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.Pipes.dll" />
-      </Component>
-      <Component Id="AppFile0328" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.IO.UnmanagedMemoryStream.dll" />
-      </Component>
-      <Component Id="AppFile0329" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Linq.dll" />
-      </Component>
-      <Component Id="AppFile0330" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Linq.Expressions.dll" />
-      </Component>
-      <Component Id="AppFile0331" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Linq.Parallel.dll" />
-      </Component>
-      <Component Id="AppFile0332" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Linq.Queryable.dll" />
-      </Component>
-      <Component Id="AppFile0333" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Memory.dll" />
-      </Component>
-      <Component Id="AppFile0334" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.dll" />
-      </Component>
-      <Component Id="AppFile0335" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Http.dll" />
-      </Component>
-      <Component Id="AppFile0336" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Http.Json.dll" />
-      </Component>
-      <Component Id="AppFile0337" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.HttpListener.dll" />
-      </Component>
-      <Component Id="AppFile0338" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Mail.dll" />
-      </Component>
-      <Component Id="AppFile0339" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.NameResolution.dll" />
-      </Component>
-      <Component Id="AppFile0340" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.NetworkInformation.dll" />
-      </Component>
-      <Component Id="AppFile0341" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Ping.dll" />
-      </Component>
-      <Component Id="AppFile0342" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0343" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Quic.dll" />
-      </Component>
-      <Component Id="AppFile0344" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Requests.dll" />
-      </Component>
-      <Component Id="AppFile0345" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Security.dll" />
-      </Component>
-      <Component Id="AppFile0346" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.ServicePoint.dll" />
-      </Component>
-      <Component Id="AppFile0347" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.Sockets.dll" />
-      </Component>
-      <Component Id="AppFile0348" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.WebClient.dll" />
-      </Component>
-      <Component Id="AppFile0349" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.WebHeaderCollection.dll" />
-      </Component>
-      <Component Id="AppFile0350" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.WebProxy.dll" />
-      </Component>
-      <Component Id="AppFile0351" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.WebSockets.Client.dll" />
-      </Component>
-      <Component Id="AppFile0352" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Net.WebSockets.dll" />
-      </Component>
-      <Component Id="AppFile0353" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Numerics.dll" />
-      </Component>
-      <Component Id="AppFile0354" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Numerics.Vectors.dll" />
-      </Component>
-      <Component Id="AppFile0355" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ObjectModel.dll" />
-      </Component>
-      <Component Id="AppFile0356" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Printing.dll" />
-      </Component>
-      <Component Id="AppFile0357" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.CoreLib.dll" />
-      </Component>
-      <Component Id="AppFile0358" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.DataContractSerialization.dll" />
-      </Component>
-      <Component Id="AppFile0359" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.Uri.dll" />
-      </Component>
-      <Component Id="AppFile0360" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0051" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.Windows.Core.dll" />
       </Component>
-      <Component Id="AppFile0361" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0052" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.Windows.GdiPlus.dll" />
       </Component>
-      <Component Id="AppFile0362" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.Xml.dll" />
-      </Component>
-      <Component Id="AppFile0363" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Private.Xml.Linq.dll" />
-      </Component>
-      <Component Id="AppFile0364" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.DispatchProxy.dll" />
-      </Component>
-      <Component Id="AppFile0365" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.dll" />
-      </Component>
-      <Component Id="AppFile0366" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Emit.dll" />
-      </Component>
-      <Component Id="AppFile0367" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Emit.ILGeneration.dll" />
-      </Component>
-      <Component Id="AppFile0368" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Emit.Lightweight.dll" />
-      </Component>
-      <Component Id="AppFile0369" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0370" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Metadata.dll" />
-      </Component>
-      <Component Id="AppFile0371" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0372" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Reflection.TypeExtensions.dll" />
-      </Component>
-      <Component Id="AppFile0373" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Resources.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0374" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Resources.Reader.dll" />
-      </Component>
-      <Component Id="AppFile0375" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Resources.ResourceManager.dll" />
-      </Component>
-      <Component Id="AppFile0376" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Resources.Writer.dll" />
-      </Component>
-      <Component Id="AppFile0377" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.CompilerServices.Unsafe.dll" />
-      </Component>
-      <Component Id="AppFile0378" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.CompilerServices.VisualC.dll" />
-      </Component>
-      <Component Id="AppFile0379" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.dll" />
-      </Component>
-      <Component Id="AppFile0380" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0381" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Handles.dll" />
-      </Component>
-      <Component Id="AppFile0382" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.InteropServices.dll" />
-      </Component>
-      <Component Id="AppFile0383" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.InteropServices.JavaScript.dll" />
-      </Component>
-      <Component Id="AppFile0384" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.InteropServices.RuntimeInformation.dll" />
-      </Component>
-      <Component Id="AppFile0385" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Intrinsics.dll" />
-      </Component>
-      <Component Id="AppFile0386" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Loader.dll" />
-      </Component>
-      <Component Id="AppFile0387" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Numerics.dll" />
-      </Component>
-      <Component Id="AppFile0388" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Serialization.dll" />
-      </Component>
-      <Component Id="AppFile0389" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Serialization.Formatters.dll" />
-      </Component>
-      <Component Id="AppFile0390" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Serialization.Json.dll" />
-      </Component>
-      <Component Id="AppFile0391" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Serialization.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0392" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Runtime.Serialization.Xml.dll" />
-      </Component>
-      <Component Id="AppFile0393" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.AccessControl.dll" />
-      </Component>
-      <Component Id="AppFile0394" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Claims.dll" />
-      </Component>
-      <Component Id="AppFile0395" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Algorithms.dll" />
-      </Component>
-      <Component Id="AppFile0396" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Cng.dll" />
-      </Component>
-      <Component Id="AppFile0397" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Csp.dll" />
-      </Component>
-      <Component Id="AppFile0398" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.dll" />
-      </Component>
-      <Component Id="AppFile0399" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Encoding.dll" />
-      </Component>
-      <Component Id="AppFile0400" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.OpenSsl.dll" />
-      </Component>
-      <Component Id="AppFile0401" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Pkcs.dll" />
-      </Component>
-      <Component Id="AppFile0402" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0403" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.ProtectedData.dll" />
-      </Component>
-      <Component Id="AppFile0404" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.X509Certificates.dll" />
-      </Component>
-      <Component Id="AppFile0405" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Cryptography.Xml.dll" />
-      </Component>
-      <Component Id="AppFile0406" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.dll" />
-      </Component>
-      <Component Id="AppFile0407" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Permissions.dll" />
-      </Component>
-      <Component Id="AppFile0408" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Principal.dll" />
-      </Component>
-      <Component Id="AppFile0409" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.Principal.Windows.dll" />
-      </Component>
-      <Component Id="AppFile0410" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Security.SecureString.dll" />
-      </Component>
-      <Component Id="AppFile0411" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ServiceModel.Web.dll" />
-      </Component>
-      <Component Id="AppFile0412" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ServiceProcess.dll" />
-      </Component>
-      <Component Id="AppFile0413" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.Encoding.CodePages.dll" />
-      </Component>
-      <Component Id="AppFile0414" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.Encoding.dll" />
-      </Component>
-      <Component Id="AppFile0415" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.Encoding.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0416" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.Encodings.Web.dll" />
-      </Component>
-      <Component Id="AppFile0417" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.Json.dll" />
-      </Component>
-      <Component Id="AppFile0418" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Text.RegularExpressions.dll" />
-      </Component>
-      <Component Id="AppFile0419" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.AccessControl.dll" />
-      </Component>
-      <Component Id="AppFile0420" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Channels.dll" />
-      </Component>
-      <Component Id="AppFile0421" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.dll" />
-      </Component>
-      <Component Id="AppFile0422" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Overlapped.dll" />
-      </Component>
-      <Component Id="AppFile0423" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Tasks.Dataflow.dll" />
-      </Component>
-      <Component Id="AppFile0424" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Tasks.dll" />
-      </Component>
-      <Component Id="AppFile0425" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Tasks.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0426" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Tasks.Parallel.dll" />
-      </Component>
-      <Component Id="AppFile0427" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Thread.dll" />
-      </Component>
-      <Component Id="AppFile0428" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.ThreadPool.dll" />
-      </Component>
-      <Component Id="AppFile0429" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Threading.Timer.dll" />
-      </Component>
-      <Component Id="AppFile0430" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Transactions.dll" />
-      </Component>
-      <Component Id="AppFile0431" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Transactions.Local.dll" />
-      </Component>
-      <Component Id="AppFile0432" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.ValueTuple.dll" />
-      </Component>
-      <Component Id="AppFile0433" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Web.dll" />
-      </Component>
-      <Component Id="AppFile0434" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Web.HttpUtility.dll" />
-      </Component>
-      <Component Id="AppFile0435" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Controls.Ribbon.dll" />
-      </Component>
-      <Component Id="AppFile0436" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.dll" />
-      </Component>
-      <Component Id="AppFile0437" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Extensions.dll" />
-      </Component>
-      <Component Id="AppFile0438" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Forms.Design.dll" />
-      </Component>
-      <Component Id="AppFile0439" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Forms.Design.Editors.dll" />
-      </Component>
-      <Component Id="AppFile0440" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Forms.dll" />
-      </Component>
-      <Component Id="AppFile0441" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Forms.Primitives.dll" />
-      </Component>
-      <Component Id="AppFile0442" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Input.Manipulations.dll" />
-      </Component>
-      <Component Id="AppFile0443" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Windows.Presentation.dll" />
-      </Component>
-      <Component Id="AppFile0444" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xaml.dll" />
-      </Component>
-      <Component Id="AppFile0445" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.dll" />
-      </Component>
-      <Component Id="AppFile0446" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.Linq.dll" />
-      </Component>
-      <Component Id="AppFile0447" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.ReaderWriter.dll" />
-      </Component>
-      <Component Id="AppFile0448" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.Serialization.dll" />
-      </Component>
-      <Component Id="AppFile0449" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.XDocument.dll" />
-      </Component>
-      <Component Id="AppFile0450" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.XmlDocument.dll" />
-      </Component>
-      <Component Id="AppFile0451" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.XmlSerializer.dll" />
-      </Component>
-      <Component Id="AppFile0452" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.XPath.dll" />
-      </Component>
-      <Component Id="AppFile0453" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\System.Xml.XPath.XDocument.dll" />
-      </Component>
-      <Component Id="AppFile0454" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0455" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0456" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0457" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0458" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0459" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0460" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0461" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0462" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0463" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0464" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0465" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0466" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0467" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0468" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0469" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0470" Guid="*" Directory="AppDir0011">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\tr\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0471" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\UIAutomationClient.dll" />
-      </Component>
-      <Component Id="AppFile0472" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\UIAutomationClientSideProviders.dll" />
-      </Component>
-      <Component Id="AppFile0473" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\UIAutomationProvider.dll" />
-      </Component>
-      <Component Id="AppFile0474" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\UIAutomationTypes.dll" />
-      </Component>
-      <Component Id="AppFile0475" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\vcruntime140_cor3.dll" />
-      </Component>
-      <Component Id="AppFile0476" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\WindowsBase.dll" />
-      </Component>
-      <Component Id="AppFile0477" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\WindowsFormsIntegration.dll" />
-      </Component>
-      <Component Id="AppFile0478" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0053" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Wpf.Ui.Abstractions.dll" />
       </Component>
-      <Component Id="AppFile0479" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0054" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Wpf.Ui.dll" />
       </Component>
-      <Component Id="AppFile0480" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0055" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Wpf.Ui.Tray.dll" />
-      </Component>
-      <Component Id="AppFile0481" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\wpfgfx_cor3.dll" />
-      </Component>
-      <Component Id="AppFile0482" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0483" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0484" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0485" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0486" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0487" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0488" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0489" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0490" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0491" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0492" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0493" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0494" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0495" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0496" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0497" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0498" Guid="*" Directory="AppDir0012">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hans\WindowsFormsIntegration.resources.dll" />
-      </Component>
-      <Component Id="AppFile0499" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\Microsoft.VisualBasic.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0500" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\PresentationCore.resources.dll" />
-      </Component>
-      <Component Id="AppFile0501" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\PresentationFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0502" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\PresentationUI.resources.dll" />
-      </Component>
-      <Component Id="AppFile0503" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\ReachFramework.resources.dll" />
-      </Component>
-      <Component Id="AppFile0504" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Windows.Controls.Ribbon.resources.dll" />
-      </Component>
-      <Component Id="AppFile0505" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Windows.Forms.Design.resources.dll" />
-      </Component>
-      <Component Id="AppFile0506" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Windows.Forms.Primitives.resources.dll" />
-      </Component>
-      <Component Id="AppFile0507" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Windows.Forms.resources.dll" />
-      </Component>
-      <Component Id="AppFile0508" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Windows.Input.Manipulations.resources.dll" />
-      </Component>
-      <Component Id="AppFile0509" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\System.Xaml.resources.dll" />
-      </Component>
-      <Component Id="AppFile0510" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\UIAutomationClient.resources.dll" />
-      </Component>
-      <Component Id="AppFile0511" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\UIAutomationClientSideProviders.resources.dll" />
-      </Component>
-      <Component Id="AppFile0512" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\UIAutomationProvider.resources.dll" />
-      </Component>
-      <Component Id="AppFile0513" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\UIAutomationTypes.resources.dll" />
-      </Component>
-      <Component Id="AppFile0514" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\WindowsBase.resources.dll" />
-      </Component>
-      <Component Id="AppFile0515" Guid="*" Directory="AppDir0013">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\zh-Hant\WindowsFormsIntegration.resources.dll" />
       </Component>
     </ComponentGroup>
   </Fragment>
