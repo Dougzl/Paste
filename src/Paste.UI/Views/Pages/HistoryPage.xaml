@@ -28,6 +28,7 @@
         <converters:ContentTypeToColorConverter x:Key="ContentTypeToColorConverter" />
         <converters:ContentTypeToLabelConverter x:Key="ContentTypeToLabelConverter" />
         <converters:StringToColorConverter x:Key="StringToColorConverter" />
+        <converters:FilePathsDisplayConverter x:Key="FilePathsDisplayConverter" />
         <helpers:BindingProxy x:Key="ViewModelProxy" Data="{Binding}" />
     </UserControl.Resources>
 
@@ -668,7 +669,7 @@
                                             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                             VerticalAlignment="Top" />
                                         <TextBlock
-                                            Text="{Binding Content}"
+                                            Text="{Binding Content, Converter={StaticResource FilePathsDisplayConverter}}"
                                             TextWrapping="Wrap"
                                             TextTrimming="CharacterEllipsis"
                                             MaxHeight="240"

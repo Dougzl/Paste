@@ -7,11 +7,21 @@ namespace Paste.Data.Services;
 
 public class ClipboardHistoryService : IClipboardHistoryService
 {
-    private readonly IDbContextFactory<PasteDbContext> _contextFactory;
+    private static readonly string ManagedRootDir = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Paste");
+    private static readonly string ManagedImagesDir = Path.Combine(ManagedRootDir, "images");
+    private static readonly string ManagedFilesDir = Path.Combine(ManagedRootDir, "files");
 
-    public ClipboardHistoryService(IDbContextFactory<PasteDbContext> contextFactory)
+    private readonly IDbContextFactory<PasteDbContext> _contextFactory;
+    private readonly IImageStorageService _imageStorageService;
+
+    public ClipboardHistoryService(
+        IDbContextFactory<PasteDbContext> contextFactory,
+        IImageStorageService imageStorageService)
     {
         _contextFactory = contextFactory;
+        _imageStorageService = imageStorageService;
     }
 
     public async Task<List<ClipboardEntry>> GetRecentAsync(int count = 50)
@@ -37,6 +47,9 @@ public class ClipboardHistoryService : IClipboardHistoryService
     public async Task<ClipboardEntry> AddAsync(ClipboardEntry entry)
     {
         await using var db = await _contextFactory.CreateDbContextAsync();
+        var imageCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var fileCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
         // Move existing duplicate to top by deleting old entry
         if (!string.IsNullOrEmpty(entry.ContentHash))
         {
@@ -44,12 +57,14 @@ public class ClipboardHistoryService : IClipboardHistoryService
                 .FirstOrDefaultAsync(e => e.ContentHash == entry.ContentHash);
             if (existing != null)
             {
+                CollectPayloadCandidates(existing, imageCandidates, fileCandidates);
                 db.ClipboardEntries.Remove(existing);
             }
         }
 
         db.ClipboardEntries.Add(entry);
         await db.SaveChangesAsync();
+        await CleanupUnreferencedPayloadsAsync(db, imageCandidates, fileCandidates);
         return entry;
     }
 
@@ -59,8 +74,12 @@ public class ClipboardHistoryService : IClipboardHistoryService
         var entry = await db.ClipboardEntries.FindAsync(id);
         if (entry != null)
         {
+            var imageCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var fileCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            CollectPayloadCandidates(entry, imageCandidates, fileCandidates);
             db.ClipboardEntries.Remove(entry);
             await db.SaveChangesAsync();
+            await CleanupUnreferencedPayloadsAsync(db, imageCandidates, fileCandidates);
         }
     }
 
@@ -115,8 +134,256 @@ public class ClipboardHistoryService : IClipboardHistoryService
 
         if (entriesToRemove.Any())
         {
+            var imageCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var fileCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var entry in entriesToRemove)
+            {
+                CollectPayloadCandidates(entry, imageCandidates, fileCandidates);
+            }
+
             db.ClipboardEntries.RemoveRange(entriesToRemove);
             await db.SaveChangesAsync();
+            await CleanupUnreferencedPayloadsAsync(db, imageCandidates, fileCandidates);
+        }
+    }
+
+    public async Task CleanupExpiredAsync(int autoCleanupDays)
+    {
+        if (autoCleanupDays <= 0)
+        {
+            return;
+        }
+
+        var threshold = DateTime.UtcNow.AddDays(-autoCleanupDays);
+
+        await using var db = await _contextFactory.CreateDbContextAsync();
+        var entriesToRemove = await db.ClipboardEntries
+            .Where(e => !e.IsPinned && e.FavoriteFolderId == null && e.CopiedAt < threshold)
+            .ToListAsync();
+
+        var imageCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var fileCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in entriesToRemove)
+        {
+            CollectPayloadCandidates(entry, imageCandidates, fileCandidates);
+        }
+
+        if (entriesToRemove.Count > 0)
+        {
+            db.ClipboardEntries.RemoveRange(entriesToRemove);
+            await db.SaveChangesAsync();
+        }
+
+        await CleanupUnreferencedPayloadsAsync(db, imageCandidates, fileCandidates);
+        await CleanupExpiredOrphanedManagedFilesAsync(db, threshold);
+    }
+
+    private async Task CleanupUnreferencedPayloadsAsync(
+        PasteDbContext db,
+        HashSet<string> imageCandidates,
+        HashSet<string> fileCandidates)
+    {
+        if (imageCandidates.Count > 0)
+        {
+            var referencedImages = await db.ClipboardEntries
+                .Where(e => e.ContentType == ClipboardContentType.Image && e.Content != null && e.Content != "")
+                .Select(e => e.Content!)
+                .ToListAsync();
+
+            var referencedImageSet = new HashSet<string>(referencedImages, StringComparer.OrdinalIgnoreCase);
+            foreach (var imageContent in imageCandidates)
+            {
+                if (!referencedImageSet.Contains(imageContent))
+                {
+                    _imageStorageService.DeleteImage(imageContent);
+                }
+            }
+        }
+
+        if (fileCandidates.Count > 0)
+        {
+            var referencedFileEntries = await db.ClipboardEntries
+                .Where(e => e.ContentType == ClipboardContentType.FilePaths && e.Content != null && e.Content != "")
+                .Select(e => e.Content!)
+                .ToListAsync();
+
+            var referencedManagedFiles = BuildReferencedManagedFileSet(referencedFileEntries);
+            foreach (var filePath in fileCandidates)
+            {
+                if (!referencedManagedFiles.Contains(filePath))
+                {
+                    TryDeleteFile(filePath);
+                }
+            }
+        }
+    }
+
+    private async Task CleanupExpiredOrphanedManagedFilesAsync(PasteDbContext db, DateTime thresholdUtc)
+    {
+        var referencedImages = await db.ClipboardEntries
+            .Where(e => e.ContentType == ClipboardContentType.Image && e.Content != null && e.Content != "")
+            .Select(e => e.Content!)
+            .ToListAsync();
+        var referencedImageNames = new HashSet<string>(referencedImages, StringComparer.OrdinalIgnoreCase);
+
+        if (Directory.Exists(ManagedImagesDir))
+        {
+            foreach (var file in Directory.EnumerateFiles(ManagedImagesDir, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var fileName = Path.GetFileName(file);
+                    if (referencedImageNames.Contains(fileName))
+                    {
+                        continue;
+                    }
+
+                    if (File.GetLastWriteTimeUtc(file) < thresholdUtc)
+                    {
+                        File.Delete(file);
+                    }
+                }
+                catch
+                {
+                    // Ignore single-file failures
+                }
+            }
+        }
+
+        var referencedFileEntries = await db.ClipboardEntries
+            .Where(e => e.ContentType == ClipboardContentType.FilePaths && e.Content != null && e.Content != "")
+            .Select(e => e.Content!)
+            .ToListAsync();
+        var referencedManagedFiles = BuildReferencedManagedFileSet(referencedFileEntries);
+
+        if (Directory.Exists(ManagedFilesDir))
+        {
+            foreach (var file in Directory.EnumerateFiles(ManagedFilesDir, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var fullPath = NormalizeFullPath(file);
+                    if (fullPath == null)
+                    {
+                        continue;
+                    }
+
+                    if (referencedManagedFiles.Contains(fullPath))
+                    {
+                        continue;
+                    }
+
+                    if (File.GetLastWriteTimeUtc(file) < thresholdUtc)
+                    {
+                        File.Delete(file);
+                    }
+                }
+                catch
+                {
+                    // Ignore single-file failures
+                }
+            }
+        }
+    }
+
+    private static void CollectPayloadCandidates(
+        ClipboardEntry entry,
+        HashSet<string> imageCandidates,
+        HashSet<string> fileCandidates)
+    {
+        if (entry.ContentType == ClipboardContentType.Image && !string.IsNullOrWhiteSpace(entry.Content))
+        {
+            imageCandidates.Add(entry.Content);
+            return;
+        }
+
+        if (entry.ContentType != ClipboardContentType.FilePaths || string.IsNullOrWhiteSpace(entry.Content))
+        {
+            return;
+        }
+
+        foreach (var line in SplitLines(entry.Content))
+        {
+            var normalized = NormalizeFullPath(line);
+            if (normalized != null && IsUnderDirectory(normalized, ManagedFilesDir))
+            {
+                fileCandidates.Add(normalized);
+            }
+        }
+    }
+
+    private static HashSet<string> BuildReferencedManagedFileSet(IEnumerable<string> fileDropContents)
+    {
+        var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var content in fileDropContents)
+        {
+            foreach (var line in SplitLines(content))
+            {
+                var normalized = NormalizeFullPath(line);
+                if (normalized != null && IsUnderDirectory(normalized, ManagedFilesDir))
+                {
+                    set.Add(normalized);
+                }
+            }
+        }
+
+        return set;
+    }
+
+    private static IEnumerable<string> SplitLines(string content)
+    {
+        return content
+            .Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(static line => line.Trim())
+            .Where(static line => line.Length > 0);
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try
+        {
+            var normalized = NormalizeFullPath(path);
+            if (normalized == null || !IsUnderDirectory(normalized, ManagedFilesDir))
+            {
+                return;
+            }
+
+            if (File.Exists(normalized))
+            {
+                File.Delete(normalized);
+            }
+        }
+        catch
+        {
+            // Ignore delete failures
+        }
+    }
+
+    private static bool IsUnderDirectory(string fullPath, string directory)
+    {
+        var dirPath = NormalizeFullPath(directory);
+        if (dirPath == null)
+        {
+            return false;
+        }
+
+        if (!dirPath.EndsWith(Path.DirectorySeparatorChar))
+        {
+            dirPath += Path.DirectorySeparatorChar;
+        }
+
+        return fullPath.StartsWith(dirPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string? NormalizeFullPath(string path)
+    {
+        try
+        {
+            return Path.GetFullPath(path);
+        }
+        catch
+        {
+            return null;
         }
     }
 }

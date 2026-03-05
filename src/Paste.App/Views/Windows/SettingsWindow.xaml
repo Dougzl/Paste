@@ -171,6 +171,41 @@
                         </StackPanel>
                     </Border>
 
+                    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}" CornerRadius="12" Padding="20,16" Margin="0,0,0,12" BorderBrush="Transparent" BorderThickness="0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Ellipse Width="10" Height="10" Fill="{StaticResource OrangeDot}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <TextBlock Text="源文件设置" FontSize="15" FontWeight="Bold"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <DockPanel Margin="0,8,0,12">
+                                <TextBlock Text="复制源文件" FontSize="13" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <ToggleButton x:Name="CopySourceFilesToggle" DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                              Style="{StaticResource ToggleSwitchStyle}" />
+                            </DockPanel>
+
+                            <DockPanel x:Name="SourceFileMaxSizeRow" Margin="0,0,0,4">
+                                <TextBlock Text="源文件复制上限 (MB)" FontSize="13" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBox
+                                        x:Name="SourceFileMaxSizeBox"
+                                        Width="120"
+                                        Height="30"
+                                        Padding="8,0"
+                                        FontSize="13"
+                                        VerticalContentAlignment="Center"
+                                        TextAlignment="Left"
+                                        PreviewTextInput="SourceFileMaxSizeBox_PreviewTextInput"
+                                        LostFocus="SourceFileMaxSizeBox_LostFocus"
+                                        KeyDown="SourceFileMaxSizeBox_KeyDown" />
+                                </StackPanel>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
                     <Border Background="{DynamicResource ControlFillColorSecondaryBrush}" CornerRadius="12" Padding="20,16,20,12" BorderBrush="Transparent" BorderThickness="0">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,16">

@@ -13,4 +13,5 @@ public interface IClipboardHistoryService
     Task UpdateAliasAsync(long id, string? alias);
     Task UpdateContentAsync(long id, string content);
     Task ClearAllAsync();
+    Task CleanupExpiredAsync(int autoCleanupDays);
 }

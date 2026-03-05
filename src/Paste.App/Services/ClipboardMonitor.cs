@@ -16,22 +16,38 @@ public class ClipboardMonitor : IClipboardMonitor
     private static readonly string ImageDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Paste", "images");
+    private static readonly string SourceFilesDir = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Paste", "files");
+    private const int DefaultSourceFileCopyMaxSizeMb = 100;
+    private const int MinSourceFileCopyMaxSizeMb = 1;
+    private const int MaxSourceFileCopyMaxSizeMb = 2048;
+    private const int MaxStoredTextLength = 1_000_000;
+    private const int TextHashSampleLength = 16_384;
 
     private HwndSource? _hwndSource;
     private readonly ISourceAppService _sourceAppService;
     private readonly IImageStorageService _imageStorageService;
+    private readonly ISettingsService _settingsService;
     private bool _isMonitoring;
     private bool _isSuppressed;
+    private AppSettings _settings;
 
     public event EventHandler<ClipboardEntry>? ClipboardChanged;
 
     public void Suppress() => _isSuppressed = true;
     public void Resume() => _isSuppressed = false;
 
-    public ClipboardMonitor(ISourceAppService sourceAppService, IImageStorageService imageStorageService)
+    public ClipboardMonitor(
+        ISourceAppService sourceAppService,
+        IImageStorageService imageStorageService,
+        ISettingsService settingsService)
     {
         _sourceAppService = sourceAppService;
         _imageStorageService = imageStorageService;
+        _settingsService = settingsService;
+        _settings = _settingsService.Load();
+        _settingsService.SettingsChanged += OnSettingsChanged;
     }
 
     public void Start()
@@ -88,7 +104,13 @@ public class ClipboardMonitor : IClipboardMonitor
             if (Clipboard.ContainsFileDropList())
             {
                 var files = Clipboard.GetFileDropList();
-                var content = string.Join(Environment.NewLine, files.Cast<string>());
+                var normalizedPaths = NormalizeFileDropPaths(files.Cast<string>());
+                if (normalizedPaths.Count == 0)
+                {
+                    return;
+                }
+
+                var content = string.Join(Environment.NewLine, normalizedPaths);
                 var fileCount = files.Count;
                 var firstFile = fileCount > 0 ? Path.GetFileName(files[0]!) : "";
                 var preview = fileCount > 1 ? $"{firstFile} +{fileCount - 1}" : firstFile;
@@ -133,12 +155,21 @@ public class ClipboardMonitor : IClipboardMonitor
                 var text = Clipboard.GetText();
                 if (!string.IsNullOrEmpty(text))
                 {
+                    if (text.Length > MaxStoredTextLength)
+                    {
+                        return;
+                    }
+
+                    var hashInput = text.Length > TextHashSampleLength
+                        ? $"{text.Length}:{text[..TextHashSampleLength]}"
+                        : text;
+
                     entry = new ClipboardEntry
                     {
                         Content = text,
                         ContentType = ClipboardContentType.Text,
                         Preview = text.Length > 200 ? text[..200] + "..." : text,
-                        ContentHash = ComputeHash(text),
+                        ContentHash = ComputeHash(hashInput),
                         SourceAppName = appName,
                         SourceAppPath = appPath,
                         CopiedAt = DateTime.UtcNow
@@ -155,6 +186,93 @@ public class ClipboardMonitor : IClipboardMonitor
         {
             // Clipboard access can fail if another app has it locked
         }
+    }
+
+    private void OnSettingsChanged(object? sender, AppSettings settings)
+    {
+        _settings = settings ?? new AppSettings();
+    }
+
+    private List<string> NormalizeFileDropPaths(IEnumerable<string> originalPaths)
+    {
+        var settings = _settings;
+        if (!settings.CopySourceFiles)
+        {
+            return originalPaths.Where(p => !string.IsNullOrWhiteSpace(p)).ToList();
+        }
+
+        var maxBytes = NormalizeSourceFileCopyMaxSizeMb(settings.SourceFileCopyMaxSizeMb) * 1024L * 1024L;
+        var normalized = new List<string>();
+        foreach (var originalPath in originalPaths)
+        {
+            if (string.IsNullOrWhiteSpace(originalPath))
+            {
+                continue;
+            }
+
+            normalized.Add(TryCopySourceFile(originalPath, maxBytes));
+        }
+
+        return normalized;
+    }
+
+    private static string TryCopySourceFile(string path, long maxBytes)
+    {
+        try
+        {
+            if (!File.Exists(path))
+            {
+                return path;
+            }
+
+            var info = new FileInfo(path);
+            if (info.Length <= 0 || info.Length > maxBytes)
+            {
+                return path;
+            }
+
+            Directory.CreateDirectory(SourceFilesDir);
+            var destinationPath = GetAvailableDestinationPath(SourceFilesDir, info.Name);
+            File.Copy(path, destinationPath, overwrite: true);
+            return destinationPath;
+        }
+        catch
+        {
+            return path;
+        }
+    }
+
+    private static string GetAvailableDestinationPath(string directory, string originalFileName)
+    {
+        var safeName = string.IsNullOrWhiteSpace(originalFileName) ? "copied-file" : originalFileName;
+        var candidate = Path.Combine(directory, safeName);
+        if (!File.Exists(candidate))
+        {
+            return candidate;
+        }
+
+        var stem = Path.GetFileNameWithoutExtension(safeName);
+        var ext = Path.GetExtension(safeName);
+        for (var i = 1; i < 10_000; i++)
+        {
+            candidate = Path.Combine(directory, $"{stem} ({i}){ext}");
+            if (!File.Exists(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return Path.Combine(directory, $"{DateTime.UtcNow:yyyyMMddHHmmssfff}_{Guid.NewGuid():N}{ext}");
+    }
+
+    private static int NormalizeSourceFileCopyMaxSizeMb(int value)
+    {
+        if (value <= 0)
+        {
+            value = DefaultSourceFileCopyMaxSizeMb;
+        }
+
+        return Math.Clamp(value, MinSourceFileCopyMaxSizeMb, MaxSourceFileCopyMaxSizeMb);
     }
 
     private static string ComputeHash(string text)
@@ -246,6 +364,7 @@ public class ClipboardMonitor : IClipboardMonitor
     public void Dispose()
     {
         Stop();
+        _settingsService.SettingsChanged -= OnSettingsChanged;
         GC.SuppressFinalize(this);
     }
 }

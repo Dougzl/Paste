@@ -70,7 +70,7 @@ public partial class App : Application
         await DatabaseMigrator.MigrateAsync(contextFactory);
 
         // Auto-cleanup based on settings
-        await RunAutoCleanupAsync(contextFactory);
+        await RunAutoCleanupAsync();
 
         await _host.StartAsync();
     }
@@ -92,31 +92,14 @@ public partial class App : Application
         ApplicationThemeManager.ApplySystemTheme();
     }
 
-    private async Task RunAutoCleanupAsync(IDbContextFactory<PasteDbContext> contextFactory)
+    private async Task RunAutoCleanupAsync()
     {
         var settingsService = _host.Services.GetRequiredService<ISettingsService>();
         var settings = settingsService.Load();
         if (settings.AutoCleanupDays <= 0) return;
 
-        var threshold = DateTime.UtcNow.AddDays(-settings.AutoCleanupDays);
-        var imageStorage = _host.Services.GetRequiredService<IImageStorageService>();
-
-        await using var db = await contextFactory.CreateDbContextAsync();
-        var oldEntries = await db.ClipboardEntries
-            .Where(e => !e.IsPinned && e.FavoriteFolderId == null && e.CopiedAt < threshold)
-            .ToListAsync();
-
-        foreach (var entry in oldEntries)
-        {
-            if (entry.ContentType == ClipboardContentType.Image && !string.IsNullOrEmpty(entry.Content))
-            {
-                imageStorage.DeleteImage(entry.Content);
-            }
-            db.ClipboardEntries.Remove(entry);
-        }
-
-        if (oldEntries.Count > 0)
-            await db.SaveChangesAsync();
+        var historyService = _host.Services.GetRequiredService<IClipboardHistoryService>();
+        await historyService.CleanupExpiredAsync(settings.AutoCleanupDays);
     }
 
     protected override async void OnExit(ExitEventArgs e)

@@ -14,6 +14,9 @@ public partial class SettingsWindow : FluentWindow
     private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
     private const double MinScrollSpeed = 0.5;
     private const double MaxScrollSpeed = 10.0;
+    private const int DefaultSourceFileCopyMaxSizeMb = 100;
+    private const int MinSourceFileCopyMaxSizeMb = 1;
+    private const int MaxSourceFileCopyMaxSizeMb = 2048;
     private readonly ISettingsService _settingsService;
     private readonly IClipboardHistoryService _historyService;
     private int _capturedModifiers;
@@ -66,6 +69,9 @@ public partial class SettingsWindow : FluentWindow
         AutoRunToggle.IsChecked = s.AutoRunOnStartup;
         MinimizeToTrayToggle.IsChecked = s.MinimizeToTrayOnStartup;
         ShowTrayIconToggle.IsChecked = s.ShowTrayIcon;
+        CopySourceFilesToggle.IsChecked = s.CopySourceFiles;
+        SourceFileMaxSizeBox.Text = NormalizeSourceFileCopyMaxSizeMb(s.SourceFileCopyMaxSizeMb).ToString();
+        UpdateSourceFileControlsState();
         ThemeModeCombo.SelectedValue = NormalizeThemeMode(s.ThemeMode);
         ScrollSpeedSlider.Value = Clamp(s.ScrollSpeedMultiplier, MinScrollSpeed, MaxScrollSpeed);
         UpdateScrollSpeedText();
@@ -77,6 +83,8 @@ public partial class SettingsWindow : FluentWindow
         MinimizeToTrayToggle.Unchecked += ToggleChanged;
         ShowTrayIconToggle.Checked += ToggleChanged;
         ShowTrayIconToggle.Unchecked += ToggleChanged;
+        CopySourceFilesToggle.Checked += ToggleChanged;
+        CopySourceFilesToggle.Unchecked += ToggleChanged;
 
         _isLoading = false;
     }
@@ -96,6 +104,8 @@ public partial class SettingsWindow : FluentWindow
             AutoRunOnStartup = AutoRunToggle.IsChecked == true,
             MinimizeToTrayOnStartup = MinimizeToTrayToggle.IsChecked == true,
             ShowTrayIcon = ShowTrayIconToggle.IsChecked == true,
+            CopySourceFiles = CopySourceFilesToggle.IsChecked == true,
+            SourceFileCopyMaxSizeMb = GetSourceFileCopyMaxSizeMb(),
             ThemeMode = GetSelectedThemeMode(),
             ScrollSpeedMultiplier = Clamp(ScrollSpeedSlider.Value, MinScrollSpeed, MaxScrollSpeed)
         };
@@ -131,7 +141,32 @@ public partial class SettingsWindow : FluentWindow
         }
     }
 
-    private void ToggleChanged(object sender, RoutedEventArgs e) => SaveSettings();
+    private void ToggleChanged(object sender, RoutedEventArgs e)
+    {
+        UpdateSourceFileControlsState();
+        SaveSettings();
+    }
+
+    private void SourceFileMaxSizeBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = e.Text.Any(ch => !char.IsDigit(ch));
+    }
+
+    private void SourceFileMaxSizeBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SaveSettings();
+    }
+
+    private void SourceFileMaxSizeBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter)
+        {
+            return;
+        }
+
+        e.Handled = true;
+        SaveSettings();
+    }
 
     private void CleanupSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => SaveSettings();
 
@@ -149,6 +184,41 @@ public partial class SettingsWindow : FluentWindow
 
         UpdateScrollSpeedText();
         SaveSettings();
+    }
+
+    private int GetSourceFileCopyMaxSizeMb()
+    {
+        var normalized = DefaultSourceFileCopyMaxSizeMb;
+
+        if (int.TryParse(SourceFileMaxSizeBox.Text, out var parsed))
+        {
+            normalized = NormalizeSourceFileCopyMaxSizeMb(parsed);
+        }
+
+        if (!string.Equals(SourceFileMaxSizeBox.Text, normalized.ToString(), StringComparison.Ordinal))
+        {
+            SourceFileMaxSizeBox.Text = normalized.ToString();
+        }
+
+        UpdateSourceFileControlsState();
+        return normalized;
+    }
+
+    private static int NormalizeSourceFileCopyMaxSizeMb(int value)
+    {
+        if (value <= 0)
+        {
+            value = DefaultSourceFileCopyMaxSizeMb;
+        }
+
+        return Math.Clamp(value, MinSourceFileCopyMaxSizeMb, MaxSourceFileCopyMaxSizeMb);
+    }
+
+    private void UpdateSourceFileControlsState()
+    {
+        var enabled = CopySourceFilesToggle.IsChecked == true;
+        SourceFileMaxSizeRow.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+        SourceFileMaxSizeBox.IsEnabled = enabled;
     }
 
     private void ResetHotkey_Click(object sender, MouseButtonEventArgs e)

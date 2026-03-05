@@ -25,4 +25,10 @@ public class AppSettings
 
     /// <summary>Scroll speed multiplier. 1.0 = default speed.</summary>
     public double ScrollSpeedMultiplier { get; set; } = 1.0;
+
+    /// <summary>Whether to copy source files to app-managed cache when capturing file-drop clipboard entries.</summary>
+    public bool CopySourceFiles { get; set; } = false;
+
+    /// <summary>Per-file size limit (MB) when copying source files.</summary>
+    public int SourceFileCopyMaxSizeMb { get; set; } = 100;
 }
