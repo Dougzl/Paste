@@ -340,6 +340,12 @@ public partial class HistoryPage : UserControl
             return;
         }
 
+        if (e.Key is Key.LeftAlt or Key.RightAlt || (e.Key == Key.System && e.SystemKey is Key.LeftAlt or Key.RightAlt))
+        {
+            e.Handled = true;
+            return;
+        }
+
         if (Keyboard.FocusedElement is TextBox)
         {
             return;
