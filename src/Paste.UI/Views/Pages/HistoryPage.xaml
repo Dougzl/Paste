@@ -427,11 +427,26 @@
             Background="{DynamicResource ControlFillColorTertiaryBrush}"
             BorderBrush="Transparent"
             BorderThickness="0"
+            Focusable="False"
+            IsTabStop="False"
+            KeyboardNavigation.IsTabStop="False"
             FocusVisualStyle="{x:Null}"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.ScrollUnit="Pixel">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <ScrollViewer
+                        Focusable="False"
+                        Background="{TemplateBinding Background}"
+                        HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                        CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ListBox.Template>
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
