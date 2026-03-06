@@ -187,8 +187,9 @@ public partial class ClipboardHistoryViewModel : ObservableObject
 
     public async Task HandleClipboardChangedAsync(ClipboardEntry entry)
     {
-        // Deduplicate: skip if same hash as last entry
-        if (entry.ContentHash == _lastHash)
+        // Deduplicate non-image clipboard content only.
+        // Image captures should always be kept as separate entries.
+        if (entry.ContentType != ClipboardContentType.Image && entry.ContentHash == _lastHash)
             return;
 
         _lastHash = entry.ContentHash;

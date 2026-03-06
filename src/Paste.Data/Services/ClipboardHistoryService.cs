@@ -50,8 +50,9 @@ public class ClipboardHistoryService : IClipboardHistoryService
         var imageCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var fileCandidates = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Move existing duplicate to top by deleting old entry
-        if (!string.IsNullOrEmpty(entry.ContentHash))
+        // Move existing duplicate to top by deleting old entry.
+        // Images should keep each capture as an independent record.
+        if (entry.ContentType != ClipboardContentType.Image && !string.IsNullOrEmpty(entry.ContentHash))
         {
             var existing = await db.ClipboardEntries
                 .FirstOrDefaultAsync(e => e.ContentHash == entry.ContentHash);

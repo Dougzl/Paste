@@ -18,13 +18,10 @@ public class ImageStorageService : IImageStorageService
 
     public async Task<string> SaveImageAsync(byte[] imageData, string hash)
     {
-        var fileName = $"{hash}.png";
+        // Keep a unique file per clipboard capture, even when image bytes are identical.
+        var fileName = $"{hash}_{DateTime.UtcNow:yyyyMMddHHmmssfff}_{Guid.NewGuid():N}.png";
         var filePath = Path.Combine(_imageDir, fileName);
-
-        if (!File.Exists(filePath))
-        {
-            await File.WriteAllBytesAsync(filePath, imageData);
-        }
+        await File.WriteAllBytesAsync(filePath, imageData);
 
         return fileName;
     }
