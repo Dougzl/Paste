@@ -428,7 +428,7 @@
             Background="{DynamicResource ControlFillColorTertiaryBrush}"
             BorderBrush="Transparent"
             BorderThickness="0"
-            Focusable="False"
+            Focusable="True"
             IsTabStop="False"
             KeyboardNavigation.IsTabStop="False"
             FocusVisualStyle="{x:Null}"

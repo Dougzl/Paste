@@ -264,8 +264,11 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     {
         if (entry == null) return;
 
-        // Find index in current Entries for auto-selecting next
-        var currentIndex = Entries.IndexOf(entry);
+        // Find index in current Entries for auto-selecting next.
+        // Use Id instead of object reference to avoid stale selection references.
+        var currentIndex = Entries
+            .Select((item, index) => new { item.Id, index })
+            .FirstOrDefault(x => x.Id == entry.Id)?.index ?? -1;
 
         // If viewing a folder, only remove from folder (don't delete the entry)
         if (SelectedFolder != null && _favoriteFolderService != null)
@@ -276,7 +279,7 @@ public partial class ClipboardHistoryViewModel : ObservableObject
         else
         {
             await _historyService.DeleteAsync(entry.Id);
-            _allEntries.Remove(entry);
+            _allEntries.RemoveAll(e => e.Id == entry.Id);
         }
 
         RebuildAppFilters();

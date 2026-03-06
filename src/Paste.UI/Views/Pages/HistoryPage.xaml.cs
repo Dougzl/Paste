@@ -58,6 +58,9 @@ public partial class HistoryPage : UserControl
 
     private void HistoryPage_Loaded(object sender, RoutedEventArgs e)
     {
+        CardList.SelectionChanged -= CardList_SelectionChanged;
+        CardList.SelectionChanged += CardList_SelectionChanged;
+
         if (!_settingsEventsHooked)
         {
             _settingsService.SettingsChanged += OnSettingsChanged;
@@ -303,11 +306,13 @@ public partial class HistoryPage : UserControl
         else if (e.Key == Key.Right)
         {
             MoveSelectionBy(1);
+            CardList.Focus();
             e.Handled = true;
         }
         else if (e.Key == Key.Left)
         {
             MoveSelectionBy(-1);
+            CardList.Focus();
             e.Handled = true;
         }
         else if (e.Key == Key.Delete)
@@ -315,7 +320,7 @@ public partial class HistoryPage : UserControl
             var entry = ResolveCurrentEntryForKeyboardDelete();
             if (entry != null)
             {
-                var indexBeforeDelete = _currentSelectionIndex >= 0 ? _currentSelectionIndex : CardList.SelectedIndex;
+                var indexBeforeDelete = GetCurrentSelectionIndex();
 
                 if (entry.FavoriteFolderId is > 0)
                 {
@@ -328,6 +333,7 @@ public partial class HistoryPage : UserControl
 
                 await _viewModel.DeleteEntryCommand.ExecuteAsync(entry);
                 SelectByIndex(indexBeforeDelete);
+                CardList.Focus();
                 e.Handled = true;
             }
         }
@@ -369,11 +375,7 @@ public partial class HistoryPage : UserControl
             return;
         }
 
-        var baseIndex = _currentSelectionIndex;
-        if (baseIndex < 0)
-        {
-            baseIndex = CardList.SelectedIndex;
-        }
+        var baseIndex = GetCurrentSelectionIndex();
         if (baseIndex < 0)
         {
             baseIndex = 0;
@@ -396,15 +398,36 @@ public partial class HistoryPage : UserControl
         _currentSelectionIndex = clamped;
         var entry = _viewModel.Entries[clamped];
         _viewModel.SelectedEntry = entry;
+        CardList.SelectedItem = entry;
         CardList.SelectedIndex = clamped;
         CardList.ScrollIntoView(entry);
+        CardList.Focus();
     }
 
     private ClipboardEntry? ResolveCurrentEntryForKeyboardDelete()
     {
+        if (CardList.SelectedItem is ClipboardEntry selectedItem)
+        {
+            var selectedById = _viewModel.Entries.FirstOrDefault(e => e.Id == selectedItem.Id);
+            if (selectedById != null)
+            {
+                _viewModel.SelectedEntry = selectedById;
+                return selectedById;
+            }
+        }
+
         if (_viewModel.SelectedEntry != null)
         {
-            return _viewModel.SelectedEntry;
+            var selectedById = _viewModel.Entries.FirstOrDefault(e => e.Id == _viewModel.SelectedEntry.Id);
+            if (selectedById != null)
+            {
+                if (!ReferenceEquals(selectedById, _viewModel.SelectedEntry))
+                {
+                    _viewModel.SelectedEntry = selectedById;
+                }
+
+                return selectedById;
+            }
         }
 
         if (_viewModel.Entries.Count == 0)
@@ -412,7 +435,7 @@ public partial class HistoryPage : UserControl
             return null;
         }
 
-        var index = _currentSelectionIndex >= 0 ? _currentSelectionIndex : CardList.SelectedIndex;
+        var index = GetCurrentSelectionIndex();
         if (index < 0)
         {
             index = 0;
@@ -420,6 +443,41 @@ public partial class HistoryPage : UserControl
 
         index = Math.Clamp(index, 0, _viewModel.Entries.Count - 1);
         return _viewModel.Entries[index];
+    }
+
+    private int GetCurrentSelectionIndex()
+    {
+        if (_viewModel.SelectedEntry != null)
+        {
+            var selectedEntryIndex = _viewModel.Entries
+                .Select((entry, index) => new { entry.Id, index })
+                .FirstOrDefault(x => x.Id == _viewModel.SelectedEntry.Id)?.index ?? -1;
+            if (selectedEntryIndex >= 0)
+            {
+                _currentSelectionIndex = selectedEntryIndex;
+                return selectedEntryIndex;
+            }
+        }
+
+        if (CardList.SelectedItem is ClipboardEntry selectedItem)
+        {
+            var selectedItemIndex = _viewModel.Entries
+                .Select((entry, index) => new { entry.Id, index })
+                .FirstOrDefault(x => x.Id == selectedItem.Id)?.index ?? -1;
+            if (selectedItemIndex >= 0)
+            {
+                _currentSelectionIndex = selectedItemIndex;
+                return selectedItemIndex;
+            }
+        }
+
+        if (CardList.SelectedIndex >= 0)
+        {
+            _currentSelectionIndex = CardList.SelectedIndex;
+            return CardList.SelectedIndex;
+        }
+
+        return _currentSelectionIndex;
     }
 
     // --- Top bar handlers ---

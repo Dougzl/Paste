@@ -190,7 +190,12 @@ public class ClipboardHistoryService : IClipboardHistoryService
                 .Select(e => e.Content!)
                 .ToListAsync();
 
-            var referencedImageSet = new HashSet<string>(referencedImages, StringComparer.OrdinalIgnoreCase);
+            var referencedImageSet = new HashSet<string>(
+                referencedImages
+                    .Select(NormalizeImageContent)
+                    .Where(static value => !string.IsNullOrWhiteSpace(value))!
+                    .Select(static value => value!),
+                StringComparer.OrdinalIgnoreCase);
             foreach (var imageContent in imageCandidates)
             {
                 if (!referencedImageSet.Contains(imageContent))
@@ -224,7 +229,12 @@ public class ClipboardHistoryService : IClipboardHistoryService
             .Where(e => e.ContentType == ClipboardContentType.Image && e.Content != null && e.Content != "")
             .Select(e => e.Content!)
             .ToListAsync();
-        var referencedImageNames = new HashSet<string>(referencedImages, StringComparer.OrdinalIgnoreCase);
+        var referencedImageNames = new HashSet<string>(
+            referencedImages
+                .Select(NormalizeImageContent)
+                .Where(static value => !string.IsNullOrWhiteSpace(value))!
+                .Select(static value => value!),
+            StringComparer.OrdinalIgnoreCase);
 
         if (Directory.Exists(ManagedImagesDir))
         {
@@ -293,7 +303,11 @@ public class ClipboardHistoryService : IClipboardHistoryService
     {
         if (entry.ContentType == ClipboardContentType.Image && !string.IsNullOrWhiteSpace(entry.Content))
         {
-            imageCandidates.Add(entry.Content);
+            var imageContent = NormalizeImageContent(entry.Content);
+            if (!string.IsNullOrWhiteSpace(imageContent))
+            {
+                imageCandidates.Add(imageContent);
+            }
             return;
         }
 
@@ -336,6 +350,43 @@ public class ClipboardHistoryService : IClipboardHistoryService
             .Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
             .Select(static line => line.Trim())
             .Where(static line => line.Length > 0);
+    }
+
+    private static string? NormalizeImageContent(string? content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return null;
+        }
+
+        var value = content.Trim();
+
+        if (Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.IsFile)
+        {
+            value = uri.LocalPath;
+        }
+
+        if (Path.IsPathRooted(value))
+        {
+            var fullPath = NormalizeFullPath(value);
+            if (fullPath == null || !IsUnderDirectory(fullPath, ManagedImagesDir))
+            {
+                return null;
+            }
+
+            return Path.GetFileName(fullPath);
+        }
+
+        value = value.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        var imagePrefix = $"images{Path.DirectorySeparatorChar}";
+        if (value.StartsWith(imagePrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            value = value[imagePrefix.Length..];
+        }
+
+        value = value.TrimStart(Path.DirectorySeparatorChar);
+        var fileName = Path.GetFileName(value);
+        return string.IsNullOrWhiteSpace(fileName) ? null : fileName;
     }
 
     private static void TryDeleteFile(string path)
