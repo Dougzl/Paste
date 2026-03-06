@@ -26,6 +26,7 @@ public partial class MainWindow : FluentWindow
     private bool _isHidingProgrammatically;
     private bool _initialized;
     private bool _isWatchingSystemTheme;
+    private bool _isSettingsDialogOpen;
     private string _currentThemeMode = "System";
 
     public MainWindow(
@@ -108,7 +109,21 @@ public partial class MainWindow : FluentWindow
                 Owner = this,
                 OnHistoryClearedCallback = async () => await _historyViewModel.LoadEntriesAsync()
             };
-            settingsWindow.ShowDialog();
+
+            _isSettingsDialogOpen = true;
+            try
+            {
+                settingsWindow.ShowDialog();
+            }
+            finally
+            {
+                _isSettingsDialogOpen = false;
+                if (IsVisible)
+                {
+                    Activate();
+                    Focus();
+                }
+            }
         };
 
         // Host the history page directly
@@ -283,6 +298,11 @@ public partial class MainWindow : FluentWindow
 
     private void MainWindow_Deactivated(object? sender, EventArgs e)
     {
+        if (_isSettingsDialogOpen)
+        {
+            return;
+        }
+
         // Keep main window visible while owned dialogs (settings/confirm) are open.
         if (HasVisibleOwnedWindow())
         {
@@ -298,9 +318,9 @@ public partial class MainWindow : FluentWindow
 
     private bool HasVisibleOwnedWindow()
     {
-        foreach (Window window in Application.Current.Windows)
+        foreach (Window window in OwnedWindows)
         {
-            if (window.Owner == this && window.IsVisible)
+            if (window.IsVisible)
             {
                 return true;
             }
