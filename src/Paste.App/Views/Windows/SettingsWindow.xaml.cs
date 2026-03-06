@@ -321,6 +321,12 @@ public partial class SettingsWindow : FluentWindow
 
     private void SettingsWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
+        if (e.Key is Key.LeftAlt or Key.RightAlt || (e.Key == Key.System && e.SystemKey is Key.LeftAlt or Key.RightAlt))
+        {
+            e.Handled = true;
+            return;
+        }
+
         if (e.Key != Key.Escape)
         {
             return;

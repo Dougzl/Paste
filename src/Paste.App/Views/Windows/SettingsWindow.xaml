@@ -20,6 +20,8 @@
         <SolidColorBrush x:Key="PurpleDot" Color="#A78BFA" />
         <Style TargetType="{x:Type Control}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         </Style>
 
         <Style x:Key="ToggleSwitchStyle" TargetType="ToggleButton">
@@ -44,6 +46,19 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="ThemeModeComboItemStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </ui:FluentWindow.Resources>
 
@@ -144,9 +159,9 @@
                                     HorizontalAlignment="Right"
                                     SelectedValuePath="Tag"
                                     SelectionChanged="ThemeModeCombo_SelectionChanged">
-                                    <ComboBoxItem Content="跟随系统" Tag="System" />
-                                    <ComboBoxItem Content="浅色" Tag="Light" />
-                                    <ComboBoxItem Content="深色" Tag="Dark" />
+                                    <ComboBoxItem Content="跟随系统" Tag="System" Style="{StaticResource ThemeModeComboItemStyle}" />
+                                    <ComboBoxItem Content="浅色" Tag="Light" Style="{StaticResource ThemeModeComboItemStyle}" />
+                                    <ComboBoxItem Content="深色" Tag="Dark" Style="{StaticResource ThemeModeComboItemStyle}" />
                                 </ComboBox>
                             </DockPanel>
                             <Border Height="1" Background="{DynamicResource ControlStrokeColorDefaultBrush}" />
@@ -186,21 +201,23 @@
                                               Style="{StaticResource ToggleSwitchStyle}" />
                             </DockPanel>
 
-                            <DockPanel x:Name="SourceFileMaxSizeRow" Margin="0,0,0,4">
-                                <TextBlock Text="源文件复制上限 (MB)" FontSize="13" VerticalAlignment="Center"
+                            <DockPanel x:Name="SourceFileMaxSizeRow" Margin="0,0,0,4" LastChildFill="False">
+                                <TextBlock Text="源文件复制上限" FontSize="13" VerticalAlignment="Center"
                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <TextBox
                                         x:Name="SourceFileMaxSizeBox"
-                                        Width="120"
+                                        Width="72"
                                         Height="30"
                                         Padding="8,0"
                                         FontSize="13"
                                         VerticalContentAlignment="Center"
-                                        TextAlignment="Left"
+                                        TextAlignment="Right"
                                         PreviewTextInput="SourceFileMaxSizeBox_PreviewTextInput"
                                         LostFocus="SourceFileMaxSizeBox_LostFocus"
                                         KeyDown="SourceFileMaxSizeBox_KeyDown" />
+                                    <TextBlock Text="M" Margin="6,0,0,0" FontSize="13" VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                                 </StackPanel>
                             </DockPanel>
                         </StackPanel>
