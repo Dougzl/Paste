@@ -13,6 +13,11 @@ namespace Paste.App.Services;
 
 public class ClipboardMonitor : IClipboardMonitor
 {
+    private static readonly HashSet<string> SupportedImageExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp", ".tif", ".tiff", ".ico"
+    };
+
     private static readonly string ImageDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "Paste", "images");
@@ -110,20 +115,24 @@ public class ClipboardMonitor : IClipboardMonitor
                     return;
                 }
 
-                var content = string.Join(Environment.NewLine, normalizedPaths);
-                var fileCount = files.Count;
-                var firstFile = fileCount > 0 ? Path.GetFileName(files[0]!) : "";
-                var preview = fileCount > 1 ? $"{firstFile} +{fileCount - 1}" : firstFile;
-                entry = new ClipboardEntry
+                entry = TryCreateImageEntryFromFileDrop(normalizedPaths, appName, appPath);
+                if (entry == null)
                 {
-                    Content = content,
-                    ContentType = ClipboardContentType.FilePaths,
-                    Preview = preview,
-                    ContentHash = ComputeHash(content),
-                    SourceAppName = appName,
-                    SourceAppPath = appPath,
-                    CopiedAt = DateTime.UtcNow
-                };
+                    var content = string.Join(Environment.NewLine, normalizedPaths);
+                    var fileCount = files.Count;
+                    var firstFile = fileCount > 0 ? Path.GetFileName(files[0]!) : "";
+                    var preview = fileCount > 1 ? $"{firstFile} +{fileCount - 1}" : firstFile;
+                    entry = new ClipboardEntry
+                    {
+                        Content = content,
+                        ContentType = ClipboardContentType.FilePaths,
+                        Preview = preview,
+                        ContentHash = ComputeHash(content),
+                        SourceAppName = appName,
+                        SourceAppPath = appPath,
+                        CopiedAt = DateTime.UtcNow
+                    };
+                }
             }
             else if (Clipboard.ContainsImage())
             {
@@ -273,6 +282,65 @@ public class ClipboardMonitor : IClipboardMonitor
         }
 
         return Math.Clamp(value, MinSourceFileCopyMaxSizeMb, MaxSourceFileCopyMaxSizeMb);
+    }
+
+    private ClipboardEntry? TryCreateImageEntryFromFileDrop(
+        IReadOnlyList<string> normalizedPaths,
+        string? appName,
+        string? appPath)
+    {
+        if (normalizedPaths.Count != 1)
+        {
+            return null;
+        }
+
+        var path = normalizedPaths[0];
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path) || !IsSupportedImageFile(path))
+        {
+            return null;
+        }
+
+        try
+        {
+            using var stream = File.OpenRead(path);
+            var decoder = BitmapDecoder.Create(
+                stream,
+                BitmapCreateOptions.PreservePixelFormat,
+                BitmapCacheOption.OnLoad);
+
+            var frame = decoder.Frames.FirstOrDefault();
+            if (frame == null)
+            {
+                return null;
+            }
+
+            frame.Freeze();
+            var imageForStorage = NormalizeTransparentImageIfNeeded(frame);
+            var imageData = BitmapSourceToBytes(imageForStorage);
+            var hash = ComputeHash(imageData);
+            var relativePath = Task.Run(() => _imageStorageService.SaveImageAsync(imageData, hash)).GetAwaiter().GetResult();
+
+            return new ClipboardEntry
+            {
+                Content = relativePath,
+                ContentType = ClipboardContentType.Image,
+                Preview = $"{Path.GetFileName(path)} {(int)frame.PixelWidth}x{(int)frame.PixelHeight}",
+                ContentHash = hash,
+                SourceAppName = appName,
+                SourceAppPath = appPath,
+                CopiedAt = DateTime.UtcNow
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static bool IsSupportedImageFile(string path)
+    {
+        var extension = Path.GetExtension(path);
+        return !string.IsNullOrWhiteSpace(extension) && SupportedImageExtensions.Contains(extension);
     }
 
     private static string ComputeHash(string text)

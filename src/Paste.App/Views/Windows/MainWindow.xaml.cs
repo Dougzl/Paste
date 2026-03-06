@@ -118,7 +118,16 @@ public partial class MainWindow : FluentWindow
             finally
             {
                 _isSettingsDialogOpen = false;
-                if (IsVisible)
+                var shouldHandleVisibleWindow = IsVisible;
+                var shouldHideOwner = settingsWindow.ShouldHideOwnerOnClose;
+
+                if (shouldHandleVisibleWindow && shouldHideOwner)
+                {
+                    _isHidingProgrammatically = true;
+                    Hide();
+                    _isHidingProgrammatically = false;
+                }
+                else if (shouldHandleVisibleWindow)
                 {
                     Activate();
                     Focus();

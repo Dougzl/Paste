@@ -22,6 +22,7 @@ public partial class SettingsWindow : FluentWindow
     private int _capturedModifiers;
     private int _capturedKey;
     private bool _isLoading;
+    public bool ShouldHideOwnerOnClose { get; private set; }
 
     // Callback to refresh main window after clearing history
     public Action? OnHistoryClearedCallback { get; set; }
@@ -343,6 +344,7 @@ public partial class SettingsWindow : FluentWindow
             return;
         }
 
+        ShouldHideOwnerOnClose = ShouldHideOwnerAfterDeactivate();
         Close();
     }
 
@@ -357,6 +359,23 @@ public partial class SettingsWindow : FluentWindow
         }
 
         return false;
+    }
+
+    private bool ShouldHideOwnerAfterDeactivate()
+    {
+        var foregroundWindow = NativeMethods.GetForegroundWindow();
+        if (foregroundWindow == IntPtr.Zero)
+        {
+            return false;
+        }
+
+        NativeMethods.GetWindowThreadProcessId(foregroundWindow, out var processId);
+        if (processId == 0 || processId == Environment.ProcessId)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private static void CenterDialogOnOwnerScreen(Window dialog, Window owner)

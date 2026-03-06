@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Paste.Core.Interfaces;
@@ -513,9 +514,7 @@ public partial class ClipboardHistoryViewModel : ObservableObject
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             var query = SearchText.Trim();
-            filtered = filtered.Where(e =>
-                (e.Content != null && e.Content.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
-                (e.Preview != null && e.Preview.Contains(query, StringComparison.OrdinalIgnoreCase)));
+            filtered = filtered.Where(e => MatchesSearch(e, query));
         }
 
         Entries = new ObservableCollection<ClipboardEntry>(filtered);
@@ -544,6 +543,35 @@ public partial class ClipboardHistoryViewModel : ObservableObject
             dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 
         return dateTime.ToLocalTime().Date;
+    }
+
+    private static bool MatchesSearch(ClipboardEntry entry, string query)
+    {
+        if (entry.ContentType == ClipboardContentType.FilePaths)
+        {
+            return GetFileNames(entry.Content)
+                .Any(fileName => fileName.Contains(query, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return (entry.Content != null && entry.Content.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
+               (entry.Preview != null && entry.Preview.Contains(query, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static IEnumerable<string> GetFileNames(string? content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            yield break;
+        }
+
+        foreach (var line in content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var fileName = Path.GetFileName(line.Trim());
+            if (!string.IsNullOrWhiteSpace(fileName))
+            {
+                yield return fileName;
+            }
+        }
     }
 
     public void RebuildAppFilters()
