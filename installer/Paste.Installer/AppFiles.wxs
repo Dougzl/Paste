@@ -118,22 +118,22 @@
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Win32.SystemEvents.dll" />
       </Component>
       <Component Id="AppFile0039" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.deps.json" />
-      </Component>
-      <Component Id="AppFile0040" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.dll" />
-      </Component>
-      <Component Id="AppFile0041" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.exe" />
-      </Component>
-      <Component Id="AppFile0042" Guid="*" Directory="INSTALLFOLDER">
-        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.App.runtimeconfig.json" />
-      </Component>
-      <Component Id="AppFile0043" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Core.dll" />
       </Component>
-      <Component Id="AppFile0044" Guid="*" Directory="INSTALLFOLDER">
+      <Component Id="AppFile0040" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.Data.dll" />
+      </Component>
+      <Component Id="AppFile0041" Guid="*" Directory="INSTALLFOLDER">
+        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.deps.json" />
+      </Component>
+      <Component Id="AppFile0042" Guid="*" Directory="INSTALLFOLDER">
+        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.dll" />
+      </Component>
+      <Component Id="AppFile0043" Guid="*" Directory="INSTALLFOLDER">
+        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.exe" />
+      </Component>
+      <Component Id="AppFile0044" Guid="*" Directory="INSTALLFOLDER">
+        <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.runtimeconfig.json" />
       </Component>
       <Component Id="AppFile0045" Guid="*" Directory="INSTALLFOLDER">
         <File Source="C:\Users\dongz\workspaces\工具箱\Paste\src\Paste.App\bin\Release\net8.0-windows\win-x64\publish\Paste.UI.dll" />

@@ -4,7 +4,7 @@
   <Package
     Name="Paste"
     Manufacturer="Paste"
-    Version="1.0.6"
+    Version="1.0.9"
     UpgradeCode="A0B4E7EC-DDBF-480A-8B64-48898CE76C83"
     Language="1033"
     InstallerVersion="500"
@@ -12,6 +12,25 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
+    <Property Id="INSTALLFOLDER" Secure="yes">
+      <RegistrySearch
+        Root="HKLM"
+        Key="Software\Paste"
+        Name="InstallDir"
+        Type="raw" />
+    </Property>
+    <Binary Id="DetectLegacyInstallDirScript" SourceFile="DetectLegacyInstallDir.vbs" />
+    <CustomAction
+      Id="DetectLegacyInstallDir"
+      BinaryRef="DetectLegacyInstallDirScript"
+      VBScriptCall="DetectLegacyInstallDir"
+      Execute="immediate"
+      Return="ignore" />
+    <SetProperty
+      Id="ARPINSTALLLOCATION"
+      Value="[INSTALLFOLDER]"
+      Before="RegisterProduct"
+      Sequence="execute" />
     <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
 
     <StandardDirectory Id="ProgramFiles64Folder">
@@ -26,16 +45,35 @@
       <Shortcut
         Id="StartMenuShortcut"
         Name="Paste"
-        Target="[INSTALLFOLDER]Paste.App.exe"
+        Target="[INSTALLFOLDER]Paste.exe"
         WorkingDirectory="INSTALLFOLDER" />
       <RemoveFolder Id="RemoveStartMenuPasteFolder" Directory="ProgramMenuPasteFolder" On="uninstall" />
       <RegistryValue Root="HKCU" Key="Software\Paste" Name="HasStartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
     </Component>
 
+    <Component Id="InstallDirRegistryComponent" Directory="INSTALLFOLDER" Guid="*">
+      <RegistryValue
+        Root="HKLM"
+        Key="Software\Paste"
+        Name="InstallDir"
+        Type="string"
+        Value="[INSTALLFOLDER]"
+        KeyPath="yes" />
+    </Component>
+
     <Feature Id="MainFeature" Title="Paste" Level="1">
       <ComponentGroupRef Id="AppFiles" />
       <ComponentRef Id="StartMenuShortcutComponent" />
+      <ComponentRef Id="InstallDirRegistryComponent" />
     </Feature>
+
+    <InstallUISequence>
+      <Custom Action="DetectLegacyInstallDir" After="AppSearch" Condition="NOT Installed AND NOT INSTALLFOLDER" />
+    </InstallUISequence>
+
+    <InstallExecuteSequence>
+      <Custom Action="DetectLegacyInstallDir" After="AppSearch" Condition="NOT Installed AND NOT INSTALLFOLDER" />
+    </InstallExecuteSequence>
   </Package>
 
 </Wix>

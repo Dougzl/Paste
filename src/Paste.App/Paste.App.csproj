@@ -9,6 +9,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <BuildInParallel>false</BuildInParallel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>Paste</AssemblyName>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <Version>1.0.0</Version>
     <AssemblyTitle>Paste</AssemblyTitle>
