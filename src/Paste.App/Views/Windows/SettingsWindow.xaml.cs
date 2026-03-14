@@ -77,6 +77,9 @@ public partial class SettingsWindow : FluentWindow
         ScrollSpeedSlider.Value = Clamp(s.ScrollSpeedMultiplier, MinScrollSpeed, MaxScrollSpeed);
         UpdateScrollSpeedText();
 
+        var ver = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version;
+        VersionText.Text = ver != null ? $"v{ver.Major}.{ver.Minor}.{ver.Build}" : "";
+
         // Wire up toggle events after loading to avoid premature saves
         AutoRunToggle.Checked += ToggleChanged;
         AutoRunToggle.Unchecked += ToggleChanged;

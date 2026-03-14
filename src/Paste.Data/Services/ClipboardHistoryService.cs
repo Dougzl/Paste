@@ -58,6 +58,14 @@ public class ClipboardHistoryService : IClipboardHistoryService
                 .FirstOrDefaultAsync(e => e.ContentHash == entry.ContentHash);
             if (existing != null)
             {
+                if (existing.IsPinned || existing.FavoriteFolderId is > 0)
+                {
+                    // Preserve favorited/pinned entry – just refresh timestamp
+                    existing.CopiedAt = entry.CopiedAt;
+                    await db.SaveChangesAsync();
+                    return existing;
+                }
+
                 CollectPayloadCandidates(existing, imageCandidates, fileCandidates);
                 db.ClipboardEntries.Remove(existing);
             }
