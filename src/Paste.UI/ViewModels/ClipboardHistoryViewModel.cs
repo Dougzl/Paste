@@ -524,7 +524,7 @@ public partial class ClipboardHistoryViewModel : ObservableObject
     {
         TimeFilters = new ObservableCollection<TimeFilterOption>
         {
-            new() { Key = "today", Label = "今天", IsSelected = true },
+            new() { Key = "today", Label = "今天" },
             new() { Key = "yesterday", Label = "昨天" },
             new() { Key = "threeDaysAgo", Label = "前天" }
         };

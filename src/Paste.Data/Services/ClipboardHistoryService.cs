@@ -24,14 +24,19 @@ public class ClipboardHistoryService : IClipboardHistoryService
         _imageStorageService = imageStorageService;
     }
 
-    public async Task<List<ClipboardEntry>> GetRecentAsync(int count = 50)
+    public async Task<List<ClipboardEntry>> GetRecentAsync(int? count = null)
     {
         await using var db = await _contextFactory.CreateDbContextAsync();
-        return await db.ClipboardEntries
+        IQueryable<ClipboardEntry> query = db.ClipboardEntries
             .OrderByDescending(e => e.IsPinned)
-            .ThenByDescending(e => e.CopiedAt)
-            .Take(count)
-            .ToListAsync();
+            .ThenByDescending(e => e.CopiedAt);
+
+        if (count is > 0)
+        {
+            query = query.Take(count.Value);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task<List<ClipboardEntry>> SearchAsync(string query)
